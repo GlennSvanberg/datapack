@@ -2,26 +2,12 @@ import { v } from 'convex/values'
 import { mutation, query } from './_generated/server'
 import {
   buildExportsByFormat,
+  buildExportsByScope,
   buildPackStats,
+  buildTopExportFields,
   countByEvent,
 } from './lib/aggregates'
-
-const telemetryPayload = v.optional(
-  v.object({
-    query: v.optional(v.string()),
-    format: v.optional(v.string()),
-    fields: v.optional(v.array(v.string())),
-    productSku: v.optional(v.string()),
-    language: v.optional(
-      v.union(
-        v.literal('sv'),
-        v.literal('no'),
-        v.literal('da'),
-        v.literal('fi'),
-      ),
-    ),
-  }),
-)
+import { telemetryPayload } from './lib/telemetryPayload'
 
 const eventValidator = v.union(
   v.literal('open'),
@@ -90,6 +76,13 @@ export const dashboardStats = query({
     totalExports: v.number(),
     totalUpdates: v.number(),
     exportsByFormat: v.record(v.string(), v.number()),
+    exportsByScope: v.record(v.string(), v.number()),
+    topExportFields: v.array(
+      v.object({
+        field: v.string(),
+        count: v.number(),
+      }),
+    ),
     activePacks: v.number(),
   }),
   handler: async (ctx) => {
@@ -101,6 +94,8 @@ export const dashboardStats = query({
       totalExports: countByEvent(events, 'export'),
       totalUpdates: countByEvent(events, 'update'),
       exportsByFormat: buildExportsByFormat(events),
+      exportsByScope: buildExportsByScope(events),
+      topExportFields: buildTopExportFields(events),
       activePacks: packIds.size,
     }
   },
@@ -115,6 +110,13 @@ export const packStats = query({
     updates: v.number(),
     lastSeen: v.union(v.string(), v.null()),
     exportsByFormat: v.record(v.string(), v.number()),
+    exportsByScope: v.record(v.string(), v.number()),
+    topExportFields: v.array(
+      v.object({
+        field: v.string(),
+        count: v.number(),
+      }),
+    ),
     topSearches: v.array(
       v.object({
         query: v.string(),

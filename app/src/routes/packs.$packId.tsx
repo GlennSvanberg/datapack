@@ -3,7 +3,7 @@ import { useQuery } from 'convex/react'
 import { ArrowLeft, Activity, Download, RefreshCw, Search } from 'lucide-react'
 import { api } from '../../convex/_generated/api'
 import { EventTable } from '#/components/EventTable'
-import { FormatBadges } from '#/components/FormatBadges'
+import { ExportInsights } from '#/components/ExportInsights'
 import { PackEditor } from '#/components/PackEditor'
 import { StatCard } from '#/components/StatCard'
 import { formatTimestamp } from '#/lib/format'
@@ -70,15 +70,19 @@ function PackDetailPage() {
       <PackEditor packId={packId} pack={pack} />
 
       <section className="rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] p-6">
-        <h2 className="mb-4 text-lg font-medium">Export formats</h2>
-        <FormatBadges exportsByFormat={stats.exportsByFormat} />
+        <h2 className="mb-4 text-lg font-medium">Export insights</h2>
+        <ExportInsights
+          exportsByFormat={stats.exportsByFormat}
+          exportsByScope={stats.exportsByScope}
+          topExportFields={stats.topExportFields}
+        />
       </section>
 
-      {stats.topSearches.length > 0 && (
+      {(stats.topSearches ?? []).length > 0 && (
         <section className="rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] p-6">
           <h2 className="mb-4 text-lg font-medium">Top searches</h2>
           <div className="flex flex-wrap gap-2">
-            {stats.topSearches.map(({ query, count }) => (
+            {(stats.topSearches ?? []).map(({ query, count }) => (
               <span
                 key={query}
                 className="rounded bg-[var(--bg-tertiary)] px-3 py-1 text-sm text-[var(--text-secondary)]"

@@ -3,7 +3,7 @@ import { useQuery } from 'convex/react'
 import { Activity, Download, Package, RefreshCw } from 'lucide-react'
 import { api } from '../../convex/_generated/api'
 import { EventTable } from '#/components/EventTable'
-import { FormatBadges } from '#/components/FormatBadges'
+import { ExportInsights } from '#/components/ExportInsights'
 import { PackTable } from '#/components/PackTable'
 import { StatCard } from '#/components/StatCard'
 
@@ -41,8 +41,12 @@ function DashboardHome() {
       </div>
 
       <section className="rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] p-6">
-        <h2 className="mb-4 text-lg font-medium">Export formats</h2>
-        <FormatBadges exportsByFormat={stats.exportsByFormat} />
+        <h2 className="mb-4 text-lg font-medium">Export insights</h2>
+        <ExportInsights
+          exportsByFormat={stats.exportsByFormat}
+          exportsByScope={stats.exportsByScope}
+          topExportFields={stats.topExportFields}
+        />
       </section>
 
       <section className="rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] p-6">

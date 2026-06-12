@@ -22,6 +22,37 @@ export function buildExportsByFormat(
   return exportsByFormat
 }
 
+export function buildExportsByScope(
+  events: TelemetryEventDoc[],
+): Record<string, number> {
+  const exportsByScope: Record<string, number> = {}
+  for (const event of events) {
+    if (event.event === 'export' && event.payload?.scope) {
+      const scope = event.payload.scope
+      exportsByScope[scope] = (exportsByScope[scope] ?? 0) + 1
+    }
+  }
+  return exportsByScope
+}
+
+export function buildTopExportFields(
+  events: TelemetryEventDoc[],
+  limit = 10,
+): Array<{ field: string; count: number }> {
+  const fieldCounts: Record<string, number> = {}
+  for (const event of events) {
+    if (event.event === 'export' && event.payload?.fields) {
+      for (const field of event.payload.fields) {
+        fieldCounts[field] = (fieldCounts[field] ?? 0) + 1
+      }
+    }
+  }
+  return Object.entries(fieldCounts)
+    .map(([field, count]) => ({ field, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, limit)
+}
+
 export function buildPackStats(packId: string, events: TelemetryEventDoc[]) {
   const exportsByFormat = buildExportsByFormat(events)
   const searchCounts: Record<string, number> = {}
@@ -49,6 +80,8 @@ export function buildPackStats(packId: string, events: TelemetryEventDoc[]) {
     updates: countByEvent(events, 'update'),
     lastSeen,
     exportsByFormat,
+    exportsByScope: buildExportsByScope(events),
+    topExportFields: buildTopExportFields(events),
     topSearches,
   }
 }

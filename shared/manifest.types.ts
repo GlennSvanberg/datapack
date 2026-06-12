@@ -46,12 +46,24 @@ export interface PackManifest {
   products: Product[]
 }
 
+export type ExportScope = 'all' | 'filtered' | 'one'
+export type ExportSource = 'catalog' | 'product'
+
 export interface TelemetryPayload {
   query?: string
   format?: string
   fields?: string[]
   productSku?: string
   language?: NordicLang
+  scope?: ExportScope
+  productCount?: number
+  fieldCount?: number
+  totalFields?: number
+  allFieldsSelected?: boolean
+  searchQuery?: string
+  source?: ExportSource
+  filename?: string
+  catalogTotal?: number
 }
 
 export interface TelemetryEvent {

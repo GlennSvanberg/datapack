@@ -5,9 +5,51 @@ interface EventTableProps {
   events: TelemetryEvent[]
 }
 
+const scopeLabels: Record<string, string> = {
+  all: 'all products',
+  filtered: 'filtered',
+  one: 'single product',
+}
+
+function formatExportPayload(event: TelemetryEvent): string {
+  const p = event.payload
+  if (!p) return '—'
+
+  const parts: string[] = []
+
+  if (p.format) parts.push(p.format.toUpperCase())
+  if (p.scope) parts.push(scopeLabels[p.scope] ?? p.scope)
+  if (p.productCount != null) {
+    parts.push(
+      p.catalogTotal != null && p.scope === 'all'
+        ? `${p.productCount}/${p.catalogTotal} products`
+        : `${p.productCount} product${p.productCount === 1 ? '' : 's'}`,
+    )
+  }
+  if (p.fields?.length) {
+    const fieldSummary =
+      p.allFieldsSelected && p.totalFields
+        ? `all ${p.totalFields} fields`
+        : `${p.fieldCount ?? p.fields.length} fields (${p.fields.join(', ')})`
+    parts.push(fieldSummary)
+  }
+  if (p.searchQuery) parts.push(`search: "${p.searchQuery}"`)
+  if (p.productSku) parts.push(p.productSku)
+  if (p.source) parts.push(`from ${p.source}`)
+  if (p.language) parts.push(p.language)
+  if (p.filename) parts.push(p.filename)
+
+  return parts.join(' · ') || '—'
+}
+
 function formatPayload(event: TelemetryEvent): string {
   const p = event.payload
   if (!p) return '—'
+
+  if (event.event === 'export') {
+    return formatExportPayload(event)
+  }
+
   const parts: string[] = []
   if (p.query) parts.push(`"${p.query}"`)
   if (p.format) parts.push(p.format.toUpperCase())

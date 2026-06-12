@@ -13,6 +13,7 @@ const DataPackApp = (() => {
     scope: 'all',
     fields: [],
     singleSku: null,
+    source: 'catalog',
     downloaded: false,
   }
 
@@ -171,6 +172,7 @@ const DataPackApp = (() => {
       scope: singleSku ? 'one' : 'all',
       fields: manifest.schema.filter((f) => f.exportable).map((f) => f.name),
       singleSku: singleSku || null,
+      source: singleSku ? 'product' : 'catalog',
       downloaded: false,
     }
     $('wizard-overlay').classList.add('open')
@@ -350,8 +352,7 @@ const DataPackApp = (() => {
       const tbody = preview.previewRows.map((row) => {
         const cells = preview.fields.map((f) => {
           const val = row[f] ?? ''
-          const display = String(val).length > 48 ? String(val).slice(0, 45) + '…' : String(val)
-          return `<td title="${escHtml(val)}">${escHtml(display)}</td>`
+          return `<td title="${escHtml(val)}">${escHtml(String(val))}</td>`
         }).join('')
         return `<tr>${cells}</tr>`
       }).join('')
@@ -438,11 +439,27 @@ const DataPackApp = (() => {
   function doExport() {
     const products = getExportProducts()
     const fields = getExportFields()
-    DataPackExport.exportData(products, fields, wizard.format, manifest)
+    const exportable = manifest.schema.filter((f) => f.exportable)
+    const prepared = DataPackExport.exportData(products, fields, wizard.format, manifest)
     DataPackTelemetry.send(manifest, 'export', {
       format: wizard.format,
       fields,
-      productSku: wizard.singleSku || selectedSku || undefined,
+      scope: wizard.scope,
+      productCount: products.length,
+      fieldCount: fields.length,
+      totalFields: exportable.length,
+      allFieldsSelected: fields.length === exportable.length,
+      searchQuery:
+        wizard.scope === 'filtered' && searchQuery.trim()
+          ? searchQuery.trim()
+          : undefined,
+      productSku:
+        wizard.scope === 'one'
+          ? wizard.singleSku || selectedSku || undefined
+          : undefined,
+      source: wizard.source,
+      filename: prepared.filename,
+      catalogTotal: manifest.products.length,
     })
   }
 

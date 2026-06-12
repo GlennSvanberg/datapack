@@ -1,5 +1,5 @@
 interface FormatBadgesProps {
-  exportsByFormat: Record<string, number>
+  exportsByFormat?: Record<string, number> | null
 }
 
 const formatColors: Record<string, string> = {
@@ -10,7 +10,7 @@ const formatColors: Record<string, string> = {
 }
 
 export function FormatBadges({ exportsByFormat }: FormatBadgesProps) {
-  const entries = Object.entries(exportsByFormat)
+  const entries = Object.entries(exportsByFormat ?? {})
   if (entries.length === 0) {
     return <span className="text-sm text-[var(--text-muted)]">No exports yet</span>
   }

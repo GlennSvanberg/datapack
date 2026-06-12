@@ -33,12 +33,24 @@ export interface PackManifest {
   }>
 }
 
+export type ExportScope = 'all' | 'filtered' | 'one'
+export type ExportSource = 'catalog' | 'product'
+
 export interface TelemetryPayload {
   query?: string
   format?: string
   fields?: string[]
   productSku?: string
   language?: NordicLang
+  scope?: ExportScope
+  productCount?: number
+  fieldCount?: number
+  totalFields?: number
+  allFieldsSelected?: boolean
+  searchQuery?: string
+  source?: ExportSource
+  filename?: string
+  catalogTotal?: number
 }
 
 export interface TelemetryEvent {
@@ -60,6 +72,8 @@ export interface DashboardStats {
   totalExports: number
   totalUpdates: number
   exportsByFormat: Record<string, number>
+  exportsByScope: Record<string, number>
+  topExportFields: Array<{ field: string; count: number }>
   activePacks: number
 }
 
@@ -70,5 +84,7 @@ export interface PackStats {
   updates: number
   lastSeen: string | null
   exportsByFormat: Record<string, number>
+  exportsByScope: Record<string, number>
+  topExportFields: Array<{ field: string; count: number }>
   topSearches: Array<{ query: string; count: number }>
 }

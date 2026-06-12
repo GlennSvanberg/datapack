@@ -1,22 +1,6 @@
 import { defineSchema, defineTable } from 'convex/server'
 import { v } from 'convex/values'
-
-const telemetryPayload = v.optional(
-  v.object({
-    query: v.optional(v.string()),
-    format: v.optional(v.string()),
-    fields: v.optional(v.array(v.string())),
-    productSku: v.optional(v.string()),
-    language: v.optional(
-      v.union(
-        v.literal('sv'),
-        v.literal('no'),
-        v.literal('da'),
-        v.literal('fi'),
-      ),
-    ),
-  }),
-)
+import { telemetryPayload } from './lib/telemetryPayload'
 
 export default defineSchema({
   packs: defineTable({
