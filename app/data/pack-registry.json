@@ -1,0 +1,14 @@
+[
+  {
+    "packId": "friluftsportalen-spring-tents-001",
+    "assortment": "Spring Tents 2026",
+    "productCount": 4,
+    "version": "1.0.1"
+  },
+  {
+    "packId": "friluftsportalen-hiking-shoes-001",
+    "assortment": "Hiking Shoes 2026",
+    "productCount": 3,
+    "version": "1.0.1"
+  }
+]

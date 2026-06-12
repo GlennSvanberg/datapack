@@ -1,0 +1,258 @@
+const DataPackI18n = (() => {
+  const LANGS = ['sv', 'no', 'da', 'fi']
+  const UI = {
+    sv: {
+      download: 'Ladda ner data',
+      exportProduct: 'Exportera produkt',
+      search: 'Sök produkter...',
+      stale: 'Datan kan vara föråldrad. Uppdatera för senaste priser och lager.',
+      update: 'Uppdatera data',
+      back: 'Tillbaka till katalogen',
+      wizardTitle: 'Ladda ner data',
+      wizardSubtitle: 'Välj format, produkter och fält — förhandsgranskningen uppdateras direkt.',
+      stepFormat: 'Välj format',
+      stepScope: 'Välj produkter',
+      stepFields: 'Välj fält',
+      stepReview: 'Granska & ladda ner',
+      stepFormatDesc: 'Vilket filformat ska datan sparas i?',
+      stepScopeDesc: 'Vilka produkter ska ingå i exporten?',
+      stepFieldsDesc: 'Markera de kolumner du vill ha med. Du kan ändra när som helst.',
+      stepReviewDesc: 'Allt ser bra ut? Klicka på ladda ner — filen sparas på din dator.',
+      stepNames: ['Format', 'Produkter', 'Fält', 'Ladda ner'],
+      next: 'Fortsätt',
+      back_btn: 'Tillbaka',
+      download_btn: 'Ladda ner fil',
+      close: 'Stäng',
+      scopeAll: 'Alla produkter',
+      scopeFiltered: 'Filtrerade resultat',
+      scopeOne: 'Denna produkt',
+      scopeAllDesc: 'Exportera hela sortimentet',
+      scopeFilteredDesc: 'Bara det du sökt fram',
+      scopeOneDesc: 'Bara den valda produkten',
+      noResults: 'Inga produkter hittades',
+      stock: 'I lager',
+      formats: { csv: 'CSV', xlsx: 'Excel', json: 'JSON', xml: 'XML' },
+      formatDesc: {
+        csv: 'Perfekt för Excel, Google Sheets och de flesta system',
+        xlsx: 'Öppnas direkt i Microsoft Excel',
+        json: 'Strukturerad data för appar och integrationer',
+        xml: 'Standardformat för system och PIM',
+      },
+      previewTitle: 'Förhandsgranskning',
+      previewHint: 'Så här ser din fil ut',
+      previewEmpty: 'Välj minst ett fält för att se förhandsgranskning',
+      previewMore: '… och {n} rader till i den färdiga filen',
+      previewTruncated: 'Förhandsgranskningen är förkortad',
+      summaryProducts: '{n} produkter',
+      summaryFields: '{n} fält',
+      summaryFormat: 'Format',
+      summaryFilename: 'Filnamn',
+      selectAll: 'Markera alla',
+      selectNone: 'Avmarkera alla',
+      fieldsSelected: '{n} av {total} fält valda',
+      productCount: '{n} st',
+      readyToDownload: 'Redo att ladda ner',
+      downloadAgain: 'Ladda ner igen',
+      downloadSuccess: 'Filen har laddats ner!',
+    },
+    no: {
+      download: 'Last ned data',
+      exportProduct: 'Eksporter produkt',
+      search: 'Søk produkter...',
+      stale: 'Dataene kan være utdaterte. Oppdater for nyeste priser og lager.',
+      update: 'Oppdater data',
+      back: 'Tilbake til katalogen',
+      wizardTitle: 'Last ned data',
+      wizardSubtitle: 'Velg format, produkter og felt — forhåndsvisningen oppdateres med en gang.',
+      stepFormat: 'Velg format',
+      stepScope: 'Velg produkter',
+      stepFields: 'Velg felt',
+      stepReview: 'Gjennomgå & last ned',
+      stepFormatDesc: 'Hvilket filformat skal dataene lagres i?',
+      stepScopeDesc: 'Hvilke produkter skal inkluderes i eksporten?',
+      stepFieldsDesc: 'Merk kolonnene du vil ha med. Du kan endre når som helst.',
+      stepReviewDesc: 'Ser alt bra ut? Klikk last ned — filen lagres på datamaskinen din.',
+      stepNames: ['Format', 'Produkter', 'Felt', 'Last ned'],
+      next: 'Fortsett',
+      back_btn: 'Tilbake',
+      download_btn: 'Last ned fil',
+      close: 'Lukk',
+      scopeAll: 'Alle produkter',
+      scopeFiltered: 'Filtrerte resultater',
+      scopeOne: 'Dette produktet',
+      scopeAllDesc: 'Eksporter hele sortimentet',
+      scopeFilteredDesc: 'Bare det du har søkt frem',
+      scopeOneDesc: 'Bare det valgte produktet',
+      noResults: 'Ingen produkter funnet',
+      stock: 'På lager',
+      formats: { csv: 'CSV', xlsx: 'Excel', json: 'JSON', xml: 'XML' },
+      formatDesc: {
+        csv: 'Perfekt for Excel, Google Sheets og de fleste systemer',
+        xlsx: 'Åpnes direkte i Microsoft Excel',
+        json: 'Strukturert data for apper og integrasjoner',
+        xml: 'Standardformat for systemer og PIM',
+      },
+      previewTitle: 'Forhåndsvisning',
+      previewHint: 'Slik ser filen din ut',
+      previewEmpty: 'Velg minst ett felt for å se forhåndsvisning',
+      previewMore: '… og {n} rader til i den ferdige filen',
+      previewTruncated: 'Forhåndsvisningen er forkortet',
+      summaryProducts: '{n} produkter',
+      summaryFields: '{n} felt',
+      summaryFormat: 'Format',
+      summaryFilename: 'Filnavn',
+      selectAll: 'Merk alle',
+      selectNone: 'Fjern alle',
+      fieldsSelected: '{n} av {total} felt valgt',
+      productCount: '{n} stk',
+      readyToDownload: 'Klar til nedlasting',
+      downloadAgain: 'Last ned igjen',
+      downloadSuccess: 'Filen er lastet ned!',
+    },
+    da: {
+      download: 'Download data',
+      exportProduct: 'Eksporter produkt',
+      search: 'Søg produkter...',
+      stale: 'Dataene kan være forældede. Opdater for nyeste priser og lager.',
+      update: 'Opdater data',
+      back: 'Tilbage til kataloget',
+      wizardTitle: 'Download data',
+      wizardSubtitle: 'Vælg format, produkter og felter — forhåndsvisningen opdateres med det samme.',
+      stepFormat: 'Vælg format',
+      stepScope: 'Vælg produkter',
+      stepFields: 'Vælg felter',
+      stepReview: 'Gennemse & download',
+      stepFormatDesc: 'Hvilket filformat skal dataene gemmes i?',
+      stepScopeDesc: 'Hvilke produkter skal med i eksporten?',
+      stepFieldsDesc: 'Markér de kolonner du vil have med. Du kan ændre når som helst.',
+      stepReviewDesc: 'Ser alt godt ud? Klik download — filen gemmes på din computer.',
+      stepNames: ['Format', 'Produkter', 'Felter', 'Download'],
+      next: 'Fortsæt',
+      back_btn: 'Tilbage',
+      download_btn: 'Download fil',
+      close: 'Luk',
+      scopeAll: 'Alle produkter',
+      scopeFiltered: 'Filtrerede resultater',
+      scopeOne: 'Dette produkt',
+      scopeAllDesc: 'Eksporter hele sortimentet',
+      scopeFilteredDesc: 'Kun det du har søgt frem',
+      scopeOneDesc: 'Kun det valgte produkt',
+      noResults: 'Ingen produkter fundet',
+      stock: 'På lager',
+      formats: { csv: 'CSV', xlsx: 'Excel', json: 'JSON', xml: 'XML' },
+      formatDesc: {
+        csv: 'Perfekt til Excel, Google Sheets og de fleste systemer',
+        xlsx: 'Åbnes direkte i Microsoft Excel',
+        json: 'Struktureret data til apps og integrationer',
+        xml: 'Standardformat til systemer og PIM',
+      },
+      previewTitle: 'Forhåndsvisning',
+      previewHint: 'Sådan ser din fil ud',
+      previewEmpty: 'Vælg mindst ét felt for at se forhåndsvisning',
+      previewMore: '… og {n} rækker mere i den færdige fil',
+      previewTruncated: 'Forhåndsvisningen er forkortet',
+      summaryProducts: '{n} produkter',
+      summaryFields: '{n} felter',
+      summaryFormat: 'Format',
+      summaryFilename: 'Filnavn',
+      selectAll: 'Vælg alle',
+      selectNone: 'Fravælg alle',
+      fieldsSelected: '{n} af {total} felter valgt',
+      productCount: '{n} stk',
+      readyToDownload: 'Klar til download',
+      downloadAgain: 'Download igen',
+      downloadSuccess: 'Filen er downloadet!',
+    },
+    fi: {
+      download: 'Lataa tiedot',
+      exportProduct: 'Vie tuote',
+      search: 'Hae tuotteita...',
+      stale: 'Tiedot voivat olla vanhentuneita. Päivitä uusimmat hinnat ja varasto.',
+      update: 'Päivitä tiedot',
+      back: 'Takaisin luetteloon',
+      wizardTitle: 'Lataa tiedot',
+      wizardSubtitle: 'Valitse muoto, tuotteet ja kentät — esikatselu päivittyy heti.',
+      stepFormat: 'Valitse muoto',
+      stepScope: 'Valitse tuotteet',
+      stepFields: 'Valitse kentät',
+      stepReview: 'Tarkista & lataa',
+      stepFormatDesc: 'Missä tiedostomuodossa tiedot tallennetaan?',
+      stepScopeDesc: 'Mitkä tuotteet sisällytetään vientiin?',
+      stepFieldsDesc: 'Valitse haluamasi sarakkeet. Voit muuttaa valintoja milloin tahansa.',
+      stepReviewDesc: 'Kaikki näyttää hyvältä? Napsauta lataa — tiedosto tallentuu tietokoneellesi.',
+      stepNames: ['Muoto', 'Tuotteet', 'Kentät', 'Lataa'],
+      next: 'Jatka',
+      back_btn: 'Takaisin',
+      download_btn: 'Lataa tiedosto',
+      close: 'Sulje',
+      scopeAll: 'Kaikki tuotteet',
+      scopeFiltered: 'Suodatetut tulokset',
+      scopeOne: 'Tämä tuote',
+      scopeAllDesc: 'Vie koko valikoima',
+      scopeFilteredDesc: 'Vain hakutulokset',
+      scopeOneDesc: 'Vain valittu tuote',
+      noResults: 'Tuotteita ei löytynyt',
+      stock: 'Varastossa',
+      formats: { csv: 'CSV', xlsx: 'Excel', json: 'JSON', xml: 'XML' },
+      formatDesc: {
+        csv: 'Sopii Exceliin, Google Sheetsiin ja useimpiin järjestelmiin',
+        xlsx: 'Avautuu suoraan Microsoft Excelissä',
+        json: 'Jäsennelty data sovelluksiin ja integraatioihin',
+        xml: 'Vakiomuoto järjestelmille ja PIM:lle',
+      },
+      previewTitle: 'Esikatselu',
+      previewHint: 'Näin tiedostosi näyttää',
+      previewEmpty: 'Valitse vähintään yksi kenttä nähdäksesi esikatselun',
+      previewMore: '… ja {n} riviä lisää valmiissa tiedostossa',
+      previewTruncated: 'Esikatselu on lyhennetty',
+      summaryProducts: '{n} tuotetta',
+      summaryFields: '{n} kenttää',
+      summaryFormat: 'Muoto',
+      summaryFilename: 'Tiedostonimi',
+      selectAll: 'Valitse kaikki',
+      selectNone: 'Poista valinnat',
+      fieldsSelected: '{n} / {total} kenttää valittu',
+      productCount: '{n} kpl',
+      readyToDownload: 'Valmis ladattavaksi',
+      downloadAgain: 'Lataa uudelleen',
+      downloadSuccess: 'Tiedosto on ladattu!',
+    },
+  }
+
+  let currentLang = localStorage.getItem('datapack-lang') || 'sv'
+
+  function t(key, vars) {
+    let str = UI[currentLang][key] ?? UI.sv[key] ?? key
+    if (vars) {
+      for (const [k, v] of Object.entries(vars)) {
+        str = str.replace(`{${k}}`, String(v))
+      }
+    }
+    return str
+  }
+
+  function getLang() {
+    return currentLang
+  }
+
+  function setLang(lang) {
+    if (!LANGS.includes(lang)) return
+    currentLang = lang
+    localStorage.setItem('datapack-lang', lang)
+  }
+
+  function productText(product, field) {
+    const texts = product.texts[currentLang] || product.texts.sv
+    return texts[field] || ''
+  }
+
+  function schemaLabel(field) {
+    return field.label[currentLang] || field.label.sv || field.name
+  }
+
+  function attrKey(attr) {
+    return attr.key[currentLang] || attr.key.sv || ''
+  }
+
+  return { LANGS, t, getLang, setLang, productText, schemaLabel, attrKey }
+})()

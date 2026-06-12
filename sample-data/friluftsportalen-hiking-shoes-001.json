@@ -1,0 +1,172 @@
+{
+  "meta": {
+    "packId": "friluftsportalen-hiking-shoes-001",
+    "brand": "Friluftsportalen",
+    "assortment": "Hiking Shoes 2026",
+    "version": "1.0.0",
+    "generatedAt": "2026-05-20T08:00:00Z",
+    "staleAfter": "2026-06-05T00:00:00Z",
+    "apiBase": "http://localhost:4040"
+  },
+  "schema": [
+    {
+      "name": "sku",
+      "label": {
+        "sv": "Artikelnummer",
+        "no": "Artikkelnummer",
+        "da": "Varenummer",
+        "fi": "Tuotenumero"
+      },
+      "type": "string",
+      "exportable": true
+    },
+    {
+      "name": "name",
+      "label": {
+        "sv": "Produktnamn",
+        "no": "Produktnavn",
+        "da": "Produktnavn",
+        "fi": "Tuotenimi"
+      },
+      "type": "string",
+      "exportable": true
+    },
+    {
+      "name": "description",
+      "label": {
+        "sv": "Beskrivning",
+        "no": "Beskrivelse",
+        "da": "Beskrivelse",
+        "fi": "Kuvaus"
+      },
+      "type": "string",
+      "exportable": true
+    },
+    {
+      "name": "price",
+      "label": {
+        "sv": "Pris (SEK)",
+        "no": "Pris (SEK)",
+        "da": "Pris (SEK)",
+        "fi": "Hinta (SEK)"
+      },
+      "type": "number",
+      "exportable": true
+    },
+    {
+      "name": "stock",
+      "label": {
+        "sv": "Lagersaldo",
+        "no": "Lagerbeholdning",
+        "da": "Lagerbeholdning",
+        "fi": "Varasto"
+      },
+      "type": "number",
+      "exportable": true
+    }
+  ],
+  "products": [
+    {
+      "sku": "SHOE-001",
+      "texts": {
+        "sv": {
+          "name": "Trailmaster GTX",
+          "description": "Vattentäta vandringskängor med Gore-Tex membran och Vibram-sula."
+        },
+        "no": {
+          "name": "Trailmaster GTX",
+          "description": "Vanntette tursko med Gore-Tex membran og Vibram-såle."
+        },
+        "da": {
+          "name": "Trailmaster GTX",
+          "description": "Vandtætte vandrestøvler med Gore-Tex membran og Vibram-sål."
+        },
+        "fi": {
+          "name": "Trailmaster GTX",
+          "description": "Vedenpitävät vaelluskengät Gore-Tex-kalvon ja Vibram-pohjan kanssa."
+        }
+      },
+      "imageUrl": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop",
+      "attributes": [
+        {
+          "key": { "sv": "Vikt", "no": "Vekt", "da": "Vægt", "fi": "Paino" },
+          "value": "980 g"
+        },
+        {
+          "key": { "sv": "Storlekar", "no": "Størrelser", "da": "Størrelser", "fi": "Koot" },
+          "value": "36-48"
+        }
+      ],
+      "price": 1899,
+      "stock": 30
+    },
+    {
+      "sku": "SHOE-002",
+      "texts": {
+        "sv": {
+          "name": "Alpine Pro Mid",
+          "description": "Stödjande mellanhöga kängor för fjällvandring och stenig terräng."
+        },
+        "no": {
+          "name": "Alpine Pro Mid",
+          "description": "Støttende mellomhøye støvler for fjellvandring og steinete terreng."
+        },
+        "da": {
+          "name": "Alpine Pro Mid",
+          "description": "Støttende mellemhøje støvler til bjergvandring og stenet terræn."
+        },
+        "fi": {
+          "name": "Alpine Pro Mid",
+          "description": "Tukevat puolikorkeat kengät vuoristovaellukseen ja kiviselle maastolle."
+        }
+      },
+      "imageUrl": "https://images.unsplash.com/photo-1606107557195-0a29b4b4b4aa?w=400&h=300&fit=crop",
+      "attributes": [
+        {
+          "key": { "sv": "Vikt", "no": "Vekt", "da": "Vægt", "fi": "Paino" },
+          "value": "1150 g"
+        },
+        {
+          "key": { "sv": "Sula", "no": "Såle", "da": "Sål", "fi": "Pohja" },
+          "value": "Vibram Megagrip"
+        }
+      ],
+      "price": 2499,
+      "stock": 18
+    },
+    {
+      "sku": "SHOE-003",
+      "texts": {
+        "sv": {
+          "name": "Speedlite Trail",
+          "description": "Ultralätta trailskor för snabba dagsturer och löpning i terräng."
+        },
+        "no": {
+          "name": "Speedlite Trail",
+          "description": "Ultralette trailsko for raske dagsturer og terrengløping."
+        },
+        "da": {
+          "name": "Speedlite Trail",
+          "description": "Ultralette trailsko til hurtige dagsture og terrænløb."
+        },
+        "fi": {
+          "name": "Speedlite Trail",
+          "description": "Ultrakevyet polkujuoksukengät nopeille päiväretkille."
+        }
+      },
+      "imageUrl": "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400&h=300&fit=crop",
+      "attributes": [
+        {
+          "key": { "sv": "Vikt", "no": "Vekt", "da": "Vægt", "fi": "Paino" },
+          "value": "620 g"
+        },
+        {
+          "key": { "sv": "Drop", "no": "Drop", "da": "Drop", "fi": "Drop" },
+          "value": "6 mm"
+        }
+      ],
+      "price": 1299,
+      "stock": 45
+    }
+  ]
+}

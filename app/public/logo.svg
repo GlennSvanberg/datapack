@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40" fill="none">
+  <path d="M8 32 L20 12 L28 22 L36 8 L44 32 Z" fill="#2eaadc" stroke="#2eaadc" stroke-width="1" stroke-linejoin="round"/>
+  <circle cx="38" cy="10" r="3" fill="#4dab6d"/>
+  <text x="52" y="26" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="#ebebeb">Friluftsportalen</text>
+</svg>

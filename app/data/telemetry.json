@@ -1,0 +1,24 @@
+[
+  {
+    "packId": "friluftsportalen-spring-tents-001",
+    "event": "open",
+    "timestamp": "2026-06-12T12:00:00Z"
+  },
+  {
+    "packId": "friluftsportalen-spring-tents-001",
+    "event": "export",
+    "timestamp": "2026-06-12T12:01:00Z",
+    "payload": {
+      "format": "csv",
+      "fields": [
+        "sku",
+        "price"
+      ]
+    }
+  },
+  {
+    "packId": "friluftsportalen-spring-tents-001",
+    "event": "open",
+    "timestamp": "2026-06-12T12:00:00Z"
+  }
+]

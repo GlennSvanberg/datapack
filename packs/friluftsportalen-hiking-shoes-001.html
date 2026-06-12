@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Friluftsportalen — DataPack</title>
+  <style>
+:root {
+  --bg-primary: #191919;
+  --bg-secondary: #252525;
+  --bg-tertiary: #2f2f2f;
+  --bg-hover: #373737;
+  --border: #3d3d3d;
+  --text-primary: #ebebeb;
+  --text-secondary: #9b9b9b;
+  --text-muted: #6b6b6b;
+  --accent: #2eaadc;
+  --accent-hover: #2596c4;
+  --accent-green: #4dab6d;
+  --accent-orange: #d9730d;
+  --accent-red: #e03e3e;
+  --radius: 6px;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.logo { display: flex; align-items: center; gap: 0.75rem; }
+.logo svg { height: 32px; width: auto; }
+.logo span { font-weight: 600; font-size: 1rem; }
+
+.header-actions { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+
+.lang-switcher {
+  display: flex;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.lang-btn {
+  padding: 0.35rem 0.6rem;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.lang-btn.active { background: var(--accent); color: #fff; }
+.lang-btn:hover:not(.active) { background: var(--bg-hover); color: var(--text-primary); }
+
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-secondary { background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border); }
+.btn-secondary:hover { background: var(--bg-hover); }
+.btn-green { background: var(--accent-green); color: #fff; }
+.btn-green:hover { opacity: 0.9; }
+
+.stale-banner {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(217, 115, 13, 0.15);
+  border-bottom: 1px solid var(--accent-orange);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+}
+
+.stale-banner.visible { display: flex; flex-wrap: wrap; }
+
+main { max-width: 1100px; margin: 0 auto; padding: 1.5rem; }
+
+.search-bar {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.search-bar:focus { outline: 2px solid var(--accent); outline-offset: 0; }
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.product-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.product-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+.product-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  background: var(--bg-tertiary);
+}
+
+.product-card-body { padding: 1rem; }
+.product-card-body h3 { font-size: 0.95rem; margin-bottom: 0.25rem; }
+.product-card-body .price { color: var(--accent-green); font-weight: 600; font-size: 0.9rem; }
+.product-card-body .sku { color: var(--text-muted); font-size: 0.75rem; font-family: monospace; }
+
+.product-detail { display: none; }
+.product-detail.active { display: block; }
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.back-link:hover { color: var(--text-primary); }
+
+.detail-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 700px) { .detail-layout { grid-template-columns: 1fr; } }
+
+.detail-image {
+  width: 100%;
+  border-radius: var(--radius);
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  background: var(--bg-tertiary);
+}
+
+.detail-info h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.detail-info .price { font-size: 1.25rem; color: var(--accent-green); font-weight: 600; margin: 0.5rem 0; }
+.detail-info .desc { color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem; }
+
+.attributes { list-style: none; margin-top: 1rem; }
+.attributes li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.875rem;
+}
+.attributes li span:first-child { color: var(--text-secondary); }
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal.export-wizard {
+  max-width: min(1100px, 96vw);
+  max-height: 92vh;
+}
+
+.modal-header {
+  padding: 1.25rem 1.75rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.modal-header-text { flex: 1; min-width: 0; }
+.modal-header h2 { font-size: 1.35rem; font-weight: 600; }
+.wizard-subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.35rem; line-height: 1.45; }
+.modal-close {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 1.25rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius);
+  flex-shrink: 0;
+  line-height: 1;
+}
+.modal-close:hover { color: var(--text-primary); background: var(--bg-hover); }
+.modal-body { padding: 1.5rem; }
+.modal-footer {
+  padding: 1rem 1.75rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.export-wizard-footer { background: var(--bg-primary); }
+
+.wizard-stepper {
+  display: flex;
+  gap: 0;
+  padding: 0 1.75rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-primary);
+  flex-shrink: 0;
+}
+
+.wizard-step-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 0.5rem;
+  border-bottom: 2px solid transparent;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+  min-width: 0;
+}
+
+.wizard-step-item.done { color: var(--text-secondary); border-bottom-color: var(--accent); }
+.wizard-step-item.current { color: var(--text-primary); border-bottom-color: var(--accent-green); }
+
+.wizard-step-num {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.wizard-step-item.done .wizard-step-num { background: rgba(46,170,220,0.2); border-color: var(--accent); color: var(--accent); }
+.wizard-step-item.current .wizard-step-num { background: var(--accent-green); border-color: var(--accent-green); color: #fff; }
+
+.wizard-step-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.export-wizard-body {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.export-wizard-main {
+  overflow-y: auto;
+  padding: 1.5rem 1.75rem;
+  min-height: 280px;
+}
+
+.wizard-content { max-width: 560px; }
+
+.step-heading {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.step-desc {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+
+.export-preview-panel {
+  border-left: 1px solid var(--border);
+  background: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.preview-header {
+  padding: 1.25rem 1.25rem 0.75rem;
+  flex-shrink: 0;
+}
+
+.preview-header h3 { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-secondary); }
+.preview-hint { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+.preview-summary {
+  padding: 0 1.25rem 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.summary-chip {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+.summary-chip strong { color: var(--text-primary); font-weight: 600; }
+
+.preview-content {
+  flex: 1;
+  overflow: auto;
+  margin: 0 1.25rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-secondary);
+  min-height: 120px;
+}
+
+.preview-table-wrap { overflow: auto; }
+.preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+}
+.preview-table th,
+.preview-table td {
+  padding: 0.45rem 0.6rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.preview-table th {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.preview-table tr:last-child td { border-bottom: none; }
+
+.preview-code {
+  margin: 0;
+  padding: 0.85rem;
+  font-family: ui-monospace, 'Cascadia Code', 'Consolas', monospace;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.preview-empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.preview-more {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  background: var(--bg-tertiary);
+}
+
+.format-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.format-card {
+  padding: 1rem;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.format-card:hover { border-color: var(--accent); }
+.format-card.selected { border-color: var(--accent-green); background: rgba(77,171,109,0.12); }
+
+.format-card-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.format-card-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+
+.format-card-desc {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.scope-options { display: flex; flex-direction: column; gap: 0.6rem; }
+
+.scope-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.1rem;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-tertiary);
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  color: var(--text-primary);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.scope-card:hover { border-color: var(--accent); }
+.scope-card.selected { border-color: var(--accent-green); background: rgba(77,171,109,0.12); }
+
+.scope-card-body { flex: 1; min-width: 0; }
+.scope-card-title { font-weight: 600; font-size: 0.95rem; }
+.scope-card-desc { font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.15rem; }
+
+.scope-badge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  color: var(--accent-green);
+  flex-shrink: 0;
+}
+
+.field-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.field-toolbar-actions { display: flex; gap: 0.5rem; }
+
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 0.25rem 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.btn-link:hover { color: var(--accent-hover); }
+
+.field-count-label { font-size: 0.8rem; color: var(--text-muted); }
+
+.field-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem;
+}
+
+.field-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--bg-tertiary);
+  font-size: 0.875rem;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.field-item:has(input:checked) {
+  border-color: var(--accent-green);
+  background: rgba(77,171,109,0.1);
+}
+
+.field-item:hover { background: var(--bg-hover); }
+.field-item input { accent-color: var(--accent-green); width: 1rem; height: 1rem; flex-shrink: 0; }
+
+.review-step {
+  text-align: center;
+  padding: 1.5rem 0 0.5rem;
+}
+
+.review-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.review-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.review-desc {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  max-width: 360px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.btn-download-action {
+  min-width: 10rem;
+  padding: 0.6rem 1.5rem;
+  font-weight: 600;
+}
+
+.btn-download-action.is-ready {
+  background: var(--accent-green);
+  font-size: 0.95rem;
+  padding: 0.7rem 2rem;
+}
+
+.btn-download-action.is-ready:hover { opacity: 0.92; }
+
+.btn-download-action.is-success {
+  background: var(--accent-green);
+  pointer-events: none;
+}
+
+@media (max-width: 860px) {
+  .export-wizard-body { grid-template-columns: 1fr; }
+  .export-preview-panel {
+    border-left: none;
+    border-top: 1px solid var(--border);
+    max-height: 220px;
+  }
+  .field-list { grid-template-columns: 1fr; }
+  .format-options { grid-template-columns: 1fr; }
+  .wizard-step-label { display: none; }
+  .wizard-step-item { justify-content: center; padding: 0.75rem 0.25rem; }
+}
+
+.option-btn {
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  cursor: pointer;
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.option-btn.selected { border-color: var(--accent); background: rgba(46,170,220,0.15); }
+.option-btn:hover { border-color: var(--accent); }
+
+.empty-state { text-align: center; padding: 3rem; color: var(--text-muted); }
+
+.catalog-view.hidden { display: none; }
+
+</style>
+  <script>
+    window.DATAPACK_MANIFEST = {"meta":{"packId":"friluftsportalen-hiking-shoes-001","brand":"Friluftsportalen","assortment":"Hiking Shoes 2026","version":"1.0.0","generatedAt":"2026-05-20T08:00:00Z","staleAfter":"2026-06-05T00:00:00Z","apiBase":"http://localhost:4040"},"schema":[{"name":"sku","label":{"sv":"Artikelnummer","no":"Artikkelnummer","da":"Varenummer","fi":"Tuotenumero"},"type":"string","exportable":true},{"name":"name","label":{"sv":"Produktnamn","no":"Produktnavn","da":"Produktnavn","fi":"Tuotenimi"},"type":"string","exportable":true},{"name":"description","label":{"sv":"Beskrivning","no":"Beskrivelse","da":"Beskrivelse","fi":"Kuvaus"},"type":"string","exportable":true},{"name":"price","label":{"sv":"Pris (SEK)","no":"Pris (SEK)","da":"Pris (SEK)","fi":"Hinta (SEK)"},"type":"number","exportable":true},{"name":"stock","label":{"sv":"Lagersaldo","no":"Lagerbeholdning","da":"Lagerbeholdning","fi":"Varasto"},"type":"number","exportable":true}],"products":[{"sku":"SHOE-001","texts":{"sv":{"name":"Trailmaster GTX","description":"Vattentäta vandringskängor med Gore-Tex membran och Vibram-sula."},"no":{"name":"Trailmaster GTX","description":"Vanntette tursko med Gore-Tex membran og Vibram-såle."},"da":{"name":"Trailmaster GTX","description":"Vandtætte vandrestøvler med Gore-Tex membran og Vibram-sål."},"fi":{"name":"Trailmaster GTX","description":"Vedenpitävät vaelluskengät Gore-Tex-kalvon ja Vibram-pohjan kanssa."}},"imageUrl":"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop","attributes":[{"key":{"sv":"Vikt","no":"Vekt","da":"Vægt","fi":"Paino"},"value":"980 g"},{"key":{"sv":"Storlekar","no":"Størrelser","da":"Størrelser","fi":"Koot"},"value":"36-48"}],"price":1899,"stock":30},{"sku":"SHOE-002","texts":{"sv":{"name":"Alpine Pro Mid","description":"Stödjande mellanhöga kängor för fjällvandring och stenig terräng."},"no":{"name":"Alpine Pro Mid","description":"Støttende mellomhøye støvler for fjellvandring og steinete terreng."},"da":{"name":"Alpine Pro Mid","description":"Støttende mellemhøje støvler til bjergvandring og stenet terræn."},"fi":{"name":"Alpine Pro Mid","description":"Tukevat puolikorkeat kengät vuoristovaellukseen ja kiviselle maastolle."}},"imageUrl":"https://images.unsplash.com/photo-1606107557195-0a29b4b4b4aa?w=400&h=300&fit=crop","attributes":[{"key":{"sv":"Vikt","no":"Vekt","da":"Vægt","fi":"Paino"},"value":"1150 g"},{"key":{"sv":"Sula","no":"Såle","da":"Sål","fi":"Pohja"},"value":"Vibram Megagrip"}],"price":2499,"stock":18},{"sku":"SHOE-003","texts":{"sv":{"name":"Speedlite Trail","description":"Ultralätta trailskor för snabba dagsturer och löpning i terräng."},"no":{"name":"Speedlite Trail","description":"Ultralette trailsko for raske dagsturer og terrengløping."},"da":{"name":"Speedlite Trail","description":"Ultralette trailsko til hurtige dagsture og terrænløb."},"fi":{"name":"Speedlite Trail","description":"Ultrakevyet polkujuoksukengät nopeille päiväretkille."}},"imageUrl":"https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400&h=300&fit=crop","attributes":[{"key":{"sv":"Vikt","no":"Vekt","da":"Vægt","fi":"Paino"},"value":"620 g"},{"key":{"sv":"Drop","no":"Drop","da":"Drop","fi":"Drop"},"value":"6 mm"}],"price":1299,"stock":45}]};
+  </script>
+</head>
+<body>
+  <div id="stale-banner" class="stale-banner">
+    <span id="stale-message"></span>
+    <button id="btn-update" class="btn btn-primary" type="button"></button>
+  </div>
+
+  <header>
+    <div class="logo">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 32" fill="none">
+  <path d="M4 28 L12 10 L18 18 L24 6 L32 28 Z" fill="#2eaadc" stroke="#2eaadc" stroke-width="1" stroke-linejoin="round"/>
+  <circle cx="26" cy="8" r="3" fill="#4dab6d"/>
+</svg>
+
+      <span>Friluftsportalen</span>
+    </div>
+    <div class="header-actions">
+      <div class="lang-switcher" id="lang-switcher"></div>
+      <button id="btn-download" class="btn btn-green" type="button"></button>
+    </div>
+  </header>
+
+  <main>
+    <div id="catalog-view" class="catalog-view">
+      <input type="search" id="search" class="search-bar" autocomplete="off">
+      <div id="catalog-grid" class="catalog-grid"></div>
+    </div>
+
+    <div id="product-detail" class="product-detail">
+      <button type="button" class="back-link" id="btn-back">←</button>
+      <div class="detail-layout">
+        <img id="detail-image" class="detail-image" alt="">
+        <div class="detail-info">
+          <p class="sku" id="detail-sku"></p>
+          <h1 id="detail-name"></h1>
+          <p class="price" id="detail-price"></p>
+          <p class="desc" id="detail-desc"></p>
+          <ul class="attributes" id="detail-attrs"></ul>
+          <button id="btn-export-product" class="btn btn-primary" type="button" style="margin-top:1rem"></button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="wizard-overlay" class="modal-overlay">
+    <div class="modal export-wizard" role="dialog" aria-modal="true" aria-labelledby="wizard-title">
+      <div class="modal-header">
+        <div class="modal-header-text">
+          <h2 id="wizard-title"></h2>
+          <p id="wizard-subtitle" class="wizard-subtitle"></p>
+        </div>
+        <button type="button" class="modal-close" id="wizard-close" aria-label="Close">×</button>
+      </div>
+      <div class="wizard-stepper" id="wizard-steps"></div>
+      <div class="export-wizard-body">
+        <div class="export-wizard-main">
+          <div id="wizard-content" class="wizard-content"></div>
+        </div>
+        <aside class="export-preview-panel" id="wizard-preview">
+          <div class="preview-header">
+            <h3 id="preview-title"></h3>
+            <p id="preview-hint" class="preview-hint"></p>
+          </div>
+          <div class="preview-summary" id="preview-summary"></div>
+          <div class="preview-content" id="preview-content"></div>
+        </aside>
+      </div>
+      <div class="modal-footer export-wizard-footer">
+        <button type="button" class="btn btn-secondary" id="wizard-back"></button>
+        <button type="button" class="btn btn-primary btn-download-action" id="wizard-next"></button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+const DataPackI18n = (() => {
+  const LANGS = ['sv', 'no', 'da', 'fi']
+  const UI = {
+    sv: {
+      download: 'Ladda ner data',
+      exportProduct: 'Exportera produkt',
+      search: 'Sök produkter...',
+      stale: 'Datan kan vara föråldrad. Uppdatera för senaste priser och lager.',
+      update: 'Uppdatera data',
+      back: 'Tillbaka till katalogen',
+      wizardTitle: 'Ladda ner data',
+      wizardSubtitle: 'Välj format, produkter och fält — förhandsgranskningen uppdateras direkt.',
+      stepFormat: 'Välj format',
+      stepScope: 'Välj produkter',
+      stepFields: 'Välj fält',
+      stepReview: 'Granska & ladda ner',
+      stepFormatDesc: 'Vilket filformat ska datan sparas i?',
+      stepScopeDesc: 'Vilka produkter ska ingå i exporten?',
+      stepFieldsDesc: 'Markera de kolumner du vill ha med. Du kan ändra när som helst.',
+      stepReviewDesc: 'Allt ser bra ut? Klicka på ladda ner — filen sparas på din dator.',
+      stepNames: ['Format', 'Produkter', 'Fält', 'Ladda ner'],
+      next: 'Fortsätt',
+      back_btn: 'Tillbaka',
+      download_btn: 'Ladda ner fil',
+      close: 'Stäng',
+      scopeAll: 'Alla produkter',
+      scopeFiltered: 'Filtrerade resultat',
+      scopeOne: 'Denna produkt',
+      scopeAllDesc: 'Exportera hela sortimentet',
+      scopeFilteredDesc: 'Bara det du sökt fram',
+      scopeOneDesc: 'Bara den valda produkten',
+      noResults: 'Inga produkter hittades',
+      stock: 'I lager',
+      formats: { csv: 'CSV', xlsx: 'Excel', json: 'JSON', xml: 'XML' },
+      formatDesc: {
+        csv: 'Perfekt för Excel, Google Sheets och de flesta system',
+        xlsx: 'Öppnas direkt i Microsoft Excel',
+        json: 'Strukturerad data för appar och integrationer',
+        xml: 'Standardformat för system och PIM',
+      },
+      previewTitle: 'Förhandsgranskning',
+      previewHint: 'Så här ser din fil ut',
+      previewEmpty: 'Välj minst ett fält för att se förhandsgranskning',
+      previewMore: '… och {n} rader till i den färdiga filen',
+      previewTruncated: 'Förhandsgranskningen är förkortad',
+      summaryProducts: '{n} produkter',
+      summaryFields: '{n} fält',
+      summaryFormat: 'Format',
+      summaryFilename: 'Filnamn',
+      selectAll: 'Markera alla',
+      selectNone: 'Avmarkera alla',
+      fieldsSelected: '{n} av {total} fält valda',
+      productCount: '{n} st',
+      readyToDownload: 'Redo att ladda ner',
+      downloadAgain: 'Ladda ner igen',
+      downloadSuccess: 'Filen har laddats ner!',
+    },
+    no: {
+      download: 'Last ned data',
+      exportProduct: 'Eksporter produkt',
+      search: 'Søk produkter...',
+      stale: 'Dataene kan være utdaterte. Oppdater for nyeste priser og lager.',
+      update: 'Oppdater data',
+      back: 'Tilbake til katalogen',
+      wizardTitle: 'Last ned data',
+      wizardSubtitle: 'Velg format, produkter og felt — forhåndsvisningen oppdateres med en gang.',
+      stepFormat: 'Velg format',
+      stepScope: 'Velg produkter',
+      stepFields: 'Velg felt',
+      stepReview: 'Gjennomgå & last ned',
+      stepFormatDesc: 'Hvilket filformat skal dataene lagres i?',
+      stepScopeDesc: 'Hvilke produkter skal inkluderes i eksporten?',
+      stepFieldsDesc: 'Merk kolonnene du vil ha med. Du kan endre når som helst.',
+      stepReviewDesc: 'Ser alt bra ut? Klikk last ned — filen lagres på datamaskinen din.',
+      stepNames: ['Format', 'Produkter', 'Felt', 'Last ned'],
+      next: 'Fortsett',
+      back_btn: 'Tilbake',
+      download_btn: 'Last ned fil',
+      close: 'Lukk',
+      scopeAll: 'Alle produkter',
+      scopeFiltered: 'Filtrerte resultater',
+      scopeOne: 'Dette produktet',
+      scopeAllDesc: 'Eksporter hele sortimentet',
+      scopeFilteredDesc: 'Bare det du har søkt frem',
+      scopeOneDesc: 'Bare det valgte produktet',
+      noResults: 'Ingen produkter funnet',
+      stock: 'På lager',
+      formats: { csv: 'CSV', xlsx: 'Excel', json: 'JSON', xml: 'XML' },
+      formatDesc: {
+        csv: 'Perfekt for Excel, Google Sheets og de fleste systemer',
+        xlsx: 'Åpnes direkte i Microsoft Excel',
+        json: 'Strukturert data for apper og integrasjoner',
+        xml: 'Standardformat for systemer og PIM',
+      },
+      previewTitle: 'Forhåndsvisning',
+      previewHint: 'Slik ser filen din ut',
+      previewEmpty: 'Velg minst ett felt for å se forhåndsvisning',
+      previewMore: '… og {n} rader til i den ferdige filen',
+      previewTruncated: 'Forhåndsvisningen er forkortet',
+      summaryProducts: '{n} produkter',
+      summaryFields: '{n} felt',
+      summaryFormat: 'Format',
+      summaryFilename: 'Filnavn',
+      selectAll: 'Merk alle',
+      selectNone: 'Fjern alle',
+      fieldsSelected: '{n} av {total} felt valgt',
+      productCount: '{n} stk',
+      readyToDownload: 'Klar til nedlasting',
+      downloadAgain: 'Last ned igjen',
+      downloadSuccess: 'Filen er lastet ned!',
+    },
+    da: {
+      download: 'Download data',
+      exportProduct: 'Eksporter produkt',
+      search: 'Søg produkter...',
+      stale: 'Dataene kan være forældede. Opdater for nyeste priser og lager.',
+      update: 'Opdater data',
+      back: 'Tilbage til kataloget',
+      wizardTitle: 'Download data',
+      wizardSubtitle: 'Vælg format, produkter og felter — forhåndsvisningen opdateres med det samme.',
+      stepFormat: 'Vælg format',
+      stepScope: 'Vælg produkter',
+      stepFields: 'Vælg felter',
+      stepReview: 'Gennemse & download',
+      stepFormatDesc: 'Hvilket filformat skal dataene gemmes i?',
+      stepScopeDesc: 'Hvilke produkter skal med i eksporten?',
+      stepFieldsDesc: 'Markér de kolonner du vil have med. Du kan ændre når som helst.',
+      stepReviewDesc: 'Ser alt godt ud? Klik download — filen gemmes på din computer.',
+      stepNames: ['Format', 'Produkter', 'Felter', 'Download'],
+      next: 'Fortsæt',
+      back_btn: 'Tilbage',
+      download_btn: 'Download fil',
+      close: 'Luk',
+      scopeAll: 'Alle produkter',
+      scopeFiltered: 'Filtrerede resultater',
+      scopeOne: 'Dette produkt',
+      scopeAllDesc: 'Eksporter hele sortimentet',
+      scopeFilteredDesc: 'Kun det du har søgt frem',
+      scopeOneDesc: 'Kun det valgte produkt',
+      noResults: 'Ingen produkter fundet',
+      stock: 'På lager',
+      formats: { csv: 'CSV', xlsx: 'Excel', json: 'JSON', xml: 'XML' },
+      formatDesc: {
+        csv: 'Perfekt til Excel, Google Sheets og de fleste systemer',
+        xlsx: 'Åbnes direkte i Microsoft Excel',
+        json: 'Struktureret data til apps og integrationer',
+        xml: 'Standardformat til systemer og PIM',
+      },
+      previewTitle: 'Forhåndsvisning',
+      previewHint: 'Sådan ser din fil ud',
+      previewEmpty: 'Vælg mindst ét felt for at se forhåndsvisning',
+      previewMore: '… og {n} rækker mere i den færdige fil',
+      previewTruncated: 'Forhåndsvisningen er forkortet',
+      summaryProducts: '{n} produkter',
+      summaryFields: '{n} felter',
+      summaryFormat: 'Format',
+      summaryFilename: 'Filnavn',
+      selectAll: 'Vælg alle',
+      selectNone: 'Fravælg alle',
+      fieldsSelected: '{n} af {total} felter valgt',
+      productCount: '{n} stk',
+      readyToDownload: 'Klar til download',
+      downloadAgain: 'Download igen',
+      downloadSuccess: 'Filen er downloadet!',
+    },
+    fi: {
+      download: 'Lataa tiedot',
+      exportProduct: 'Vie tuote',
+      search: 'Hae tuotteita...',
+      stale: 'Tiedot voivat olla vanhentuneita. Päivitä uusimmat hinnat ja varasto.',
+      update: 'Päivitä tiedot',
+      back: 'Takaisin luetteloon',
+      wizardTitle: 'Lataa tiedot',
+      wizardSubtitle: 'Valitse muoto, tuotteet ja kentät — esikatselu päivittyy heti.',
+      stepFormat: 'Valitse muoto',
+      stepScope: 'Valitse tuotteet',
+      stepFields: 'Valitse kentät',
+      stepReview: 'Tarkista & lataa',
+      stepFormatDesc: 'Missä tiedostomuodossa tiedot tallennetaan?',
+      stepScopeDesc: 'Mitkä tuotteet sisällytetään vientiin?',
+      stepFieldsDesc: 'Valitse haluamasi sarakkeet. Voit muuttaa valintoja milloin tahansa.',
+      stepReviewDesc: 'Kaikki näyttää hyvältä? Napsauta lataa — tiedosto tallentuu tietokoneellesi.',
+      stepNames: ['Muoto', 'Tuotteet', 'Kentät', 'Lataa'],
+      next: 'Jatka',
+      back_btn: 'Takaisin',
+      download_btn: 'Lataa tiedosto',
+      close: 'Sulje',
+      scopeAll: 'Kaikki tuotteet',
+      scopeFiltered: 'Suodatetut tulokset',
+      scopeOne: 'Tämä tuote',
+      scopeAllDesc: 'Vie koko valikoima',
+      scopeFilteredDesc: 'Vain hakutulokset',
+      scopeOneDesc: 'Vain valittu tuote',
+      noResults: 'Tuotteita ei löytynyt',
+      stock: 'Varastossa',
+      formats: { csv: 'CSV', xlsx: 'Excel', json: 'JSON', xml: 'XML' },
+      formatDesc: {
+        csv: 'Sopii Exceliin, Google Sheetsiin ja useimpiin järjestelmiin',
+        xlsx: 'Avautuu suoraan Microsoft Excelissä',
+        json: 'Jäsennelty data sovelluksiin ja integraatioihin',
+        xml: 'Vakiomuoto järjestelmille ja PIM:lle',
+      },
+      previewTitle: 'Esikatselu',
+      previewHint: 'Näin tiedostosi näyttää',
+      previewEmpty: 'Valitse vähintään yksi kenttä nähdäksesi esikatselun',
+      previewMore: '… ja {n} riviä lisää valmiissa tiedostossa',
+      previewTruncated: 'Esikatselu on lyhennetty',
+      summaryProducts: '{n} tuotetta',
+      summaryFields: '{n} kenttää',
+      summaryFormat: 'Muoto',
+      summaryFilename: 'Tiedostonimi',
+      selectAll: 'Valitse kaikki',
+      selectNone: 'Poista valinnat',
+      fieldsSelected: '{n} / {total} kenttää valittu',
+      productCount: '{n} kpl',
+      readyToDownload: 'Valmis ladattavaksi',
+      downloadAgain: 'Lataa uudelleen',
+      downloadSuccess: 'Tiedosto on ladattu!',
+    },
+  }
+
+  let currentLang = localStorage.getItem('datapack-lang') || 'sv'
+
+  function t(key, vars) {
+    let str = UI[currentLang][key] ?? UI.sv[key] ?? key
+    if (vars) {
+      for (const [k, v] of Object.entries(vars)) {
+        str = str.replace(`{${k}}`, String(v))
+      }
+    }
+    return str
+  }
+
+  function getLang() {
+    return currentLang
+  }
+
+  function setLang(lang) {
+    if (!LANGS.includes(lang)) return
+    currentLang = lang
+    localStorage.setItem('datapack-lang', lang)
+  }
+
+  function productText(product, field) {
+    const texts = product.texts[currentLang] || product.texts.sv
+    return texts[field] || ''
+  }
+
+  function schemaLabel(field) {
+    return field.label[currentLang] || field.label.sv || field.name
+  }
+
+  function attrKey(attr) {
+    return attr.key[currentLang] || attr.key.sv || ''
+  }
+
+  return { LANGS, t, getLang, setLang, productText, schemaLabel, attrKey }
+})()
+
+
+const DataPackTelemetry = (() => {
+  function getApiBase(manifest) {
+    return manifest.meta.apiBase || 'http://localhost:4040'
+  }
+
+  function send(manifest, event, payload = {}) {
+    const body = {
+      packId: manifest.meta.packId,
+      event,
+      timestamp: new Date().toISOString(),
+      payload: { ...payload, language: DataPackI18n.getLang() },
+    }
+
+    const url = `${getApiBase(manifest)}/api/telemetry`
+
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      mode: 'cors',
+    }).catch(() => {
+      // Best-effort — never block UI
+    })
+  }
+
+  return { send, getApiBase }
+})()
+
+
+const DataPackApi = (() => {
+  async function fetchLatestPack(manifest) {
+    const base = DataPackTelemetry.getApiBase(manifest)
+    const url = `${base}/api/packs/${encodeURIComponent(manifest.meta.packId)}`
+    const res = await fetch(url, { mode: 'cors' })
+    if (!res.ok) throw new Error(`Update failed: ${res.status}`)
+    return res.json()
+  }
+
+  return { fetchLatestPack }
+})()
+
+
+const DataPackExport = (() => {
+  function flattenProduct(product, fields, lang) {
+    const row = {}
+    const texts = product.texts[lang] || product.texts.sv
+    for (const field of fields) {
+      if (field === 'sku') row.sku = product.sku
+      else if (field === 'name') row.name = texts.name
+      else if (field === 'description') row.description = texts.description
+      else if (field === 'price') row.price = product.price
+      else if (field === 'stock') row.stock = product.stock
+      else row[field] = product[field]
+    }
+    return row
+  }
+
+  function toCsv(rows, fields, labels) {
+    const header = fields.map((f) => labels[f] || f).join(',')
+    const lines = rows.map((row) =>
+      fields.map((f) => {
+        const val = row[f] ?? ''
+        const str = String(val).replace(/"/g, '""')
+        return str.includes(',') || str.includes('"') || str.includes('\n')
+          ? `"${str}"`
+          : str
+      }).join(','),
+    )
+    return [header, ...lines].join('\n')
+  }
+
+  function toJson(rows) {
+    return JSON.stringify(rows, null, 2)
+  }
+
+  function toXml(rows, rootName) {
+    const esc = (s) =>
+      String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    xml += `<${rootName}>\n`
+    for (const row of rows) {
+      xml += '  <product>\n'
+      for (const [key, val] of Object.entries(row)) {
+        xml += `    <${key}>${esc(val)}</${key}>\n`
+      }
+      xml += '  </product>\n'
+    }
+    xml += `</${rootName}>`
+    return xml
+  }
+
+  function toXlsx(rows, fields, labels) {
+    const esc = (s) =>
+      String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+    let xml = '<?xml version="1.0"?>\n'
+    xml += '<?mso-application progid="Excel.Sheet"?>\n'
+    xml += '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet">\n'
+    xml += '<Worksheet ss:Name="Products" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">\n'
+    xml += '<Table>\n'
+    xml += '<Row>' + fields.map((f) => `<Cell><Data ss:Type="String">${esc(labels[f] || f)}</Data></Cell>`).join('') + '</Row>\n'
+    for (const row of rows) {
+      xml += '<Row>'
+      for (const f of fields) {
+        const val = row[f] ?? ''
+        const type = typeof val === 'number' ? 'Number' : 'String'
+        xml += `<Cell><Data ss:Type="${type}">${esc(val)}</Data></Cell>`
+      }
+      xml += '</Row>\n'
+    }
+    xml += '</Table></Worksheet></Workbook>'
+    return xml
+  }
+
+  function getLabels(manifest, fields) {
+    const labels = {}
+    for (const f of manifest.schema) {
+      if (fields.includes(f.name)) labels[f.name] = DataPackI18n.schemaLabel(f)
+    }
+    return labels
+  }
+
+  function getFilename(packId, format) {
+    const ext = format === 'xlsx' ? 'xls' : format
+    return `${packId}-export.${ext}`
+  }
+
+  function buildContent(rows, fields, labels, format) {
+    switch (format) {
+      case 'csv':
+        return toCsv(rows, fields, labels)
+      case 'json':
+        return toJson(rows)
+      case 'xml':
+        return toXml(rows, 'products')
+      case 'xlsx':
+        return toXlsx(rows, fields, labels)
+      default:
+        return ''
+    }
+  }
+
+  function getMime(format) {
+    switch (format) {
+      case 'csv':
+        return 'text/csv;charset=utf-8'
+      case 'json':
+        return 'application/json'
+      case 'xml':
+        return 'application/xml'
+      case 'xlsx':
+        return 'application/vnd.ms-excel'
+      default:
+        return 'application/octet-stream'
+    }
+  }
+
+  function prepareExport(products, fields, format, manifest) {
+    const lang = DataPackI18n.getLang()
+    const labels = getLabels(manifest, fields)
+    const rows = products.map((p) => flattenProduct(p, fields, lang))
+    const packId = manifest.meta.packId
+    return {
+      rows,
+      fields,
+      labels,
+      content: buildContent(rows, fields, labels, format),
+      filename: getFilename(packId, format),
+      mime: getMime(format),
+      format,
+      productCount: products.length,
+      fieldCount: fields.length,
+    }
+  }
+
+  function truncateText(text, maxLen = 1200) {
+    if (text.length <= maxLen) return { text, truncated: false }
+    return { text: text.slice(0, maxLen) + '\n…', truncated: true }
+  }
+
+  function buildPreview(products, fields, format, manifest, maxRows = 5) {
+    const exportableFields = fields.length
+      ? fields
+      : manifest.schema.filter((f) => f.exportable).map((f) => f.name)
+    const prepared = prepareExport(products, exportableFields, format, manifest)
+    const previewRows = prepared.rows.slice(0, maxRows)
+    const isTabular = format === 'csv' || format === 'xlsx'
+    const previewContent = isTabular
+      ? buildContent(previewRows, prepared.fields, prepared.labels, format)
+      : buildContent(prepared.rows, prepared.fields, prepared.labels, format)
+    const { text, truncated } = truncateText(previewContent, isTabular ? 2000 : 1400)
+
+    return {
+      ...prepared,
+      previewRows,
+      previewText: text,
+      previewTruncated: truncated || prepared.rows.length > maxRows,
+      totalRows: prepared.rows.length,
+      isTabular,
+    }
+  }
+
+  function download(content, filename, mime) {
+    const blob = new Blob([content], { type: mime })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = filename
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  function exportData(products, fields, format, manifest) {
+    const prepared = prepareExport(products, fields, format, manifest)
+    download(prepared.content, prepared.filename, prepared.mime)
+    return prepared
+  }
+
+  return { flattenProduct, prepareExport, buildPreview, exportData, getFilename }
+})()
+
+
+const DataPackApp = (() => {
+  let manifest = window.DATAPACK_MANIFEST
+  let searchQuery = ''
+  let selectedSku = null
+  let searchTelemetryTimer = null
+
+  const FORMAT_ICONS = { csv: '📊', xlsx: '📗', json: '{ }', xml: '<>' }
+
+  let wizard = {
+    open: false,
+    step: 0,
+    format: 'csv',
+    scope: 'all',
+    fields: [],
+    singleSku: null,
+    downloaded: false,
+  }
+
+  const $ = (id) => document.getElementById(id)
+
+  function getFilteredProducts() {
+    const q = searchQuery.toLowerCase().trim()
+    if (!q) return manifest.products
+    return manifest.products.filter((p) => {
+      const texts = p.texts[DataPackI18n.getLang()] || p.texts.sv
+      return (
+        p.sku.toLowerCase().includes(q) ||
+        texts.name.toLowerCase().includes(q) ||
+        texts.description.toLowerCase().includes(q)
+      )
+    })
+  }
+
+  function formatPrice(price) {
+    return `${price.toLocaleString('sv-SE')} SEK`
+  }
+
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+  }
+
+  function renderLangSwitcher() {
+    const el = $('lang-switcher')
+    el.innerHTML = ''
+    for (const lang of DataPackI18n.LANGS) {
+      const btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'lang-btn' + (DataPackI18n.getLang() === lang ? ' active' : '')
+      btn.textContent = lang.toUpperCase()
+      btn.addEventListener('click', () => {
+        DataPackI18n.setLang(lang)
+        renderAll()
+      })
+      el.appendChild(btn)
+    }
+  }
+
+  function renderStaticLabels() {
+    $('btn-download').textContent = DataPackI18n.t('download')
+    $('btn-update').textContent = DataPackI18n.t('update')
+    $('stale-message').textContent = DataPackI18n.t('stale')
+    $('search').placeholder = DataPackI18n.t('search')
+    $('btn-back').textContent = '← ' + DataPackI18n.t('back')
+    $('btn-export-product').textContent = DataPackI18n.t('exportProduct')
+    $('wizard-title').textContent = DataPackI18n.t('wizardTitle')
+    $('wizard-subtitle').textContent = DataPackI18n.t('wizardSubtitle')
+    $('preview-title').textContent = DataPackI18n.t('previewTitle')
+    $('preview-hint').textContent = DataPackI18n.t('previewHint')
+    $('wizard-back').textContent = DataPackI18n.t('back_btn')
+    $('wizard-close').setAttribute('aria-label', DataPackI18n.t('close'))
+  }
+
+  function renderStaleBanner() {
+    const stale = new Date(manifest.meta.staleAfter) < new Date()
+    $('stale-banner').classList.toggle('visible', stale)
+  }
+
+  function renderCatalog() {
+    const products = getFilteredProducts()
+    const grid = $('catalog-grid')
+    grid.innerHTML = ''
+
+    if (products.length === 0) {
+      grid.innerHTML = `<p class="empty-state">${DataPackI18n.t('noResults')}</p>`
+      return
+    }
+
+    for (const product of products) {
+      const texts = product.texts[DataPackI18n.getLang()] || product.texts.sv
+      const card = document.createElement('article')
+      card.className = 'product-card'
+      card.innerHTML = `
+        <img src="${product.imageUrl}" alt="${escHtml(texts.name)}" loading="lazy">
+        <div class="product-card-body">
+          <p class="sku">${escHtml(product.sku)}</p>
+          <h3>${escHtml(texts.name)}</h3>
+          <p class="price">${formatPrice(product.price)}</p>
+        </div>
+      `
+      card.addEventListener('click', () => showProduct(product.sku))
+      grid.appendChild(card)
+    }
+  }
+
+  function showCatalog() {
+    selectedSku = null
+    $('catalog-view').classList.remove('hidden')
+    $('product-detail').classList.remove('active')
+    location.hash = ''
+    renderCatalog()
+  }
+
+  function showProduct(sku) {
+    const product = manifest.products.find((p) => p.sku === sku)
+    if (!product) return
+    selectedSku = sku
+    $('catalog-view').classList.add('hidden')
+    $('product-detail').classList.add('active')
+    location.hash = `product/${sku}`
+
+    const texts = product.texts[DataPackI18n.getLang()] || product.texts.sv
+    $('detail-image').src = product.imageUrl
+    $('detail-image').alt = texts.name
+    $('detail-sku').textContent = product.sku
+    $('detail-name').textContent = texts.name
+    $('detail-price').textContent = formatPrice(product.price)
+    $('detail-desc').textContent = texts.description
+
+    const attrs = $('detail-attrs')
+    attrs.innerHTML = ''
+    for (const attr of product.attributes) {
+      const li = document.createElement('li')
+      li.innerHTML = `<span>${escHtml(DataPackI18n.attrKey(attr))}</span><span>${escHtml(attr.value)}</span>`
+      attrs.appendChild(li)
+    }
+    const stockLi = document.createElement('li')
+    stockLi.innerHTML = `<span>${DataPackI18n.t('stock')}</span><span>${product.stock}</span>`
+    attrs.appendChild(stockLi)
+  }
+
+  function getScopeProductCount(scope) {
+    if (scope === 'one') return wizard.singleSku || selectedSku ? 1 : 0
+    if (scope === 'filtered') return getFilteredProducts().length
+    return manifest.products.length
+  }
+
+  function getExportProducts() {
+    if (wizard.scope === 'one') {
+      const sku = wizard.singleSku || selectedSku
+      const p = manifest.products.find((x) => x.sku === sku)
+      return p ? [p] : []
+    }
+    if (wizard.scope === 'filtered') return getFilteredProducts()
+    return manifest.products
+  }
+
+  function getExportFields() {
+    const exportable = manifest.schema.filter((f) => f.exportable).map((f) => f.name)
+    return wizard.fields.length ? wizard.fields : exportable
+  }
+
+  function openWizard(singleSku) {
+    wizard = {
+      open: true,
+      step: 0,
+      format: 'csv',
+      scope: singleSku ? 'one' : 'all',
+      fields: manifest.schema.filter((f) => f.exportable).map((f) => f.name),
+      singleSku: singleSku || null,
+      downloaded: false,
+    }
+    $('wizard-overlay').classList.add('open')
+    renderWizard()
+  }
+
+  function closeWizard() {
+    wizard.open = false
+    $('wizard-overlay').classList.remove('open')
+  }
+
+  function renderWizardStepper() {
+    const steps = $('wizard-steps')
+    steps.innerHTML = ''
+    const stepNames = DataPackI18n.t('stepNames')
+    const names = Array.isArray(stepNames) ? stepNames : ['Format', 'Products', 'Fields', 'Download']
+
+    for (let i = 0; i < 4; i++) {
+      const item = document.createElement('div')
+      item.className = 'wizard-step-item'
+      if (i < wizard.step) item.classList.add('done')
+      if (i === wizard.step) item.classList.add('current')
+      item.innerHTML = `
+        <span class="wizard-step-num">${i < wizard.step ? '✓' : i + 1}</span>
+        <span class="wizard-step-label">${escHtml(names[i] || '')}</span>
+      `
+      steps.appendChild(item)
+    }
+  }
+
+  function renderFormatStep(content) {
+    content.innerHTML = `
+      <h3 class="step-heading">${escHtml(DataPackI18n.t('stepFormat'))}</h3>
+      <p class="step-desc">${escHtml(DataPackI18n.t('stepFormatDesc'))}</p>
+    `
+    const opts = document.createElement('div')
+    opts.className = 'format-options'
+    const descs = DataPackI18n.t('formatDesc')
+
+    for (const fmt of ['csv', 'xlsx', 'json', 'xml']) {
+      const card = document.createElement('button')
+      card.type = 'button'
+      card.className = 'format-card' + (wizard.format === fmt ? ' selected' : '')
+      card.innerHTML = `
+        <div class="format-card-icon">${FORMAT_ICONS[fmt]}</div>
+        <div class="format-card-title">${escHtml(DataPackI18n.t('formats')[fmt] || fmt)}</div>
+        <div class="format-card-desc">${escHtml(descs[fmt] || '')}</div>
+      `
+      card.addEventListener('click', () => {
+        wizard.format = fmt
+        wizard.downloaded = false
+        renderWizard()
+      })
+      opts.appendChild(card)
+    }
+    content.appendChild(opts)
+  }
+
+  function renderScopeStep(content) {
+    content.innerHTML = `
+      <h3 class="step-heading">${escHtml(DataPackI18n.t('stepScope'))}</h3>
+      <p class="step-desc">${escHtml(DataPackI18n.t('stepScopeDesc'))}</p>
+    `
+    const opts = document.createElement('div')
+    opts.className = 'scope-options'
+
+    const scopes = wizard.singleSku
+      ? [['one', DataPackI18n.t('scopeOne'), DataPackI18n.t('scopeOneDesc')]]
+      : [
+          ['all', DataPackI18n.t('scopeAll'), DataPackI18n.t('scopeAllDesc')],
+          ['filtered', DataPackI18n.t('scopeFiltered'), DataPackI18n.t('scopeFilteredDesc')],
+          ['one', DataPackI18n.t('scopeOne'), DataPackI18n.t('scopeOneDesc')],
+        ]
+
+    for (const [scope, title, desc] of scopes) {
+      const count = getScopeProductCount(scope)
+      const card = document.createElement('button')
+      card.type = 'button'
+      card.className = 'scope-card' + (wizard.scope === scope ? ' selected' : '')
+      card.innerHTML = `
+        <div class="scope-card-body">
+          <div class="scope-card-title">${escHtml(title)}</div>
+          <div class="scope-card-desc">${escHtml(desc)}</div>
+        </div>
+        <span class="scope-badge">${escHtml(DataPackI18n.t('productCount', { n: count }))}</span>
+      `
+      card.addEventListener('click', () => {
+        wizard.scope = scope
+        wizard.downloaded = false
+        renderWizard()
+      })
+      opts.appendChild(card)
+    }
+    content.appendChild(opts)
+  }
+
+  function renderFieldsStep(content) {
+    const exportable = manifest.schema.filter((f) => f.exportable)
+    content.innerHTML = `
+      <h3 class="step-heading">${escHtml(DataPackI18n.t('stepFields'))}</h3>
+      <p class="step-desc">${escHtml(DataPackI18n.t('stepFieldsDesc'))}</p>
+    `
+
+    const toolbar = document.createElement('div')
+    toolbar.className = 'field-toolbar'
+    toolbar.innerHTML = `
+      <span class="field-count-label">${escHtml(DataPackI18n.t('fieldsSelected', { n: wizard.fields.length, total: exportable.length }))}</span>
+      <div class="field-toolbar-actions">
+        <button type="button" class="btn-link" data-action="all">${escHtml(DataPackI18n.t('selectAll'))}</button>
+        <button type="button" class="btn-link" data-action="none">${escHtml(DataPackI18n.t('selectNone'))}</button>
+      </div>
+    `
+    toolbar.querySelector('[data-action="all"]').addEventListener('click', () => {
+      wizard.fields = exportable.map((f) => f.name)
+      wizard.downloaded = false
+      renderWizard()
+    })
+    toolbar.querySelector('[data-action="none"]').addEventListener('click', () => {
+      wizard.fields = []
+      wizard.downloaded = false
+      renderWizard()
+    })
+    content.appendChild(toolbar)
+
+    const list = document.createElement('div')
+    list.className = 'field-list'
+    for (const field of exportable) {
+      const label = document.createElement('label')
+      label.className = 'field-item'
+      const checked = wizard.fields.includes(field.name)
+      label.innerHTML = `<input type="checkbox" ${checked ? 'checked' : ''}> <span>${escHtml(DataPackI18n.schemaLabel(field))}</span>`
+      label.querySelector('input').addEventListener('change', (e) => {
+        if (e.target.checked) wizard.fields.push(field.name)
+        else wizard.fields = wizard.fields.filter((f) => f !== field.name)
+        wizard.downloaded = false
+        renderWizard()
+      })
+      list.appendChild(label)
+    }
+    content.appendChild(list)
+  }
+
+  function renderReviewStep(content) {
+    content.innerHTML = `
+      <div class="review-step">
+        <div class="review-icon">${wizard.downloaded ? '✅' : '📥'}</div>
+        <h3 class="review-title">${escHtml(wizard.downloaded ? DataPackI18n.t('downloadSuccess') : DataPackI18n.t('readyToDownload'))}</h3>
+        <p class="review-desc">${escHtml(DataPackI18n.t('stepReviewDesc'))}</p>
+      </div>
+    `
+  }
+
+  function renderPreviewPanel() {
+    const summaryEl = $('preview-summary')
+    const contentEl = $('preview-content')
+    const fields = getExportFields()
+    const products = getExportProducts()
+
+    if (!fields.length || !products.length) {
+      summaryEl.innerHTML = ''
+      contentEl.innerHTML = `<p class="preview-empty">${escHtml(DataPackI18n.t('previewEmpty'))}</p>`
+      return
+    }
+
+    const preview = DataPackExport.buildPreview(products, fields, wizard.format, manifest)
+    const formatLabel = DataPackI18n.t('formats')[wizard.format] || wizard.format
+
+    summaryEl.innerHTML = `
+      <span class="summary-chip"><strong>${escHtml(DataPackI18n.t('summaryProducts', { n: preview.totalRows }))}</strong></span>
+      <span class="summary-chip"><strong>${escHtml(DataPackI18n.t('summaryFields', { n: preview.fieldCount }))}</strong></span>
+      <span class="summary-chip">${escHtml(DataPackI18n.t('summaryFormat'))}: <strong>${escHtml(formatLabel)}</strong></span>
+      <span class="summary-chip">${escHtml(DataPackI18n.t('summaryFilename'))}: <strong>${escHtml(preview.filename)}</strong></span>
+    `
+
+    if (preview.isTabular && preview.previewRows.length) {
+      const thead = preview.fields.map((f) => `<th>${escHtml(preview.labels[f] || f)}</th>`).join('')
+      const tbody = preview.previewRows.map((row) => {
+        const cells = preview.fields.map((f) => {
+          const val = row[f] ?? ''
+          const display = String(val).length > 48 ? String(val).slice(0, 45) + '…' : String(val)
+          return `<td title="${escHtml(val)}">${escHtml(display)}</td>`
+        }).join('')
+        return `<tr>${cells}</tr>`
+      }).join('')
+
+      let moreHtml = ''
+      if (preview.totalRows > preview.previewRows.length) {
+        moreHtml = `<div class="preview-more">${escHtml(DataPackI18n.t('previewMore', { n: preview.totalRows - preview.previewRows.length }))}</div>`
+      }
+
+      contentEl.innerHTML = `
+        <div class="preview-table-wrap">
+          <table class="preview-table">
+            <thead><tr>${thead}</tr></thead>
+            <tbody>${tbody}</tbody>
+          </table>
+        </div>
+        ${moreHtml}
+      `
+    } else {
+      let note = ''
+      if (preview.previewTruncated) {
+        note = `<div class="preview-more">${escHtml(DataPackI18n.t('previewTruncated'))}</div>`
+      }
+      contentEl.innerHTML = `
+        <pre class="preview-code">${escHtml(preview.previewText)}</pre>
+        ${note}
+      `
+    }
+  }
+
+  function renderWizard() {
+    renderWizardStepper()
+
+    const content = $('wizard-content')
+    content.innerHTML = ''
+
+    if (wizard.step === 0) renderFormatStep(content)
+    else if (wizard.step === 1) renderScopeStep(content)
+    else if (wizard.step === 2) renderFieldsStep(content)
+    else renderReviewStep(content)
+
+    renderPreviewPanel()
+
+    const backBtn = $('wizard-back')
+    const nextBtn = $('wizard-next')
+
+    backBtn.style.visibility = wizard.step === 0 ? 'hidden' : 'visible'
+
+    nextBtn.classList.remove('is-ready', 'is-success')
+    if (wizard.step < 3) {
+      nextBtn.textContent = DataPackI18n.t('next')
+      nextBtn.disabled = wizard.step === 2 && wizard.fields.length === 0
+    } else {
+      nextBtn.textContent = wizard.downloaded
+        ? DataPackI18n.t('downloadAgain')
+        : DataPackI18n.t('download_btn')
+      nextBtn.classList.add('is-ready')
+      if (wizard.downloaded) nextBtn.classList.add('is-success')
+      nextBtn.disabled = getExportFields().length === 0 || getExportProducts().length === 0
+    }
+  }
+
+  function wizardNext() {
+    if (wizard.step < 3) {
+      if (wizard.step === 2 && wizard.fields.length === 0) return
+      wizard.step++
+      wizard.downloaded = false
+      renderWizard()
+      return
+    }
+    doExport()
+    wizard.downloaded = true
+    renderWizard()
+  }
+
+  function wizardBack() {
+    if (wizard.step > 0) {
+      wizard.step--
+      wizard.downloaded = false
+      renderWizard()
+    }
+  }
+
+  function doExport() {
+    const products = getExportProducts()
+    const fields = getExportFields()
+    DataPackExport.exportData(products, fields, wizard.format, manifest)
+    DataPackTelemetry.send(manifest, 'export', {
+      format: wizard.format,
+      fields,
+      productSku: wizard.singleSku || selectedSku || undefined,
+    })
+  }
+
+  async function updateData() {
+    const btn = $('btn-update')
+    btn.disabled = true
+    btn.textContent = '...'
+    try {
+      const fresh = await DataPackApi.fetchLatestPack(manifest)
+      manifest = fresh
+      window.DATAPACK_MANIFEST = fresh
+      DataPackTelemetry.send(manifest, 'update', {})
+      renderAll()
+    } catch (err) {
+      alert(err.message || 'Update failed')
+    } finally {
+      btn.disabled = false
+      btn.textContent = DataPackI18n.t('update')
+    }
+  }
+
+  function handleHash() {
+    const hash = location.hash.slice(1)
+    if (hash.startsWith('product/')) {
+      showProduct(hash.replace('product/', ''))
+    } else {
+      showCatalog()
+    }
+  }
+
+  function renderAll() {
+    renderLangSwitcher()
+    renderStaticLabels()
+    renderStaleBanner()
+    if (selectedSku) showProduct(selectedSku)
+    else renderCatalog()
+    if (wizard.open) renderWizard()
+  }
+
+  function bindEvents() {
+    $('search').addEventListener('input', (e) => {
+      searchQuery = e.target.value
+      renderCatalog()
+      if (searchQuery.trim()) {
+        clearTimeout(searchTelemetryTimer)
+        searchTelemetryTimer = setTimeout(() => {
+          DataPackTelemetry.send(manifest, 'search', { query: searchQuery.trim() })
+        }, 600)
+      }
+    })
+
+    $('btn-download').addEventListener('click', () => openWizard(null))
+    $('btn-export-product').addEventListener('click', () => openWizard(selectedSku))
+    $('btn-back').addEventListener('click', showCatalog)
+    $('btn-update').addEventListener('click', updateData)
+    $('wizard-close').addEventListener('click', closeWizard)
+    $('wizard-overlay').addEventListener('click', (e) => {
+      if (e.target === $('wizard-overlay')) closeWizard()
+    })
+    $('wizard-next').addEventListener('click', wizardNext)
+    $('wizard-back').addEventListener('click', wizardBack)
+    window.addEventListener('hashchange', handleHash)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && wizard.open) closeWizard()
+    })
+  }
+
+  function init() {
+    if (!manifest || !manifest.products) {
+      document.body.innerHTML = '<p style="padding:2rem;color:#e03e3e">Invalid DataPack manifest</p>'
+      return
+    }
+    bindEvents()
+    renderAll()
+    handleHash()
+    DataPackTelemetry.send(manifest, 'open', {})
+  }
+
+  return { init }
+})()
+
+document.addEventListener('DOMContentLoaded', () => DataPackApp.init())
+
+</script>
+</body>
+</html>

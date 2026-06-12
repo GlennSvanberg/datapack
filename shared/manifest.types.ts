@@ -1,0 +1,69 @@
+export type NordicLang = 'sv' | 'no' | 'da' | 'fi'
+
+export type LocalizedString = Record<NordicLang, string>
+
+export type TelemetryEventType = 'open' | 'search' | 'export' | 'update'
+
+export interface PackMeta {
+  packId: string
+  brand: string
+  assortment: string
+  version: string
+  generatedAt: string
+  staleAfter: string
+  apiBase?: string
+}
+
+export interface SchemaField {
+  name: string
+  label: LocalizedString
+  type: 'string' | 'number'
+  exportable: boolean
+}
+
+export interface ProductTexts {
+  name: string
+  description: string
+}
+
+export interface ProductAttribute {
+  key: LocalizedString
+  value: string
+}
+
+export interface Product {
+  sku: string
+  texts: Record<NordicLang, ProductTexts>
+  imageUrl: string
+  attributes: ProductAttribute[]
+  price: number
+  stock: number
+}
+
+export interface PackManifest {
+  meta: PackMeta
+  schema: SchemaField[]
+  products: Product[]
+}
+
+export interface TelemetryPayload {
+  query?: string
+  format?: string
+  fields?: string[]
+  productSku?: string
+  language?: NordicLang
+}
+
+export interface TelemetryEvent {
+  packId: string
+  event: TelemetryEventType
+  timestamp: string
+  payload?: TelemetryPayload
+}
+
+export interface PackRegistryEntry {
+  packId: string
+  assortment: string
+  productCount: number
+  version: string
+}
