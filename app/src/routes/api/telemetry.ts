@@ -1,7 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { json } from '@tanstack/react-start'
+import { api } from '../../../convex/_generated/api'
 import { corsPreflightResponse, withCors } from '#/lib/cors'
-import { appendEvent } from '#/lib/server/telemetry'
+import { getConvexClient } from '#/lib/convex/server'
 import type { TelemetryEvent, TelemetryEventType } from '#/lib/types'
 
 const VALID_EVENTS: TelemetryEventType[] = ['open', 'search', 'export', 'update']
@@ -42,7 +43,8 @@ export const Route = createFileRoute('/api/telemetry')({
           )
         }
 
-        await appendEvent({
+        const client = getConvexClient()
+        await client.mutation(api.telemetry.append, {
           packId: body.packId,
           event: body.event,
           timestamp: body.timestamp,

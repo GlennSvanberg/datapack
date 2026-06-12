@@ -1,19 +1,31 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { useQuery } from 'convex/react'
 import { ArrowLeft, Activity, Download, RefreshCw, Search } from 'lucide-react'
+import { api } from '../../convex/_generated/api'
 import { EventTable } from '#/components/EventTable'
 import { FormatBadges } from '#/components/FormatBadges'
+import { PackEditor } from '#/components/PackEditor'
 import { StatCard } from '#/components/StatCard'
 import { formatTimestamp } from '#/lib/format'
-import { getPackDetail } from '#/lib/dashboard/server'
+import type { PackManifest } from '#/lib/types'
 
 export const Route = createFileRoute('/packs/$packId')({
-  loader: async ({ params }) => getPackDetail({ data: params.packId }),
   component: PackDetailPage,
 })
 
 function PackDetailPage() {
   const { packId } = Route.useParams()
-  const { pack, stats, events } = Route.useLoaderData()
+  const pack = useQuery(api.packs.getByPackId, { packId }) as PackManifest | null | undefined
+  const stats = useQuery(api.telemetry.packStats, { packId })
+  const events = useQuery(api.telemetry.recent, { packId, limit: 30 })
+
+  if (pack === undefined || stats === undefined || events === undefined) {
+    return (
+      <div className="py-16 text-center text-[var(--text-secondary)]">
+        Loading pack…
+      </div>
+    )
+  }
 
   if (!pack) {
     return (
@@ -54,6 +66,8 @@ function PackDetailPage() {
           icon={Search}
         />
       </div>
+
+      <PackEditor packId={packId} pack={pack} />
 
       <section className="rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] p-6">
         <h2 className="mb-4 text-lg font-medium">Export formats</h2>

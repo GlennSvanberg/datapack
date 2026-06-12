@@ -23,7 +23,7 @@ Traditional exports (Excel, CSV, XML, JSON) lock format and columns at send time
 - **Client-side compute** — browse, search, filter, and export run in the browser
 - **Offline-first** — full catalog works without network; sync and telemetry when online
 - **Small assortments** — a few products per file, not full catalogs
-- **POC scope** — no database; telemetry appends to a static JSON file; must look polished, stay simple
+- **POC scope** — Convex cloud for pack data + telemetry; live dashboard; must look polished, stay simple
 
 ## User journeys
 
@@ -54,7 +54,7 @@ Traditional exports (Excel, CSV, XML, JSON) lock format and columns at send time
 │  • Embedded manifest        │ ──────► │  GET  /api/packs/:packId         │
 │  • Catalog UI (vanilla JS)  │         │       → latest product JSON    │
 │  • Export wizard            │ ──────► │  POST /api/telemetry             │
-│  • Language switcher        │         │       → append to telemetry.json│
+│  • Language switcher        │         │       → Convex telemetryEvents  │
 │  • Works offline            │         │  Dashboard routes (static read) │
 └─────────────────────────────┘         └──────────────────────────────────┘
 ```
@@ -122,12 +122,12 @@ All routes live under `app/`. Implement with TanStack Start server routes or `cr
 
 Returns the latest manifest JSON for that pack (same shape as embedded manifest).
 
-- Source for POC: static JSON files in `app/data/packs/{packId}.json`
+- Source: Convex `packs` table (editable from dashboard; seeded from `app/data/packs/`)
 - Pack file only needs to know its `packId` and `apiBase`
 
 ### `POST /api/telemetry`
 
-Append one event to `app/data/telemetry.json` (file-based store for POC).
+Append one event to Convex `telemetryEvents` (via TanStack API route proxy).
 
 **Request body:**
 
@@ -152,7 +152,7 @@ Telemetry is best-effort from the pack (fire-and-forget `fetch`). Failures must 
 
 ### Insights (TBD)
 
-Dashboard will read `telemetry.json` (+ pack registry) to show:
+Dashboard subscribes to Convex queries for live stats and events:
 
 - Opens per pack
 - Export formats used
@@ -205,8 +205,8 @@ Wizard steps (keep very simple):
 | DataPack runtime | Vanilla JS in self-contained MHTML | `datapack/` |
 | Sample manifests | JSON per assortment | `sample-data/` |
 | Built packs | Output `.mhtml` files | `packs/` |
-| Telemetry store | `app/data/telemetry.json` | appended at runtime |
-| Pack data store | `app/data/packs/*.json` | read by API |
+| Persistence | Convex (`app/convex/`) | packs + telemetryEvents tables |
+| Seed fixtures | `app/data/` | imported once via `npm run convex:seed` |
 | Local cache (optional) | Dexie.js / IndexedDB | inside pack |
 
 ## Repo layout
@@ -216,9 +216,8 @@ datapack/
 ├── CONTEXT.md              # Product vision, data model, API (this file)
 ├── AGENTS.md               # Agent instructions
 ├── app/                    # TanStack Start — dashboard + API (Vercel root)
-│   ├── data/
-│   │   ├── packs/          # Latest manifest per packId
-│   │   └── telemetry.json  # Appended events (POC store)
+│   ├── convex/             # Schema, queries, mutations, seed
+│   ├── data/               # Seed fixtures only (not runtime)
 │   └── src/routes/
 ├── datapack/               # MHTML template, CSS, vanilla JS runtime
 ├── sample-data/            # Source JSON used to build packs (may be outdated)
@@ -237,14 +236,11 @@ datapack/
 
 ## Out of scope (POC)
 
-- Real database
 - Authentication
 - PIM / ERP integration
 - Automated pack compiler pipeline
 - GDPR / consent flows
 - Large catalogs (1000+ SKUs)
-- Production-grade file writes on serverless (telemetry JSON append is a POC shortcut; may need Blob/KV later on Vercel)
-
 ## Demo narrative
 
 Friluftsportalen sends a spring tent assortment (3–5 products) as an MHTML file. The recipient opens it, sees outdated data, clicks Update, browses in Swedish, exports a CSV with SKU + price + description, and the operator later sees an `open` and `export` event for `friluftsportalen-spring-tents-001` on the dashboard.

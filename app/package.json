@@ -7,6 +7,10 @@
   },
   "scripts": {
     "dev": "vite dev --port 4040",
+    "convex:dev": "convex dev",
+    "convex:seed": "convex run seed:runSeed",
+    "convex:fixtures": "node scripts/generate-seed-fixtures.mjs",
+    "dev:all": "convex dev --start \"vite dev --port 4040\"",
     "generate-routes": "tsr generate",
     "build": "vite build",
     "preview": "vite preview --port 4040",
@@ -22,6 +26,7 @@
     "@tanstack/react-router-ssr-query": "latest",
     "@tanstack/react-start": "latest",
     "@tanstack/router-plugin": "^1.132.0",
+    "convex": "^1.41.0",
     "lucide-react": "^0.545.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -38,6 +43,7 @@
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^6.0.1",
     "jsdom": "^28.1.0",
+    "nitro": "npm:nitro-nightly@^3.0.1-20260611-123640-7765bcb7",
     "typescript": "^6.0.2",
     "vite": "^8.0.0",
     "vitest": "^4.1.5"

@@ -18,9 +18,10 @@ This package is the **hosted mothership**: dashboard for pack usage and HTTP API
 
 | Responsibility | Implementation |
 |----------------|----------------|
-| Serve latest pack data | `GET /api/packs/:packId` → `data/packs/{packId}.json` |
-| Record telemetry | `POST /api/telemetry` → append to `data/telemetry.json` |
-| Usage dashboard | React routes under `src/routes/` |
+| Serve latest pack data | `GET /api/packs/:packId` → Convex `packs.getByPackId` |
+| Record telemetry | `POST /api/telemetry` → Convex `telemetry.append` |
+| Usage dashboard | React routes with `useQuery` (live Convex subscriptions) |
+| Pack editing (demo) | `PackEditor` on pack detail → Convex mutations |
 | Vercel deployment | This directory is the Vercel **Root Directory** |
 
 Every telemetry event and pack fetch is keyed by **`packId`** so we know which assortment file triggered the action.
@@ -29,9 +30,12 @@ Every telemetry event and pack fetch is keyed by **`packId`** so we know which a
 
 ```bash
 cd app
-npm run dev
-npm run generate-routes   # after adding/removing routes
-npx @tanstack/intent@latest list
+npm run dev:all          # Convex + Vite (recommended)
+# or two terminals:
+npm run convex:dev       # terminal 1
+npm run dev              # terminal 2 (port 4040)
+npm run convex:seed      # once, after first convex dev
+npm run generate-routes  # after adding/removing routes
 ```
 
 Repo root: `datapack/`. Sibling folders: `datapack/` (pack runtime), `sample-data/`, `packs/`.
@@ -44,21 +48,26 @@ Repo root: `datapack/`. Sibling folders: `datapack/` (pack runtime), `sample-dat
 | Router | File-based (`src/routes/`) |
 | Toolchain | TanStack CLI, Vite 8, TypeScript, npm |
 | Styling | Tailwind CSS v4 |
-| Data (POC) | Static JSON in `data/` — no database |
+| Persistence | Convex (`convex/`) — packs + telemetry |
 
 ## Environment variables
 
 | Variable | Purpose |
 |----------|---------|
-| `VITE_API_BASE` | Optional; public app URL for client-side links |
+| `CONVEX_URL` | Server-side Convex HTTP client (API routes) |
+| `VITE_CONVEX_URL` | Client-side Convex React subscriptions |
+| `CONVEX_DEPLOYMENT` | Set by `npx convex dev` |
 
-Server routes read/write `data/telemetry.json` and `data/packs/*.json`. On Vercel serverless, file writes may be ephemeral — acceptable for POC demos; document if switching to Vercel KV / Blob later.
+Copy `.env.example` → `.env.local` after `npx convex dev`.
 
 ## Scripts
 
 | Script | Purpose |
 |--------|---------|
-| `npm run dev` | Dev server on port 3000 |
+| `npm run dev` | Vite dev server on port 4040 |
+| `npm run dev:all` | Convex dev + Vite together |
+| `npm run convex:dev` | Convex dev only |
+| `npm run convex:seed` | Import `data/` fixtures into Convex |
 | `npm run build` | Production build |
 | `npm run preview` | Preview production build |
 | `npm run generate-routes` | Regenerate `src/routeTree.gen.ts` |
@@ -68,66 +77,79 @@ Server routes read/write `data/telemetry.json` and `data/packs/*.json`. On Verce
 
 ```
 app/
-├── data/
-│   ├── packs/              # {packId}.json — latest manifest per assortment
-│   └── telemetry.json      # Appended events from DataPack files
+├── convex/
+│   ├── schema.ts           # packs + telemetryEvents
+│   ├── packs.ts            # queries + edit mutations
+│   ├── telemetry.ts        # append + aggregate queries
+│   └── seed.ts             # seed from data/ fixtures
+├── data/                   # Seed fixtures only (not read at runtime)
 ├── src/
 │   ├── routes/
-│   │   ├── __root.tsx
-│   │   ├── index.tsx       # Dashboard home
-│   │   └── api/            # API routes (packs, telemetry)
-│   ├── router.tsx
-│   ├── routeTree.gen.ts    # Generated — do not edit
-│   └── styles.css
-├── vite.config.ts
-└── tsr.config.json
+│   │   ├── __root.tsx      # ConvexProvider + Live badge
+│   │   ├── index.tsx       # Live dashboard home
+│   │   ├── packs.$packId.tsx  # Live stats + PackEditor
+│   │   └── api/            # CORS API → Convex proxy
+│   ├── components/
+│   │   ├── PackEditor.tsx
+│   │   └── LiveBadge.tsx
+│   └── lib/convex/         # client + server Convex helpers
+└── vite.config.ts
 ```
 
 ### Patterns
 
-- `getRouter()` in `src/router.tsx` wires the generated route tree
-- Root route uses `shellComponent` for the HTML document shell
-- Use `createServerFn` or file-based API routes for server-only logic (telemetry append, pack read)
-- API routes must return **CORS headers** so MHTML files opened locally can `fetch` the hosted API
+- Dashboard uses **`useQuery` / `useMutation`** from `convex/react` for live data
+- API routes use **`ConvexHttpClient`** via `src/lib/convex/server.ts`
+- API routes must return **CORS headers** so pack HTML files can `fetch` the hosted API
+- Regenerate `convex/seedFixtures.ts` from `data/` when fixtures change:
+  `node scripts/generate-seed-fixtures.mjs`
 
-### API routes to implement
+### API routes
 
 ```
-GET  /api/packs/$packId     → read data/packs/{packId}.json
-POST /api/telemetry         → append to data/telemetry.json
+GET  /api/packs/$packId     → Convex packs.getByPackId
+POST /api/telemetry         → Convex telemetry.append
 ```
 
 Request/response shapes: see [`../CONTEXT.md`](../CONTEXT.md).
 
-## Design
+## Vercel + Convex deployment
 
-- Dark, Notion-inspired dashboard — high contrast, clean typography
-- Accent color for charts, badges, and primary actions
-- Align visually with DataPack catalog where reasonable (shared CSS variables optional)
-
-## Vercel deployment
-
-1. Create Vercel project linked to this repo
-2. Set **Root Directory** → `app`
-3. Build command: `npm run build` (default)
-4. Deploy; use production URL as `apiBase` when building MHTML packs
-
-TanStack Start builds for Node/serverless targets. See `@tanstack/start-client-core#start-core/deployment` for adapter details if needed.
+1. `npx convex login` and `npx convex deploy` from `app/`
+2. Set Vercel env vars: `CONVEX_URL`, `VITE_CONVEX_URL` (same Convex deployment URL)
+3. Vercel project **Root Directory** → `app`
+4. Build: `npm run build`
+5. Run `npx convex run seed:runSeed` on production deployment once
+6. Rebuild pack HTML with `API_BASE=https://your-app.vercel.app`
 
 ## Known gotchas
 
 1. **Route generation** — run `npm run generate-routes` if `routeTree.gen.ts` is missing
-2. **Vite plugin order** — `tanstackStart()` before `viteReact()` in `vite.config.ts`
-3. **Do not edit** `routeTree.gen.ts`
-4. **CORS** — required for local `.mhtml` → hosted API calls
-5. **Serverless writes** — `telemetry.json` append works locally; may not persist on Vercel without external storage (POC limitation)
+2. **Convex must be running** — dashboard and API need `CONVEX_URL`; use `dev:all`
+3. **Do not edit** `routeTree.gen.ts` or `convex/_generated/`
+4. **CORS** — required for local pack HTML → hosted API calls
+5. **Seed** — after resetting Convex, run `npm run convex:seed`
 
 ## Related directories (outside this package)
 
 | Path | Purpose |
 |------|---------|
 | `../datapack/` | Vanilla JS catalog runtime embedded in MHTML |
-| `../sample-data/` | Source JSON (often intentionally outdated) |
-| `../packs/` | Built `.mhtml` files |
+| `../sample-data/` | Source JSON for building pack files |
+| `../packs/` | Built `.html` pack files |
 
-When changing manifest shape, update **both** `sample-data/`, `data/packs/`, and the pack runtime in `../datapack/`.
+When changing manifest shape, update **sample-data**, **app/data** (seed fixtures), regenerate seed, and the pack runtime in `../datapack/`.
+
+<!-- convex-ai-start -->
+
+This project uses [Convex](https://convex.dev) as its backend.
+
+When working on Convex code, **always read
+`convex/_generated/ai/guidelines.md` first** for important guidelines on
+how to correctly use Convex APIs and patterns. The file contains rules that
+override what you may have learned about Convex from training data.
+
+Convex agent skills for common tasks can be installed by running
+`npx convex ai-files install`.
+
+<!-- convex-ai-end -->

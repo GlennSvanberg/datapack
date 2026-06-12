@@ -11,7 +11,7 @@ Two deliverables in one monorepo:
 | **Hosted app** — dashboard + API | `app/` | TanStack Start, React 19, Tailwind v4 |
 | **DataPack** — single-file catalog | `datapack/`, `sample-data/`, `packs/` | Vanilla JS inside `.mhtml` |
 
-**No database.** Pack data and telemetry use static JSON under `app/data/` for the POC.
+**Convex** for pack data and telemetry (`app/convex/`). `app/data/` is seed fixtures only.
 
 ## Where to look
 
@@ -20,7 +20,8 @@ Two deliverables in one monorepo:
 | Product vision, manifest shape, API | [`CONTEXT.md`](./CONTEXT.md) |
 | Dashboard UI, routes, server API | [`app/src/`](./app/src/) |
 | Pack JSON served by API | [`app/data/packs/`](./app/data/packs/) |
-| Telemetry log (append-only POC) | [`app/data/telemetry.json`](./app/data/telemetry.json) |
+| Convex backend (packs + telemetry) | [`app/convex/`](./app/convex/) |
+| Seed fixtures | [`app/data/`](./app/data/) |
 | TanStack-specific gotchas | [`app/AGENTS.md`](./app/AGENTS.md) |
 | Sample / outdated source data | [`sample-data/`](./sample-data/) |
 | Pack HTML template + runtime JS | [`datapack/`](./datapack/) |
@@ -31,7 +32,8 @@ Two deliverables in one monorepo:
 ```bash
 # Dashboard + API (from repo root)
 cd app
-npm run dev              # http://localhost:3000
+npm run dev:all          # Convex + dashboard http://localhost:4040
+npm run convex:seed      # once after first convex dev
 npm run generate-routes  # after adding/removing route files
 npm run build
 npm run preview
@@ -63,7 +65,7 @@ Do not put secrets in client bundles. POC APIs are open; no auth required yet.
 - **DataPack = vanilla JS** — no React inside `.mhtml`; must work offline
 - **App = React + TanStack** — dashboard and server routes only
 - **Keep POC simple** — polished UI, minimal moving parts
-- **Telemetry** — real `POST /api/telemetry`; append to `telemetry.json`; never block UI on failure
+- **Telemetry** — real `POST /api/telemetry` → Convex; never block UI on failure
 - **Updates** — `GET /api/packs/:packId`; pack stores `packId` + `apiBase` in manifest meta
 
 ### Design
@@ -76,7 +78,7 @@ Do not put secrets in client bundles. POC APIs are open; no auth required yet.
 ## Do not
 
 - Edit `app/src/routeTree.gen.ts` — run `npm run generate-routes`
-- Add Convex, Postgres, or auth unless explicitly requested
+- Add Postgres or auth unless explicitly requested
 - Use huge product lists in sample data
 - Rely on CDN scripts in MHTML if avoidable (prefer inlined assets for single-file portability)
 - Block catalog or export when offline or when telemetry fails
@@ -86,7 +88,7 @@ Do not put secrets in client bundles. POC APIs are open; no auth required yet.
 | User asks for… | Work in… |
 |----------------|----------|
 | Export wizard, catalog UI, stale banner | `datapack/` |
-| New sample assortment | `sample-data/` + `app/data/packs/{packId}.json` |
+| New sample assortment | `sample-data/` + `app/data/packs/{packId}.json` + `npm run convex:seed` |
 | Telemetry API, pack update API | `app/src/routes/api/` or server functions |
 | Dashboard / insights UI | `app/src/routes/` |
 | Rebuild MHTML | `datapack/` → output to `packs/` |
@@ -95,7 +97,7 @@ Do not put secrets in client bundles. POC APIs are open; no auth required yet.
 
 ```
 GET  /api/packs/:packId     → latest manifest JSON
-POST /api/telemetry         → append event { packId, event, timestamp, payload }
+POST /api/telemetry         → Convex append { packId, event, timestamp, payload }
 ```
 
 See [`CONTEXT.md`](./CONTEXT.md) for full request/response shapes.

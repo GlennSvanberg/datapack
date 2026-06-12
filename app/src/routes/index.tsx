@@ -1,36 +1,35 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { useQuery } from 'convex/react'
 import { Activity, Download, Package, RefreshCw } from 'lucide-react'
+import { api } from '../../convex/_generated/api'
 import { EventTable } from '#/components/EventTable'
 import { FormatBadges } from '#/components/FormatBadges'
 import { PackTable } from '#/components/PackTable'
 import { StatCard } from '#/components/StatCard'
-import {
-  getDashboardStats,
-  getPackRegistry,
-  getRecentActivity,
-} from '#/lib/dashboard/server'
 
 export const Route = createFileRoute('/')({
-  loader: async () => {
-    const [stats, packs, events] = await Promise.all([
-      getDashboardStats(),
-      getPackRegistry(),
-      getRecentActivity(),
-    ])
-    return { stats, packs, events }
-  },
   component: DashboardHome,
 })
 
 function DashboardHome() {
-  const { stats, packs, events } = Route.useLoaderData()
+  const stats = useQuery(api.telemetry.dashboardStats)
+  const packs = useQuery(api.packs.list)
+  const events = useQuery(api.telemetry.recent, { limit: 20 })
+
+  if (stats === undefined || packs === undefined || events === undefined) {
+    return (
+      <div className="py-16 text-center text-[var(--text-secondary)]">
+        Loading dashboard…
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-semibold text-[var(--text-primary)]">Overview</h1>
         <p className="mt-1 text-sm text-[var(--text-secondary)]">
-          Monitor DataPack usage across assortments
+          Monitor DataPack usage across assortments — updates live
         </p>
       </div>
 
