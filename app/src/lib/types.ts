@@ -12,6 +12,12 @@ export interface PackMeta {
   apiBase?: string
 }
 
+export interface AttributeDefinition {
+  id: string
+  label: Record<NordicLang, string>
+  exportable?: boolean
+}
+
 export interface PackManifest {
   meta: PackMeta
   schema: Array<{
@@ -20,12 +26,13 @@ export interface PackManifest {
     type: 'string' | 'number'
     exportable: boolean
   }>
+  attributeSchema?: AttributeDefinition[]
   products: Array<{
     sku: string
     texts: Record<NordicLang, { name: string; description: string }>
     imageUrl: string
     attributes: Array<{
-      key: Record<NordicLang, string>
+      id: string
       value: string
     }>
     price: number
@@ -35,16 +42,23 @@ export interface PackManifest {
 
 export type ExportScope = 'all' | 'filtered' | 'one'
 export type ExportSource = 'catalog' | 'product'
+export type ExportLayout = 'wide' | 'tall' | 'split'
+export type ExportStructure = 'flat' | 'nested' | 'tall'
 
 export interface TelemetryPayload {
   query?: string
   format?: string
   fields?: string[]
+  productFields?: string[]
+  attributeFields?: string[]
+  layout?: ExportLayout
+  structure?: ExportStructure
   productSku?: string
   language?: NordicLang
   scope?: ExportScope
   productCount?: number
   fieldCount?: number
+  attributeCount?: number
   totalFields?: number
   allFieldsSelected?: boolean
   searchQuery?: string

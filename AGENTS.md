@@ -25,7 +25,7 @@ Two deliverables in one monorepo:
 | TanStack-specific gotchas | [`app/AGENTS.md`](./app/AGENTS.md) |
 | Sample / outdated source data | [`sample-data/`](./sample-data/) |
 | Pack HTML template + runtime JS | [`datapack/`](./datapack/) |
-| Built MHTML outputs | [`packs/`](./packs/) |
+| Built pack HTML (local + prod) | [`packs/local/`](./packs/local/), [`packs/prod/`](./packs/prod/) |
 
 ## Commands
 
@@ -37,16 +37,21 @@ npm run convex:seed      # once after first convex dev
 npm run generate-routes  # after adding/removing route files
 npm run build
 npm run preview
+
+# DataPack HTML (from repo root) — always builds BOTH environments
+npm run build:packs
+# → packs/local/{packId}.html  (apiBase http://localhost:4040)
+# → packs/prod/{packId}.html   (apiBase https://datapack-one.vercel.app)
 ```
 
-DataPack build tooling will live in `datapack/` (TBD — manual copy/embed for now).
+**Always run `npm run build:packs` after changing `datapack/` runtime, styles, or sample data.** One command writes local and prod outputs; do not build only one environment unless the user explicitly asks for a single target.
 
 ## Vercel deployment
 
 - **Root Directory:** `app` (set in Vercel project settings)
 - **Framework:** Vite / TanStack Start (auto-detected or Other)
 - **Build:** `npm run build`
-- Pack files embed `apiBase` → deployed Vercel URL (use env at build time for packs)
+- Pack files embed `apiBase` per environment — see `npm run build:packs` (always produces `packs/local/` + `packs/prod/`)
 
 Do not put secrets in client bundles. POC APIs are open; no auth required yet.
 
@@ -91,7 +96,7 @@ Do not put secrets in client bundles. POC APIs are open; no auth required yet.
 | New sample assortment | `sample-data/` + `app/data/packs/{packId}.json` + `npm run convex:seed` |
 | Telemetry API, pack update API | `app/src/routes/api/` or server functions |
 | Dashboard / insights UI | `app/src/routes/` |
-| Rebuild MHTML | `datapack/` → output to `packs/` |
+| Rebuild pack HTML | `npm run build:packs` → `packs/local/` + `packs/prod/` (always both) |
 
 ## API quick reference
 

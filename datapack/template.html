@@ -10,11 +10,6 @@
   </script>
 </head>
 <body>
-  <div id="stale-banner" class="stale-banner">
-    <span id="stale-message"></span>
-    <button id="btn-update" class="btn btn-primary" type="button"></button>
-  </div>
-
   <header>
     <div class="logo">
       <!-- LOGO -->
@@ -22,11 +17,31 @@
     </div>
     <div class="header-actions">
       <div class="lang-switcher" id="lang-switcher"></div>
-      <button id="btn-download" class="btn btn-green" type="button"></button>
+      <button id="btn-download" class="btn btn-secondary" type="button"></button>
     </div>
   </header>
 
   <main>
+    <section id="pack-hero" class="pack-hero">
+      <h1 id="hero-title" class="hero-title"></h1>
+      <p id="hero-meta" class="hero-meta"></p>
+      <p id="hero-subline" class="hero-subline"></p>
+      <p id="hero-trust" class="hero-trust"></p>
+      <div id="hero-stale" class="hero-stale" hidden>
+        <p id="hero-stale-msg" class="hero-stale-text"></p>
+        <button id="btn-update" class="btn btn-link-stale" type="button"></button>
+      </div>
+      <div class="quick-export-row" id="quick-export-row">
+        <button id="quick-excel" class="btn btn-green quick-export-btn" type="button"></button>
+        <button id="quick-csv" class="btn btn-secondary quick-export-btn" type="button"></button>
+        <button id="quick-json" class="btn btn-secondary quick-export-btn" type="button"></button>
+      </div>
+      <p id="hero-success" class="hero-success" hidden></p>
+      <p class="hero-customize-wrap">
+        <button type="button" id="hero-customize" class="btn-link"></button>
+      </p>
+    </section>
+
     <div id="catalog-view" class="catalog-view">
       <input type="search" id="search" class="search-bar" autocomplete="off">
       <div id="catalog-grid" class="catalog-grid"></div>
@@ -47,6 +62,8 @@
       </div>
     </div>
   </main>
+
+  <footer id="pack-footer" class="pack-footer" hidden></footer>
 
   <div id="wizard-overlay" class="modal-overlay">
     <div class="modal export-wizard" role="dialog" aria-modal="true" aria-labelledby="wizard-title">

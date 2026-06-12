@@ -26,8 +26,20 @@ export interface ProductTexts {
   description: string
 }
 
-export interface ProductAttribute {
+export interface AttributeDefinition {
+  id: string
+  label: LocalizedString
+  exportable?: boolean
+}
+
+/** @deprecated Legacy packs used localized key objects */
+export interface LegacyProductAttribute {
   key: LocalizedString
+  value: string
+}
+
+export interface ProductAttribute {
+  id: string
   value: string
 }
 
@@ -43,21 +55,30 @@ export interface Product {
 export interface PackManifest {
   meta: PackMeta
   schema: SchemaField[]
+  attributeSchema?: AttributeDefinition[]
   products: Product[]
 }
 
 export type ExportScope = 'all' | 'filtered' | 'one'
 export type ExportSource = 'catalog' | 'product'
 
+export type ExportLayout = 'wide' | 'tall' | 'split'
+export type ExportStructure = 'flat' | 'nested' | 'tall'
+
 export interface TelemetryPayload {
   query?: string
   format?: string
   fields?: string[]
+  productFields?: string[]
+  attributeFields?: string[]
+  layout?: ExportLayout
+  structure?: ExportStructure
   productSku?: string
   language?: NordicLang
   scope?: ExportScope
   productCount?: number
   fieldCount?: number
+  attributeCount?: number
   totalFields?: number
   allFieldsSelected?: boolean
   searchQuery?: string

@@ -3,10 +3,11 @@
     "packId": "friluftsportalen-hiking-shoes-001",
     "brand": "Friluftsportalen",
     "assortment": "Hiking Shoes 2026",
-    "version": "1.0.0",
-    "generatedAt": "2026-05-20T08:00:00Z",
-    "staleAfter": "2026-06-05T00:00:00Z",
-    "apiBase": "http://localhost:4040"
+    "version": "1.1.0",
+    "generatedAt": "2026-06-12T10:00:00Z",
+    "staleAfter": "2026-07-12T00:00:00Z",
+    "apiBase": "http://localhost:4040",
+    "contactEmail": "sortiment@friluftsportalen.se"
   },
   "schema": [
     {
@@ -65,6 +66,188 @@
       "exportable": true
     }
   ],
+  "attributeSchema": [
+    {
+      "id": "weight",
+      "label": {
+        "sv": "Vikt",
+        "no": "Vekt",
+        "da": "Vægt",
+        "fi": "Paino"
+      }
+    },
+    {
+      "id": "sizes",
+      "label": {
+        "sv": "Storlekar",
+        "no": "Størrelser",
+        "da": "Størrelser",
+        "fi": "Koot"
+      }
+    },
+    {
+      "id": "upperMaterial",
+      "label": {
+        "sv": "Ovandel",
+        "no": "Overdel",
+        "da": "Overdel",
+        "fi": "Yläosa"
+      }
+    },
+    {
+      "id": "sole",
+      "label": {
+        "sv": "Sula",
+        "no": "Såle",
+        "da": "Sål",
+        "fi": "Pohja"
+      }
+    },
+    {
+      "id": "waterproof",
+      "label": {
+        "sv": "Vattentät",
+        "no": "Vanntett",
+        "da": "Vandtæt",
+        "fi": "Vedenpitävä"
+      }
+    },
+    {
+      "id": "drop",
+      "label": {
+        "sv": "Drop",
+        "no": "Drop",
+        "da": "Drop",
+        "fi": "Drop"
+      }
+    },
+    {
+      "id": "lastWidth",
+      "label": {
+        "sv": "Lästbredd",
+        "no": "Lestbredde",
+        "da": "Lestbredde",
+        "fi": "Leveys"
+      }
+    },
+    {
+      "id": "gender",
+      "label": {
+        "sv": "Kön",
+        "no": "Kjønn",
+        "da": "Køn",
+        "fi": "Sukupuoli"
+      }
+    },
+    {
+      "id": "color",
+      "label": {
+        "sv": "Färg",
+        "no": "Farge",
+        "da": "Farve",
+        "fi": "Väri"
+      }
+    },
+    {
+      "id": "lining",
+      "label": {
+        "sv": "Foder",
+        "no": "Fôr",
+        "da": "Foer",
+        "fi": "Vuori"
+      }
+    },
+    {
+      "id": "ankleSupport",
+      "label": {
+        "sv": "Ankelstöd",
+        "no": "Ankelstøtte",
+        "da": "Ankelstøtte",
+        "fi": "Nilkkatuki"
+      }
+    },
+    {
+      "id": "toeProtection",
+      "label": {
+        "sv": "Tåskydd",
+        "no": "Tåbeskyttelse",
+        "da": "Tåbeskyttelse",
+        "fi": "Varvassuoja"
+      }
+    },
+    {
+      "id": "breathability",
+      "label": {
+        "sv": "Andningsförmåga",
+        "no": "Pusteevne",
+        "da": "Åndbarhed",
+        "fi": "Hengittävyys"
+      }
+    },
+    {
+      "id": "outsoleCompound",
+      "label": {
+        "sv": "Yttersula",
+        "no": "Yttersåle",
+        "da": "Ydersål",
+        "fi": "Ulkopohja"
+      }
+    },
+    {
+      "id": "midsole",
+      "label": {
+        "sv": "Mellansula",
+        "no": "Mellomsåle",
+        "da": "Mellemsål",
+        "fi": "Välipohja"
+      }
+    },
+    {
+      "id": "lacing",
+      "label": {
+        "sv": "Snörning",
+        "no": "Snøring",
+        "da": "Snøring",
+        "fi": "Nauhoitus"
+      }
+    },
+    {
+      "id": "insole",
+      "label": {
+        "sv": "Innersula",
+        "no": "Innersåle",
+        "da": "Indersål",
+        "fi": "Pohjallinen"
+      }
+    },
+    {
+      "id": "terrain",
+      "label": {
+        "sv": "Terräng",
+        "no": "Terreng",
+        "da": "Terræn",
+        "fi": "Maasto"
+      }
+    },
+    {
+      "id": "warranty",
+      "label": {
+        "sv": "Garanti",
+        "no": "Garanti",
+        "da": "Garanti",
+        "fi": "Takuu"
+      }
+    },
+    {
+      "id": "vegan",
+      "label": {
+        "sv": "Vegansk",
+        "no": "Vegansk",
+        "da": "Vegansk",
+        "fi": "Vegaaninen"
+      }
+    }
+  ],
   "products": [
     {
       "sku": "SHOE-001",
@@ -89,16 +272,88 @@
       "imageUrl": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop",
       "attributes": [
         {
-          "key": { "sv": "Vikt", "no": "Vekt", "da": "Vægt", "fi": "Paino" },
+          "id": "weight",
           "value": "980 g"
         },
         {
-          "key": { "sv": "Storlekar", "no": "Størrelser", "da": "Størrelser", "fi": "Koot" },
+          "id": "sizes",
           "value": "36-48"
+        },
+        {
+          "id": "upperMaterial",
+          "value": "Nubuckläder"
+        },
+        {
+          "id": "sole",
+          "value": "Vibram Megagrip"
+        },
+        {
+          "id": "waterproof",
+          "value": "Gore-Tex"
+        },
+        {
+          "id": "drop",
+          "value": "10 mm"
+        },
+        {
+          "id": "lastWidth",
+          "value": "Normal"
+        },
+        {
+          "id": "gender",
+          "value": "Unisex"
+        },
+        {
+          "id": "color",
+          "value": "Brun"
+        },
+        {
+          "id": "lining",
+          "value": "Gore-Tex"
+        },
+        {
+          "id": "ankleSupport",
+          "value": "Medel"
+        },
+        {
+          "id": "toeProtection",
+          "value": "Gummi"
+        },
+        {
+          "id": "breathability",
+          "value": "Hög"
+        },
+        {
+          "id": "outsoleCompound",
+          "value": "Megagrip"
+        },
+        {
+          "id": "midsole",
+          "value": "EVA"
+        },
+        {
+          "id": "lacing",
+          "value": "Snabbsnörning"
+        },
+        {
+          "id": "insole",
+          "value": "Ortopedisk"
+        },
+        {
+          "id": "terrain",
+          "value": "Blandad"
+        },
+        {
+          "id": "warranty",
+          "value": "2 år"
+        },
+        {
+          "id": "vegan",
+          "value": "Nej"
         }
       ],
-      "price": 1899,
-      "stock": 30
+      "price": 1799,
+      "stock": 52
     },
     {
       "sku": "SHOE-002",
@@ -123,16 +378,88 @@
       "imageUrl": "https://images.unsplash.com/photo-1606107557195-0a29b4b4b4aa?w=400&h=300&fit=crop",
       "attributes": [
         {
-          "key": { "sv": "Vikt", "no": "Vekt", "da": "Vægt", "fi": "Paino" },
+          "id": "weight",
           "value": "1150 g"
         },
         {
-          "key": { "sv": "Sula", "no": "Såle", "da": "Sål", "fi": "Pohja" },
+          "id": "sizes",
+          "value": "37-47"
+        },
+        {
+          "id": "upperMaterial",
+          "value": "Fullnarvsläder"
+        },
+        {
+          "id": "sole",
           "value": "Vibram Megagrip"
+        },
+        {
+          "id": "waterproof",
+          "value": "Nej"
+        },
+        {
+          "id": "drop",
+          "value": "12 mm"
+        },
+        {
+          "id": "lastWidth",
+          "value": "Bred"
+        },
+        {
+          "id": "gender",
+          "value": "Herr"
+        },
+        {
+          "id": "color",
+          "value": "Svart"
+        },
+        {
+          "id": "lining",
+          "value": "Mesh"
+        },
+        {
+          "id": "ankleSupport",
+          "value": "Hög"
+        },
+        {
+          "id": "toeProtection",
+          "value": "PU-kappa"
+        },
+        {
+          "id": "breathability",
+          "value": "Medel"
+        },
+        {
+          "id": "outsoleCompound",
+          "value": "Megagrip"
+        },
+        {
+          "id": "midsole",
+          "value": "PU"
+        },
+        {
+          "id": "lacing",
+          "value": "Klassisk"
+        },
+        {
+          "id": "insole",
+          "value": "Stödjande"
+        },
+        {
+          "id": "terrain",
+          "value": "Fjäll"
+        },
+        {
+          "id": "warranty",
+          "value": "3 år"
+        },
+        {
+          "id": "vegan",
+          "value": "Nej"
         }
       ],
-      "price": 2499,
-      "stock": 18
+      "price": 2299,
+      "stock": 34
     },
     {
       "sku": "SHOE-003",
@@ -157,16 +484,88 @@
       "imageUrl": "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400&h=300&fit=crop",
       "attributes": [
         {
-          "key": { "sv": "Vikt", "no": "Vekt", "da": "Vægt", "fi": "Paino" },
+          "id": "weight",
           "value": "620 g"
         },
         {
-          "key": { "sv": "Drop", "no": "Drop", "da": "Drop", "fi": "Drop" },
+          "id": "sizes",
+          "value": "36-46"
+        },
+        {
+          "id": "upperMaterial",
+          "value": "Mesh/syntet"
+        },
+        {
+          "id": "sole",
+          "value": "Vibram Litebase"
+        },
+        {
+          "id": "waterproof",
+          "value": "Nej"
+        },
+        {
+          "id": "drop",
           "value": "6 mm"
+        },
+        {
+          "id": "lastWidth",
+          "value": "Normal"
+        },
+        {
+          "id": "gender",
+          "value": "Dam"
+        },
+        {
+          "id": "color",
+          "value": "Turkos"
+        },
+        {
+          "id": "lining",
+          "value": "Mesh"
+        },
+        {
+          "id": "ankleSupport",
+          "value": "Låg"
+        },
+        {
+          "id": "toeProtection",
+          "value": "Tåbump"
+        },
+        {
+          "id": "breathability",
+          "value": "Mycket hög"
+        },
+        {
+          "id": "outsoleCompound",
+          "value": "Litebase"
+        },
+        {
+          "id": "midsole",
+          "value": "EVA"
+        },
+        {
+          "id": "lacing",
+          "value": "Snabbsnörning"
+        },
+        {
+          "id": "insole",
+          "value": "Lätt"
+        },
+        {
+          "id": "terrain",
+          "value": "Trail/löpning"
+        },
+        {
+          "id": "warranty",
+          "value": "1 år"
+        },
+        {
+          "id": "vegan",
+          "value": "Ja"
         }
       ],
-      "price": 1299,
-      "stock": 45
+      "price": 1199,
+      "stock": 67
     }
   ]
 }

@@ -1,0 +1,3259 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Friluftsportalen — DataPack</title>
+  <style>
+:root {
+  --bg-primary: #191919;
+  --bg-secondary: #252525;
+  --bg-tertiary: #2f2f2f;
+  --bg-hover: #373737;
+  --border: #3d3d3d;
+  --text-primary: #ebebeb;
+  --text-secondary: #9b9b9b;
+  --text-muted: #6b6b6b;
+  --accent: #2eaadc;
+  --accent-hover: #2596c4;
+  --accent-green: #4dab6d;
+  --accent-orange: #d9730d;
+  --accent-red: #e03e3e;
+  --radius: 6px;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.logo { display: flex; align-items: center; gap: 0.75rem; }
+.logo svg { height: 32px; width: auto; }
+.logo span { font-weight: 600; font-size: 1rem; }
+
+.header-actions { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+
+.lang-switcher {
+  display: flex;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.lang-btn {
+  padding: 0.35rem 0.6rem;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.lang-btn.active { background: var(--accent); color: #fff; }
+.lang-btn:hover:not(.active) { background: var(--bg-hover); color: var(--text-primary); }
+
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-secondary { background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border); }
+.btn-secondary:hover { background: var(--bg-hover); }
+.btn-green { background: var(--accent-green); color: #fff; }
+.btn-green:hover { opacity: 0.9; }
+
+main { max-width: 1100px; margin: 0 auto; padding: 1.5rem; }
+
+.pack-hero {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.hero-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  line-height: 1.25;
+}
+
+.hero-meta {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin-bottom: 0.75rem;
+}
+
+.hero-subline {
+  font-size: 0.95rem;
+  margin-bottom: 0.35rem;
+}
+
+.hero-trust {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.hero-stale {
+  background: rgba(46, 170, 220, 0.08);
+  border: 1px solid rgba(46, 170, 220, 0.25);
+  border-radius: var(--radius);
+  padding: 0.65rem 0.85rem;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+}
+
+.hero-stale-text {
+  color: var(--text-secondary);
+  margin-bottom: 0.35rem;
+}
+
+.btn-link-stale {
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.btn-link-stale:hover { color: var(--accent-hover); }
+.btn-link-stale:disabled { opacity: 0.6; cursor: wait; }
+
+.quick-export-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.quick-export-btn {
+  position: relative;
+  min-width: 6.5rem;
+}
+
+.quick-export-badge {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 500;
+  opacity: 0.85;
+  margin-top: 0.1rem;
+}
+
+.hero-success {
+  color: var(--accent-green);
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.hero-customize-wrap { font-size: 0.875rem; }
+
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: inherit;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.btn-link:hover { color: var(--accent-hover); }
+
+.pack-footer {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem 1.5rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.pack-footer a { color: var(--accent); text-decoration: none; }
+.pack-footer a:hover { text-decoration: underline; }
+
+.search-bar {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.search-bar:focus { outline: 2px solid var(--accent); outline-offset: 0; }
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.product-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.product-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+.product-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  background: var(--bg-tertiary);
+}
+
+.product-card-body { padding: 1rem; }
+.product-card-body h3 { font-size: 0.95rem; margin-bottom: 0.25rem; }
+.product-card-body .price { color: var(--accent-green); font-weight: 600; font-size: 0.9rem; }
+.product-card-body .sku { color: var(--text-muted); font-size: 0.75rem; font-family: monospace; }
+
+.product-detail { display: none; }
+.product-detail.active { display: block; }
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.back-link:hover { color: var(--text-primary); }
+
+.detail-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 700px) { .detail-layout { grid-template-columns: 1fr; } }
+
+.detail-image {
+  width: 100%;
+  border-radius: var(--radius);
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  background: var(--bg-tertiary);
+}
+
+.detail-info h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.detail-info .price { font-size: 1.25rem; color: var(--accent-green); font-weight: 600; margin: 0.5rem 0; }
+.detail-info .desc { color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem; }
+
+.attributes { list-style: none; margin-top: 1rem; }
+.attributes li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.875rem;
+}
+.attributes li span:first-child { color: var(--text-secondary); }
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal.export-wizard {
+  max-width: min(1280px, 98vw);
+  max-height: 92vh;
+}
+
+.modal-header {
+  padding: 1.25rem 1.75rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.modal-header-text { flex: 1; min-width: 0; }
+.modal-header h2 { font-size: 1.35rem; font-weight: 600; }
+.wizard-subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.35rem; line-height: 1.45; }
+.modal-close {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 1.25rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius);
+  flex-shrink: 0;
+  line-height: 1;
+}
+.modal-close:hover { color: var(--text-primary); background: var(--bg-hover); }
+.modal-body { padding: 1.5rem; }
+.modal-footer {
+  padding: 1rem 1.75rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.export-wizard-footer { background: var(--bg-primary); }
+
+.wizard-stepper {
+  display: flex;
+  gap: 0;
+  padding: 0 1.75rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-primary);
+  flex-shrink: 0;
+}
+
+.wizard-step-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 0.5rem;
+  border-bottom: 2px solid transparent;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+  min-width: 0;
+}
+
+.wizard-step-item.done { color: var(--text-secondary); border-bottom-color: var(--accent); }
+.wizard-step-item.current { color: var(--text-primary); border-bottom-color: var(--accent-green); }
+
+.wizard-step-num {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.wizard-step-item.done .wizard-step-num { background: rgba(46,170,220,0.2); border-color: var(--accent); color: var(--accent); }
+.wizard-step-item.current .wizard-step-num { background: var(--accent-green); border-color: var(--accent-green); color: #fff; }
+
+.wizard-step-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.export-wizard-body {
+  display: grid;
+  grid-template-columns: minmax(280px, 38%) minmax(420px, 62%);
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.export-wizard-main {
+  overflow-y: auto;
+  padding: 1.5rem 1.75rem;
+  min-height: 280px;
+}
+
+.wizard-content { max-width: 560px; }
+
+.step-heading {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.step-desc {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+
+.export-preview-panel {
+  border-left: 1px solid var(--border);
+  background: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.preview-header {
+  padding: 1.25rem 1.25rem 0.75rem;
+  flex-shrink: 0;
+}
+
+.preview-header h3 { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-secondary); }
+.preview-hint { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+.preview-summary {
+  padding: 0 1.25rem 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.summary-chip {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+.summary-chip strong { color: var(--text-primary); font-weight: 600; }
+
+.preview-content {
+  flex: 1;
+  overflow: auto;
+  margin: 0 1.25rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-secondary);
+  min-height: 160px;
+}
+
+.preview-table-wrap {
+  overflow: auto;
+  max-width: 100%;
+}
+.preview-table {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+}
+.preview-table th,
+.preview-table td {
+  padding: 0.45rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  min-width: 88px;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.preview-table th {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.preview-table tr:last-child td { border-bottom: none; }
+
+.preview-code {
+  margin: 0;
+  padding: 0.85rem;
+  font-family: ui-monospace, 'Cascadia Code', 'Consolas', monospace;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.preview-empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.preview-more {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  background: var(--bg-tertiary);
+}
+
+.format-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.format-card {
+  padding: 1rem;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.format-card:hover { border-color: var(--accent); }
+.format-card.selected { border-color: var(--accent-green); background: rgba(77,171,109,0.12); }
+
+.format-card-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.format-card-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+
+.format-card-desc {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.scope-options { display: flex; flex-direction: column; gap: 0.6rem; }
+
+.scope-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.1rem;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-tertiary);
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  color: var(--text-primary);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.scope-card:hover { border-color: var(--accent); }
+.scope-card.selected { border-color: var(--accent-green); background: rgba(77,171,109,0.12); }
+
+.scope-card-body { flex: 1; min-width: 0; }
+.scope-card-title { font-weight: 600; font-size: 0.95rem; }
+.scope-card-desc { font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.15rem; }
+
+.scope-badge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  color: var(--accent-green);
+  flex-shrink: 0;
+}
+
+.field-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.field-toolbar-actions { display: flex; gap: 0.5rem; }
+
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 0.25rem 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.btn-link:hover { color: var(--accent-hover); }
+
+.field-count-label { font-size: 0.8rem; color: var(--text-muted); }
+
+.field-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem;
+}
+
+.field-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--bg-tertiary);
+  font-size: 0.875rem;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.field-item:has(input:checked) {
+  border-color: var(--accent-green);
+  background: rgba(77,171,109,0.1);
+}
+
+.field-item:hover { background: var(--bg-hover); }
+.field-item input { accent-color: var(--accent-green); width: 1rem; height: 1rem; flex-shrink: 0; }
+
+.field-group {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.field-group:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.field-group-header h4 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  margin-bottom: 0.65rem;
+}
+
+.attribute-search-wrap { margin-bottom: 0.65rem; }
+
+.attribute-search {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+}
+
+.attribute-search:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.field-empty {
+  grid-column: 1 / -1;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  padding: 0.5rem 0;
+}
+
+.layout-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.layout-card {
+  text-align: left;
+  position: relative;
+  padding-right: 6rem;
+}
+
+.layout-badge {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(77, 171, 109, 0.2);
+  color: var(--accent-green);
+  border: 1px solid rgba(77, 171, 109, 0.35);
+}
+
+.preview-split {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.75rem;
+}
+
+.preview-split-block {
+  min-width: 0;
+}
+
+.preview-split-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.wizard-stepper {
+  overflow-x: auto;
+}
+
+.review-step {
+  text-align: center;
+  padding: 1.5rem 0 0.5rem;
+}
+
+.review-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.review-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.review-desc {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  max-width: 360px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.btn-download-action {
+  min-width: 10rem;
+  padding: 0.6rem 1.5rem;
+  font-weight: 600;
+}
+
+.btn-download-action.is-ready {
+  background: var(--accent-green);
+  font-size: 0.95rem;
+  padding: 0.7rem 2rem;
+}
+
+.btn-download-action.is-ready:hover { opacity: 0.92; }
+
+.btn-download-action.is-success {
+  background: var(--accent-green);
+  pointer-events: none;
+}
+
+@media (max-width: 860px) {
+  .export-wizard-body { grid-template-columns: 1fr; }
+  .export-preview-panel {
+    border-left: none;
+    border-top: 1px solid var(--border);
+    min-height: 240px;
+    max-height: min(42vh, 360px);
+  }
+  .field-list { grid-template-columns: 1fr; }
+  .format-options { grid-template-columns: 1fr; }
+  .wizard-step-label { display: none; }
+  .wizard-step-item { justify-content: center; padding: 0.75rem 0.25rem; }
+}
+
+.option-btn {
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  cursor: pointer;
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.option-btn.selected { border-color: var(--accent); background: rgba(46,170,220,0.15); }
+.option-btn:hover { border-color: var(--accent); }
+
+.empty-state { text-align: center; padding: 3rem; color: var(--text-muted); }
+
+.catalog-view.hidden { display: none; }
+
+</style>
+  <script>
+    window.DATAPACK_MANIFEST = {"meta":{"packId":"friluftsportalen-hiking-shoes-001","brand":"Friluftsportalen","assortment":"Hiking Shoes 2026","version":"1.1.0","generatedAt":"2026-06-12T10:00:00Z","staleAfter":"2026-07-12T00:00:00Z","apiBase":"https://datapack-one.vercel.app","contactEmail":"sortiment@friluftsportalen.se"},"schema":[{"name":"sku","label":{"sv":"Artikelnummer","no":"Artikkelnummer","da":"Varenummer","fi":"Tuotenumero"},"type":"string","exportable":true},{"name":"name","label":{"sv":"Produktnamn","no":"Produktnavn","da":"Produktnavn","fi":"Tuotenimi"},"type":"string","exportable":true},{"name":"description","label":{"sv":"Beskrivning","no":"Beskrivelse","da":"Beskrivelse","fi":"Kuvaus"},"type":"string","exportable":true},{"name":"price","label":{"sv":"Pris (SEK)","no":"Pris (SEK)","da":"Pris (SEK)","fi":"Hinta (SEK)"},"type":"number","exportable":true},{"name":"stock","label":{"sv":"Lagersaldo","no":"Lagerbeholdning","da":"Lagerbeholdning","fi":"Varasto"},"type":"number","exportable":true}],"attributeSchema":[{"id":"weight","label":{"sv":"Vikt","no":"Vekt","da":"Vægt","fi":"Paino"}},{"id":"sizes","label":{"sv":"Storlekar","no":"Størrelser","da":"Størrelser","fi":"Koot"}},{"id":"upperMaterial","label":{"sv":"Ovandel","no":"Overdel","da":"Overdel","fi":"Yläosa"}},{"id":"sole","label":{"sv":"Sula","no":"Såle","da":"Sål","fi":"Pohja"}},{"id":"waterproof","label":{"sv":"Vattentät","no":"Vanntett","da":"Vandtæt","fi":"Vedenpitävä"}},{"id":"drop","label":{"sv":"Drop","no":"Drop","da":"Drop","fi":"Drop"}},{"id":"lastWidth","label":{"sv":"Lästbredd","no":"Lestbredde","da":"Lestbredde","fi":"Leveys"}},{"id":"gender","label":{"sv":"Kön","no":"Kjønn","da":"Køn","fi":"Sukupuoli"}},{"id":"color","label":{"sv":"Färg","no":"Farge","da":"Farve","fi":"Väri"}},{"id":"lining","label":{"sv":"Foder","no":"Fôr","da":"Foer","fi":"Vuori"}},{"id":"ankleSupport","label":{"sv":"Ankelstöd","no":"Ankelstøtte","da":"Ankelstøtte","fi":"Nilkkatuki"}},{"id":"toeProtection","label":{"sv":"Tåskydd","no":"Tåbeskyttelse","da":"Tåbeskyttelse","fi":"Varvassuoja"}},{"id":"breathability","label":{"sv":"Andningsförmåga","no":"Pusteevne","da":"Åndbarhed","fi":"Hengittävyys"}},{"id":"outsoleCompound","label":{"sv":"Yttersula","no":"Yttersåle","da":"Ydersål","fi":"Ulkopohja"}},{"id":"midsole","label":{"sv":"Mellansula","no":"Mellomsåle","da":"Mellemsål","fi":"Välipohja"}},{"id":"lacing","label":{"sv":"Snörning","no":"Snøring","da":"Snøring","fi":"Nauhoitus"}},{"id":"insole","label":{"sv":"Innersula","no":"Innersåle","da":"Indersål","fi":"Pohjallinen"}},{"id":"terrain","label":{"sv":"Terräng","no":"Terreng","da":"Terræn","fi":"Maasto"}},{"id":"warranty","label":{"sv":"Garanti","no":"Garanti","da":"Garanti","fi":"Takuu"}},{"id":"vegan","label":{"sv":"Vegansk","no":"Vegansk","da":"Vegansk","fi":"Vegaaninen"}}],"products":[{"sku":"SHOE-001","texts":{"sv":{"name":"Trailmaster GTX","description":"Vattentäta vandringskängor med Gore-Tex membran och Vibram-sula."},"no":{"name":"Trailmaster GTX","description":"Vanntette tursko med Gore-Tex membran og Vibram-såle."},"da":{"name":"Trailmaster GTX","description":"Vandtætte vandrestøvler med Gore-Tex membran og Vibram-sål."},"fi":{"name":"Trailmaster GTX","description":"Vedenpitävät vaelluskengät Gore-Tex-kalvon ja Vibram-pohjan kanssa."}},"imageUrl":"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop","attributes":[{"id":"weight","value":"980 g"},{"id":"sizes","value":"36-48"},{"id":"upperMaterial","value":"Nubuckläder"},{"id":"sole","value":"Vibram Megagrip"},{"id":"waterproof","value":"Gore-Tex"},{"id":"drop","value":"10 mm"},{"id":"lastWidth","value":"Normal"},{"id":"gender","value":"Unisex"},{"id":"color","value":"Brun"},{"id":"lining","value":"Gore-Tex"},{"id":"ankleSupport","value":"Medel"},{"id":"toeProtection","value":"Gummi"},{"id":"breathability","value":"Hög"},{"id":"outsoleCompound","value":"Megagrip"},{"id":"midsole","value":"EVA"},{"id":"lacing","value":"Snabbsnörning"},{"id":"insole","value":"Ortopedisk"},{"id":"terrain","value":"Blandad"},{"id":"warranty","value":"2 år"},{"id":"vegan","value":"Nej"}],"price":1799,"stock":52},{"sku":"SHOE-002","texts":{"sv":{"name":"Alpine Pro Mid","description":"Stödjande mellanhöga kängor för fjällvandring och stenig terräng."},"no":{"name":"Alpine Pro Mid","description":"Støttende mellomhøye støvler for fjellvandring og steinete terreng."},"da":{"name":"Alpine Pro Mid","description":"Støttende mellemhøje støvler til bjergvandring og stenet terræn."},"fi":{"name":"Alpine Pro Mid","description":"Tukevat puolikorkeat kengät vuoristovaellukseen ja kiviselle maastolle."}},"imageUrl":"https://images.unsplash.com/photo-1606107557195-0a29b4b4b4aa?w=400&h=300&fit=crop","attributes":[{"id":"weight","value":"1150 g"},{"id":"sizes","value":"37-47"},{"id":"upperMaterial","value":"Fullnarvsläder"},{"id":"sole","value":"Vibram Megagrip"},{"id":"waterproof","value":"Nej"},{"id":"drop","value":"12 mm"},{"id":"lastWidth","value":"Bred"},{"id":"gender","value":"Herr"},{"id":"color","value":"Svart"},{"id":"lining","value":"Mesh"},{"id":"ankleSupport","value":"Hög"},{"id":"toeProtection","value":"PU-kappa"},{"id":"breathability","value":"Medel"},{"id":"outsoleCompound","value":"Megagrip"},{"id":"midsole","value":"PU"},{"id":"lacing","value":"Klassisk"},{"id":"insole","value":"Stödjande"},{"id":"terrain","value":"Fjäll"},{"id":"warranty","value":"3 år"},{"id":"vegan","value":"Nej"}],"price":2299,"stock":34},{"sku":"SHOE-003","texts":{"sv":{"name":"Speedlite Trail","description":"Ultralätta trailskor för snabba dagsturer och löpning i terräng."},"no":{"name":"Speedlite Trail","description":"Ultralette trailsko for raske dagsturer og terrengløping."},"da":{"name":"Speedlite Trail","description":"Ultralette trailsko til hurtige dagsture og terrænløb."},"fi":{"name":"Speedlite Trail","description":"Ultrakevyet polkujuoksukengät nopeille päiväretkille."}},"imageUrl":"https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400&h=300&fit=crop","attributes":[{"id":"weight","value":"620 g"},{"id":"sizes","value":"36-46"},{"id":"upperMaterial","value":"Mesh/syntet"},{"id":"sole","value":"Vibram Litebase"},{"id":"waterproof","value":"Nej"},{"id":"drop","value":"6 mm"},{"id":"lastWidth","value":"Normal"},{"id":"gender","value":"Dam"},{"id":"color","value":"Turkos"},{"id":"lining","value":"Mesh"},{"id":"ankleSupport","value":"Låg"},{"id":"toeProtection","value":"Tåbump"},{"id":"breathability","value":"Mycket hög"},{"id":"outsoleCompound","value":"Litebase"},{"id":"midsole","value":"EVA"},{"id":"lacing","value":"Snabbsnörning"},{"id":"insole","value":"Lätt"},{"id":"terrain","value":"Trail/löpning"},{"id":"warranty","value":"1 år"},{"id":"vegan","value":"Ja"}],"price":1199,"stock":67}]};
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 32" fill="none">
+  <path d="M4 28 L12 10 L18 18 L24 6 L32 28 Z" fill="#2eaadc" stroke="#2eaadc" stroke-width="1" stroke-linejoin="round"/>
+  <circle cx="26" cy="8" r="3" fill="#4dab6d"/>
+</svg>
+
+      <span>Friluftsportalen</span>
+    </div>
+    <div class="header-actions">
+      <div class="lang-switcher" id="lang-switcher"></div>
+      <button id="btn-download" class="btn btn-secondary" type="button"></button>
+    </div>
+  </header>
+
+  <main>
+    <section id="pack-hero" class="pack-hero">
+      <h1 id="hero-title" class="hero-title"></h1>
+      <p id="hero-meta" class="hero-meta"></p>
+      <p id="hero-subline" class="hero-subline"></p>
+      <p id="hero-trust" class="hero-trust"></p>
+      <div id="hero-stale" class="hero-stale" hidden>
+        <p id="hero-stale-msg" class="hero-stale-text"></p>
+        <button id="btn-update" class="btn btn-link-stale" type="button"></button>
+      </div>
+      <div class="quick-export-row" id="quick-export-row">
+        <button id="quick-excel" class="btn btn-green quick-export-btn" type="button"></button>
+        <button id="quick-csv" class="btn btn-secondary quick-export-btn" type="button"></button>
+        <button id="quick-json" class="btn btn-secondary quick-export-btn" type="button"></button>
+      </div>
+      <p id="hero-success" class="hero-success" hidden></p>
+      <p class="hero-customize-wrap">
+        <button type="button" id="hero-customize" class="btn-link"></button>
+      </p>
+    </section>
+
+    <div id="catalog-view" class="catalog-view">
+      <input type="search" id="search" class="search-bar" autocomplete="off">
+      <div id="catalog-grid" class="catalog-grid"></div>
+    </div>
+
+    <div id="product-detail" class="product-detail">
+      <button type="button" class="back-link" id="btn-back">←</button>
+      <div class="detail-layout">
+        <img id="detail-image" class="detail-image" alt="">
+        <div class="detail-info">
+          <p class="sku" id="detail-sku"></p>
+          <h1 id="detail-name"></h1>
+          <p class="price" id="detail-price"></p>
+          <p class="desc" id="detail-desc"></p>
+          <ul class="attributes" id="detail-attrs"></ul>
+          <button id="btn-export-product" class="btn btn-primary" type="button" style="margin-top:1rem"></button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer id="pack-footer" class="pack-footer" hidden></footer>
+
+  <div id="wizard-overlay" class="modal-overlay">
+    <div class="modal export-wizard" role="dialog" aria-modal="true" aria-labelledby="wizard-title">
+      <div class="modal-header">
+        <div class="modal-header-text">
+          <h2 id="wizard-title"></h2>
+          <p id="wizard-subtitle" class="wizard-subtitle"></p>
+        </div>
+        <button type="button" class="modal-close" id="wizard-close" aria-label="Close">×</button>
+      </div>
+      <div class="wizard-stepper" id="wizard-steps"></div>
+      <div class="export-wizard-body">
+        <div class="export-wizard-main">
+          <div id="wizard-content" class="wizard-content"></div>
+        </div>
+        <aside class="export-preview-panel" id="wizard-preview">
+          <div class="preview-header">
+            <h3 id="preview-title"></h3>
+            <p id="preview-hint" class="preview-hint"></p>
+          </div>
+          <div class="preview-summary" id="preview-summary"></div>
+          <div class="preview-content" id="preview-content"></div>
+        </aside>
+      </div>
+      <div class="modal-footer export-wizard-footer">
+        <button type="button" class="btn btn-secondary" id="wizard-back"></button>
+        <button type="button" class="btn btn-primary btn-download-action" id="wizard-next"></button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+const DataPackI18n = (() => {
+  const LANGS = ['sv', 'no', 'da', 'fi']
+
+  const EXTRA = {
+    stepLayout: ['Layout', 'Oppsett', 'Layout', 'Rakenne'],
+    stepLayoutDesc: [
+      'Hur ska produktdata och attribut arrangeras i filen?',
+      'Hvordan skal produktdata og attributter arrangeres i filen?',
+      'Hvordan skal produktdata og attributter arrangeres i filen?',
+      'Miten tuote- ja attribuuttidata järjestetään tiedostossa?',
+    ],
+    stepNames: [
+      ['Format', 'Layout', 'Produkter', 'Fält', 'Ladda ner'],
+      ['Format', 'Oppsett', 'Produkter', 'Felt', 'Last ned'],
+      ['Format', 'Layout', 'Produkter', 'Felter', 'Download'],
+      ['Muoto', 'Rakenne', 'Tuotteet', 'Kentät', 'Lataa'],
+    ],
+    layoutWide: ['Bred tabell', 'Bred tabell', 'Bred tabel', 'Leveä taulukko'],
+    layoutWideDesc: [
+      'En rad per produkt — attribut som kolumner',
+      'Én rad per produkt — attributter som kolonner',
+      'Én række per produkt — attributter som kolonner',
+      'Yksi rivi per tuote — attribuutit sarakkeina',
+    ],
+    layoutTall: ['Lång tabell', 'Lang tabell', 'Lang tabel', 'Pitkä taulukko'],
+    layoutTallDesc: [
+      'En rad per attribut — bra för import och pivottabeller',
+      'Én rad per attributt — bra for import og pivottabeller',
+      'Én række per attribut — god til import og pivottabeller',
+      'Yksi rivi per attribuutti — sopii tuontiin ja pivot-taulukoihin',
+    ],
+    layoutSplit: ['Delad / flera ark', 'Delt / flere ark', 'Delt / flere ark', 'Jaettu / useita arkkeja'],
+    layoutSplitDesc: [
+      'Produkter och attribut i separata ark (Excel) eller ZIP med två CSV-filer',
+      'Produkter og attributter i separate ark (Excel) eller ZIP med to CSV-filer',
+      'Produkter og attributter i separate ark (Excel) eller ZIP med to CSV-filer',
+      'Tuotteet ja attribuutit erillisillä arkeilla (Excel) tai ZIP kahdella CSV:llä',
+    ],
+    structureFlat: ['Platt', 'Flat', 'Flad', 'Litteä'],
+    structureFlatDesc: [
+      'Allt på samma nivå — som en bred tabell',
+      'Alt på samme nivå — som en bred tabell',
+      'Alt på samme niveau — som en bred tabel',
+      'Kaikki samalla tasolla — kuten leveä taulukko',
+    ],
+    structureNested: ['Kapslad', 'Nestet', 'Indlejret', 'Sisäkkäinen'],
+    structureNestedDesc: [
+      'Attribut grupperade under varje produkt — bäst för API och PIM',
+      'Attributter gruppert under hvert produkt — best for API og PIM',
+      'Attributter grupperet under hvert produkt — bedst til API og PIM',
+      'Attribuutit ryhmiteltynä tuotteen alle — paras API:lle ja PIM:lle',
+    ],
+    structureTall: ['Lång lista', 'Lang liste', 'Lang liste', 'Pitkä lista'],
+    structureTallDesc: [
+      'Lista med rader per attribut — enkel att filtrera',
+      'Liste med rader per attributt — enkel å filtrere',
+      'Liste med rækker per attribut — nem at filtrere',
+      'Lista riveittäin per attribuutti — helppo suodattaa',
+    ],
+    recommended: ['Rekommenderas', 'Anbefales', 'Anbefales', 'Suositeltu'],
+    fieldGroupProducts: ['Produktdata', 'Produktdata', 'Produktdata', 'Tuotetiedot'],
+    fieldGroupAttributes: ['Attribut', 'Attributter', 'Attributter', 'Attribuutit'],
+    attributesSelected: ['{n} av {total} attribut valda', '{n} av {total} attributter valgt', '{n} af {total} attributter valgt', '{n} / {total} attribuuttia valittu'],
+    searchAttributes: ['Sök attribut...', 'Søk attributter...', 'Søg attributter...', 'Hae attribuutteja...'],
+    summaryLayout: ['Layout', 'Oppsett', 'Layout', 'Rakenne'],
+    summaryAttributes: ['{n} attribut', '{n} attributter', '{n} attributter', '{n} attribuuttia'],
+    sheetProducts: ['Produkter', 'Produkter', 'Produkter', 'Tuotteet'],
+    sheetAttributes: ['Attribut', 'Attributter', 'Attributter', 'Attribuutit'],
+    previewSheetProducts: ['Produktark', 'Produktark', 'Produktark', 'Tuotearkki'],
+    previewSheetAttributes: ['Attributark', 'Attributtark', 'Attributark', 'Attribuuttiarkki'],
+    colSku: ['Artikelnummer', 'Artikkelnummer', 'Varenummer', 'Tuotenumero'],
+    colAttributeId: ['Attribut-ID', 'Attributt-ID', 'Attribut-ID', 'Attribuutti-ID'],
+    colAttributeLabel: ['Attribut', 'Attributt', 'Attribut', 'Attribuutti'],
+    colValue: ['Värde', 'Verdi', 'Værdi', 'Arvo'],
+    previewEmpty: [
+      'Välj minst ett produktfält eller attribut för att se förhandsgranskning',
+      'Velg minst ett produktfelt eller attributt for forhåndsvisning',
+      'Vælg mindst ét produktfelt eller attribut for forhåndsvisning',
+      'Valitse vähintään yksi tuotekenttä tai attribuutti esikatselua varten',
+    ],
+    wizardSubtitle: [
+      'Välj format, layout, produkter och fält — förhandsgranskningen uppdateras direkt.',
+      'Velg format, oppsett, produkter og felt — forhåndsvisningen oppdateres med en gang.',
+      'Vælg format, layout, produkter og felter — forhåndsvisningen opdateres med det samme.',
+      'Valitse muoto, rakenne, tuotteet ja kentät — esikatselu päivittyy heti.',
+    ],
+  }
+
+  const UI = {
+    sv: {
+      customizeExport: 'Anpassa export',
+      exportProduct: 'Exportera produkt',
+      search: 'Sök produkter...',
+      staleCalm: 'En nyare version finns — uppdatera för senaste priser och lager.',
+      staleReassurance: 'Du kan fortfarande bläddra och exportera den här filen.',
+      update: 'Uppdatera data',
+      back: 'Tillbaka till katalogen',
+      wizardTitle: 'Anpassa export',
+      heroSubline: 'Exportera produktdata till ditt system eller kalkylblad',
+      heroTrust: 'Ingen inloggning · fungerar offline · filen sparas på din dator',
+      heroUpdated: 'Uppdaterad {date}',
+      heroWorksOffline: 'Fungerar offline',
+      heroBrowseCustomize: 'Bläddra nedan eller anpassa fält →',
+      quickExcel: 'Excel',
+      quickCsv: 'CSV',
+      quickJson: 'JSON',
+      quickExportSuccess: 'Filen har laddats ner — kolla mappen Hämtade filer',
+      contactQuestions: 'Frågor?',
+      stepFormat: 'Välj format',
+      stepScope: 'Välj produkter',
+      stepFields: 'Välj fält',
+      stepReview: 'Granska & ladda ner',
+      stepFormatDesc: 'Vilket filformat ska datan sparas i?',
+      stepScopeDesc: 'Vilka produkter ska ingå i exporten?',
+      stepFieldsDesc: 'Välj produktfält och attribut. Du kan ändra när som helst.',
+      stepReviewDesc: 'Allt ser bra ut? Klicka på ladda ner — filen sparas på din dator.',
+      next: 'Fortsätt',
+      back_btn: 'Tillbaka',
+      download_btn: 'Ladda ner fil',
+      close: 'Stäng',
+      scopeAll: 'Alla produkter',
+      scopeFiltered: 'Filtrerade resultat',
+      scopeOne: 'Denna produkt',
+      scopeAllDesc: 'Exportera hela sortimentet',
+      scopeFilteredDesc: 'Bara det du sökt fram',
+      scopeOneDesc: 'Bara den valda produkten',
+      noResults: 'Inga produkter hittades',
+      stock: 'I lager',
+      formats: { csv: 'CSV', xlsx: 'Excel', json: 'JSON', xml: 'XML' },
+      formatDesc: {
+        csv: 'Perfekt för Excel, Google Sheets och de flesta system',
+        xlsx: 'Öppnas direkt i Microsoft Excel',
+        json: 'Strukturerad data för appar och integrationer',
+        xml: 'Standardformat för system och PIM',
+      },
+      previewTitle: 'Förhandsgranskning',
+      previewHint: 'Så här ser din fil ut',
+      previewMore: '… och {n} rader till i den färdiga filen',
+      previewTruncated: 'Förhandsgranskningen är förkortad',
+      summaryProducts: '{n} produkter',
+      summaryFields: '{n} fält',
+      summaryFormat: 'Format',
+      summaryFilename: 'Filnamn',
+      selectAll: 'Markera alla',
+      selectNone: 'Avmarkera alla',
+      fieldsSelected: '{n} av {total} fält valda',
+      productCount: '{n} st',
+      readyToDownload: 'Redo att ladda ner',
+      downloadAgain: 'Ladda ner igen',
+      downloadSuccess: 'Filen har laddats ner!',
+    },
+    no: {
+      customizeExport: 'Tilpass eksport',
+      exportProduct: 'Eksporter produkt',
+      search: 'Søk produkter...',
+      staleCalm: 'En nyere versjon finnes — oppdater for nyeste priser og lager.',
+      staleReassurance: 'Du kan fortsatt bla og eksportere denne filen.',
+      update: 'Oppdater data',
+      back: 'Tilbake til katalogen',
+      wizardTitle: 'Tilpass eksport',
+      heroSubline: 'Eksporter produktdata til systemet eller regnearket ditt',
+      heroTrust: 'Ingen innlogging · fungerer offline · filen lagres på datamaskinen din',
+      heroUpdated: 'Oppdatert {date}',
+      heroWorksOffline: 'Fungerer offline',
+      heroBrowseCustomize: 'Bla nedenfor eller tilpass felt →',
+      quickExcel: 'Excel',
+      quickCsv: 'CSV',
+      quickJson: 'JSON',
+      quickExportSuccess: 'Filen er lastet ned — sjekk Nedlastinger-mappen',
+      contactQuestions: 'Spørsmål?',
+      stepFormat: 'Velg format',
+      stepScope: 'Velg produkter',
+      stepFields: 'Velg felt',
+      stepReview: 'Gjennomgå & last ned',
+      stepFormatDesc: 'Hvilket filformat skal dataene lagres i?',
+      stepScopeDesc: 'Hvilke produkter skal inkluderes i eksporten?',
+      stepFieldsDesc: 'Velg produktfelt og attributter. Du kan endre når som helst.',
+      stepReviewDesc: 'Ser alt bra ut? Klikk last ned — filen lagres på datamaskinen din.',
+      next: 'Fortsett',
+      back_btn: 'Tilbake',
+      download_btn: 'Last ned fil',
+      close: 'Lukk',
+      scopeAll: 'Alle produkter',
+      scopeFiltered: 'Filtrerte resultater',
+      scopeOne: 'Dette produktet',
+      scopeAllDesc: 'Eksporter hele sortimentet',
+      scopeFilteredDesc: 'Bare det du har søkt frem',
+      scopeOneDesc: 'Bare det valgte produktet',
+      noResults: 'Ingen produkter funnet',
+      stock: 'På lager',
+      formats: { csv: 'CSV', xlsx: 'Excel', json: 'JSON', xml: 'XML' },
+      formatDesc: {
+        csv: 'Perfekt for Excel, Google Sheets og de fleste systemer',
+        xlsx: 'Åpnes direkte i Microsoft Excel',
+        json: 'Strukturert data for apper og integrasjoner',
+        xml: 'Standardformat for systemer og PIM',
+      },
+      previewTitle: 'Forhåndsvisning',
+      previewHint: 'Slik ser filen din ut',
+      previewMore: '… og {n} rader til i den ferdige filen',
+      previewTruncated: 'Forhåndsvisningen er forkortet',
+      summaryProducts: '{n} produkter',
+      summaryFields: '{n} felt',
+      summaryFormat: 'Format',
+      summaryFilename: 'Filnavn',
+      selectAll: 'Merk alle',
+      selectNone: 'Fjern alle',
+      fieldsSelected: '{n} av {total} felt valgt',
+      productCount: '{n} stk',
+      readyToDownload: 'Klar til nedlasting',
+      downloadAgain: 'Last ned igjen',
+      downloadSuccess: 'Filen er lastet ned!',
+    },
+    da: {
+      customizeExport: 'Tilpas eksport',
+      exportProduct: 'Eksporter produkt',
+      search: 'Søg produkter...',
+      staleCalm: 'En nyere version findes — opdater for nyeste priser og lager.',
+      staleReassurance: 'Du kan stadig gennemse og eksportere denne fil.',
+      update: 'Opdater data',
+      back: 'Tilbage til kataloget',
+      wizardTitle: 'Tilpas eksport',
+      heroSubline: 'Eksporter produktdata til dit system eller regneark',
+      heroTrust: 'Ingen login · virker offline · filen gemmes på din computer',
+      heroUpdated: 'Opdateret {date}',
+      heroWorksOffline: 'Virker offline',
+      heroBrowseCustomize: 'Gennemse nedenfor eller tilpas felter →',
+      quickExcel: 'Excel',
+      quickCsv: 'CSV',
+      quickJson: 'JSON',
+      quickExportSuccess: 'Filen er downloadet — tjek mappen Overførsler',
+      contactQuestions: 'Spørgsmål?',
+      stepFormat: 'Vælg format',
+      stepScope: 'Vælg produkter',
+      stepFields: 'Vælg felter',
+      stepReview: 'Gennemse & download',
+      stepFormatDesc: 'Hvilket filformat skal dataene gemmes i?',
+      stepScopeDesc: 'Hvilke produkter skal med i eksporten?',
+      stepFieldsDesc: 'Vælg produktfelter og attributter. Du kan ændre når som helst.',
+      stepReviewDesc: 'Ser alt godt ud? Klik download — filen gemmes på din computer.',
+      next: 'Fortsæt',
+      back_btn: 'Tilbage',
+      download_btn: 'Download fil',
+      close: 'Luk',
+      scopeAll: 'Alle produkter',
+      scopeFiltered: 'Filtrerede resultater',
+      scopeOne: 'Dette produkt',
+      scopeAllDesc: 'Eksporter hele sortimentet',
+      scopeFilteredDesc: 'Kun det du har søgt frem',
+      scopeOneDesc: 'Kun det valgte produkt',
+      noResults: 'Ingen produkter fundet',
+      stock: 'På lager',
+      formats: { csv: 'CSV', xlsx: 'Excel', json: 'JSON', xml: 'XML' },
+      formatDesc: {
+        csv: 'Perfekt til Excel, Google Sheets og de fleste systemer',
+        xlsx: 'Åbnes direkte i Microsoft Excel',
+        json: 'Struktureret data til apps og integrationer',
+        xml: 'Standardformat til systemer og PIM',
+      },
+      previewTitle: 'Forhåndsvisning',
+      previewHint: 'Sådan ser din fil ud',
+      previewMore: '… og {n} rækker mere i den færdige fil',
+      previewTruncated: 'Forhåndsvisningen er forkortet',
+      summaryProducts: '{n} produkter',
+      summaryFields: '{n} felter',
+      summaryFormat: 'Format',
+      summaryFilename: 'Filnavn',
+      selectAll: 'Vælg alle',
+      selectNone: 'Fravælg alle',
+      fieldsSelected: '{n} af {total} felter valgt',
+      productCount: '{n} stk',
+      readyToDownload: 'Klar til download',
+      downloadAgain: 'Download igen',
+      downloadSuccess: 'Filen er downloadet!',
+    },
+    fi: {
+      customizeExport: 'Mukauta vientiä',
+      exportProduct: 'Vie tuote',
+      search: 'Hae tuotteita...',
+      staleCalm: 'Uudempi versio on saatavilla — päivitä uusimmat hinnat ja varasto.',
+      staleReassurance: 'Voit silti selata ja viedä tämän tiedoston.',
+      update: 'Päivitä tiedot',
+      back: 'Takaisin luetteloon',
+      wizardTitle: 'Mukauta vientiä',
+      heroSubline: 'Vie tuotetiedot järjestelmääsi tai laskentataulukkoon',
+      heroTrust: 'Ei kirjautumista · toimii offline-tilassa · tiedosto tallentuu tietokoneellesi',
+      heroUpdated: 'Päivitetty {date}',
+      heroWorksOffline: 'Toimii offline-tilassa',
+      heroBrowseCustomize: 'Selaa alla tai mukauta kenttiä →',
+      quickExcel: 'Excel',
+      quickCsv: 'CSV',
+      quickJson: 'JSON',
+      quickExportSuccess: 'Tiedosto ladattu — tarkista Lataukset-kansio',
+      contactQuestions: 'Kysymyksiä?',
+      stepFormat: 'Valitse muoto',
+      stepScope: 'Valitse tuotteet',
+      stepFields: 'Valitse kentät',
+      stepReview: 'Tarkista & lataa',
+      stepFormatDesc: 'Missä tiedostomuodossa tiedot tallennetaan?',
+      stepScopeDesc: 'Mitkä tuotteet sisällytetään vientiin?',
+      stepFieldsDesc: 'Valitse tuotekentät ja attribuutit. Voit muuttaa valintoja milloin tahansa.',
+      stepReviewDesc: 'Kaikki näyttää hyvältä? Napsauta lataa — tiedosto tallentuu tietokoneellesi.',
+      next: 'Jatka',
+      back_btn: 'Takaisin',
+      download_btn: 'Lataa tiedosto',
+      close: 'Sulje',
+      scopeAll: 'Kaikki tuotteet',
+      scopeFiltered: 'Suodatetut tulokset',
+      scopeOne: 'Tämä tuote',
+      scopeAllDesc: 'Vie koko valikoima',
+      scopeFilteredDesc: 'Vain hakutulokset',
+      scopeOneDesc: 'Vain valittu tuote',
+      noResults: 'Tuotteita ei löytynyt',
+      stock: 'Varastossa',
+      formats: { csv: 'CSV', xlsx: 'Excel', json: 'JSON', xml: 'XML' },
+      formatDesc: {
+        csv: 'Sopii Exceliin, Google Sheetsiin ja useimpiin järjestelmiin',
+        xlsx: 'Avautuu suoraan Microsoft Excelissä',
+        json: 'Jäsennelty data sovelluksiin ja integraatioihin',
+        xml: 'Vakiomuoto järjestelmille ja PIM:lle',
+      },
+      previewTitle: 'Esikatselu',
+      previewHint: 'Näin tiedostosi näyttää',
+      previewMore: '… ja {n} riviä lisää valmiissa tiedostossa',
+      previewTruncated: 'Esikatselu on lyhennetty',
+      summaryProducts: '{n} tuotetta',
+      summaryFields: '{n} kenttää',
+      summaryFormat: 'Muoto',
+      summaryFilename: 'Tiedostonimi',
+      selectAll: 'Valitse kaikki',
+      selectNone: 'Poista valinnat',
+      fieldsSelected: '{n} / {total} kenttää valittu',
+      productCount: '{n} kpl',
+      readyToDownload: 'Valmis ladattavaksi',
+      downloadAgain: 'Lataa uudelleen',
+      downloadSuccess: 'Tiedosto on ladattu!',
+    },
+  }
+
+  const langIndex = { sv: 0, no: 1, da: 2, fi: 3 }
+  for (const lang of LANGS) {
+    const i = langIndex[lang]
+    for (const [key, values] of Object.entries(EXTRA)) {
+      if (key === 'stepNames') UI[lang][key] = values[i]
+      else UI[lang][key] = values[i]
+    }
+  }
+
+  let currentLang = localStorage.getItem('datapack-lang') || 'sv'
+
+  function detectBrowserLang() {
+    if (localStorage.getItem('datapack-lang')) return
+    const nav = (navigator.language || 'sv').toLowerCase()
+    if (nav.startsWith('no') || nav.startsWith('nb') || nav.startsWith('nn')) currentLang = 'no'
+    else if (nav.startsWith('da')) currentLang = 'da'
+    else if (nav.startsWith('fi')) currentLang = 'fi'
+  }
+
+  detectBrowserLang()
+
+  const LOCALE_MAP = { sv: 'sv-SE', no: 'nb-NO', da: 'da-DK', fi: 'fi-FI' }
+
+  function formatDate(iso) {
+    const d = new Date(iso)
+    const locale = LOCALE_MAP[currentLang] || 'sv-SE'
+    return d.toLocaleDateString(locale, { year: 'numeric', month: 'short', day: 'numeric' })
+  }
+
+  function t(key, vars) {
+    let str = UI[currentLang][key] ?? UI.sv[key] ?? key
+    if (vars) {
+      for (const [k, v] of Object.entries(vars)) {
+        str = str.replace(`{${k}}`, String(v))
+      }
+    }
+    return str
+  }
+
+  function getLang() {
+    return currentLang
+  }
+
+  function setLang(lang) {
+    if (!LANGS.includes(lang)) return
+    currentLang = lang
+    localStorage.setItem('datapack-lang', lang)
+  }
+
+  function productText(product, field) {
+    const texts = product.texts[currentLang] || product.texts.sv
+    return texts[field] || ''
+  }
+
+  function schemaLabel(field) {
+    return field.label[currentLang] || field.label.sv || field.name
+  }
+
+  function attrKey(attr, manifest) {
+    if (attr.id && manifest) {
+      const catalog = DataPackAttributes.getAttributeCatalog(manifest)
+      const def = DataPackAttributes.findDefinition(catalog, attr.id)
+      if (def) return DataPackAttributes.attrLabel(def)
+      return attr.id
+    }
+    if (attr.key) return attr.key[currentLang] || attr.key.sv || ''
+    return ''
+  }
+
+  return { LANGS, t, getLang, setLang, productText, schemaLabel, attrKey, formatDate }
+})()
+
+
+const DataPackTelemetry = (() => {
+  function getApiBase(manifest) {
+    return manifest.meta.apiBase || 'http://localhost:4040'
+  }
+
+  function send(manifest, event, payload = {}) {
+    const body = {
+      packId: manifest.meta.packId,
+      event,
+      timestamp: new Date().toISOString(),
+      payload: { ...payload, language: DataPackI18n.getLang() },
+    }
+
+    const url = `${getApiBase(manifest)}/api/telemetry`
+
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      mode: 'cors',
+    }).catch(() => {
+      // Best-effort — never block UI
+    })
+  }
+
+  return { send, getApiBase }
+})()
+
+
+const DataPackApi = (() => {
+  async function fetchLatestPack(manifest) {
+    const base = DataPackTelemetry.getApiBase(manifest)
+    const url = `${base}/api/packs/${encodeURIComponent(manifest.meta.packId)}`
+    const res = await fetch(url, { mode: 'cors' })
+    if (!res.ok) throw new Error(`Update failed: ${res.status}`)
+    return res.json()
+  }
+
+  return { fetchLatestPack }
+})()
+
+
+const DataPackAttributes = (() => {
+  function slugify(text) {
+    return String(text)
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_|_$/g, '')
+  }
+
+  function isLegacyAttribute(attr) {
+    return attr && attr.key && typeof attr.key === 'object' && !attr.id
+  }
+
+  function getAttributeId(attr, fallbackIndex) {
+    if (attr.id) return attr.id
+    if (isLegacyAttribute(attr)) {
+      const sv = attr.key.sv || attr.key.no || ''
+      return slugify(sv) || `attr_${fallbackIndex}`
+    }
+    return `attr_${fallbackIndex}`
+  }
+
+  function getAttributeCatalog(manifest) {
+    if (manifest.attributeSchema && manifest.attributeSchema.length) {
+      return manifest.attributeSchema
+        .filter((def) => def.exportable !== false)
+        .map((def) => ({ id: def.id, label: def.label }))
+    }
+
+    const byId = new Map()
+    let index = 0
+    for (const product of manifest.products || []) {
+      for (const attr of product.attributes || []) {
+        const id = getAttributeId(attr, index)
+        index += 1
+        if (!byId.has(id)) {
+          const label = isLegacyAttribute(attr)
+            ? attr.key
+            : { sv: id, no: id, da: id, fi: id }
+          byId.set(id, { id, label })
+        }
+      }
+    }
+    return Array.from(byId.values())
+  }
+
+  function getAttributeValue(product, attrId) {
+    for (const attr of product.attributes || []) {
+      if (getAttributeId(attr, 0) === attrId) return attr.value ?? ''
+    }
+    return ''
+  }
+
+  function attrLabel(def) {
+    if (!def || !def.label) return def?.id || ''
+    const lang = DataPackI18n.getLang()
+    return def.label[lang] || def.label.sv || def.id
+  }
+
+  function findDefinition(catalog, attrId) {
+    return catalog.find((def) => def.id === attrId)
+  }
+
+  return {
+    getAttributeCatalog,
+    getAttributeValue,
+    getAttributeId,
+    isLegacyAttribute,
+    attrLabel,
+    findDefinition,
+  }
+})()
+
+
+const DataPackXlsxWriter = (() => {
+  const ENCODER = new TextEncoder()
+
+  const CRC_TABLE = (() => {
+    const table = new Uint32Array(256)
+    for (let i = 0; i < 256; i += 1) {
+      let c = i
+      for (let k = 0; k < 8; k += 1) {
+        c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1
+      }
+      table[i] = c >>> 0
+    }
+    return table
+  })()
+
+  function crc32(bytes) {
+    let crc = 0xffffffff
+    for (let i = 0; i < bytes.length; i += 1) {
+      crc = CRC_TABLE[(crc ^ bytes[i]) & 0xff] ^ (crc >>> 8)
+    }
+    return (crc ^ 0xffffffff) >>> 0
+  }
+
+  function escXml(value) {
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '')
+  }
+
+  function colLetter(index) {
+    let n = index + 1
+    let letters = ''
+    while (n > 0) {
+      n -= 1
+      letters = String.fromCharCode(65 + (n % 26)) + letters
+      n = Math.floor(n / 26)
+    }
+    return letters
+  }
+
+  function cellRef(col, row) {
+    return `${colLetter(col)}${row}`
+  }
+
+  function writeU16(view, offset, value) {
+    view.setUint16(offset, value, true)
+  }
+
+  function writeU32(view, offset, value) {
+    view.setUint32(offset, value, true)
+  }
+
+  function createZipStore(files) {
+    const chunks = []
+    const central = []
+    let offset = 0
+
+    for (const file of files) {
+      const nameBytes = ENCODER.encode(file.name)
+      const data = file.data
+      const checksum = crc32(data)
+      const local = new Uint8Array(30 + nameBytes.length + data.length)
+      const lv = new DataView(local.buffer)
+
+      writeU32(lv, 0, 0x04034b50)
+      writeU16(lv, 4, 20)
+      writeU16(lv, 6, 0)
+      writeU16(lv, 8, 0)
+      writeU16(lv, 10, 0)
+      writeU16(lv, 12, 0)
+      writeU32(lv, 14, checksum)
+      writeU32(lv, 18, data.length)
+      writeU32(lv, 22, data.length)
+      writeU16(lv, 26, nameBytes.length)
+      writeU16(lv, 28, 0)
+      local.set(nameBytes, 30)
+      local.set(data, 30 + nameBytes.length)
+      chunks.push(local)
+
+      const centralHeader = new Uint8Array(46 + nameBytes.length)
+      const cv = new DataView(centralHeader.buffer)
+      writeU32(cv, 0, 0x02014b50)
+      writeU16(cv, 4, 20)
+      writeU16(cv, 6, 20)
+      writeU16(cv, 8, 0)
+      writeU16(cv, 10, 0)
+      writeU16(cv, 12, 0)
+      writeU16(cv, 14, 0)
+      writeU32(cv, 16, checksum)
+      writeU32(cv, 20, data.length)
+      writeU32(cv, 24, data.length)
+      writeU16(cv, 28, nameBytes.length)
+      writeU16(cv, 30, 0)
+      writeU16(cv, 32, 0)
+      writeU16(cv, 34, 0)
+      writeU16(cv, 36, 0)
+      writeU32(cv, 38, 0)
+      writeU32(cv, 42, offset)
+      centralHeader.set(nameBytes, 46)
+      central.push(centralHeader)
+
+      offset += local.length
+    }
+
+    const centralSize = central.reduce((sum, part) => sum + part.length, 0)
+    const centralStart = offset
+    const end = new Uint8Array(22)
+    const ev = new DataView(end.buffer)
+    writeU32(ev, 0, 0x06054b50)
+    writeU16(ev, 4, 0)
+    writeU16(ev, 6, 0)
+    writeU16(ev, 8, files.length)
+    writeU16(ev, 10, files.length)
+    writeU32(ev, 12, centralSize)
+    writeU32(ev, 16, centralStart)
+    writeU16(ev, 20, 0)
+
+    const total = offset + centralSize + end.length
+    const out = new Uint8Array(total)
+    let pos = 0
+    for (const chunk of chunks) {
+      out.set(chunk, pos)
+      pos += chunk.length
+    }
+    for (const part of central) {
+      out.set(part, pos)
+      pos += part.length
+    }
+    out.set(end, pos)
+    return out
+  }
+
+  function xmlFile(content) {
+    return ENCODER.encode(content)
+  }
+
+  function stylesXml() {
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+  <fonts count="2">
+    <font><sz val="11"/><name val="Calibri"/><family val="2"/></font>
+    <font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/><family val="2"/></font>
+  </fonts>
+  <fills count="3">
+    <fill><patternFill patternType="none"/></fill>
+    <fill><patternFill patternType="gray125"/></fill>
+    <fill><patternFill patternType="solid"><fgColor rgb="FF1A3A2A"/><bgColor indexed="64"/></patternFill></fill>
+  </fills>
+  <borders count="2">
+    <border><left/><right/><top/><bottom/><diagonal/></border>
+    <border>
+      <left style="thin"><color auto="1"/></left>
+      <right style="thin"><color auto="1"/></right>
+      <top style="thin"><color auto="1"/></top>
+      <bottom style="thin"><color auto="1"/></bottom>
+      <diagonal/>
+    </border>
+  </borders>
+  <cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
+  <cellXfs count="4">
+    <xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1"/>
+    <xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1"/>
+    <xf numFmtId="4" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyBorder="1" applyAlignment="1"><alignment horizontal="right"/></xf>
+    <xf numFmtId="1" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyBorder="1" applyAlignment="1"><alignment horizontal="right"/></xf>
+  </cellXfs>
+</styleSheet>`
+  }
+
+  function workbookXml(sheets) {
+    const sheetTags = sheets
+      .map(
+        (sheet, i) =>
+          `<sheet name="${escXml(sheet.name)}" sheetId="${i + 1}" r:id="rId${i + 1}"/>`,
+      )
+      .join('\n    ')
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+  <sheets>
+    ${sheetTags}
+  </sheets>
+</workbook>`
+  }
+
+  function workbookRelsXml(sheetCount) {
+    const rels = []
+    for (let i = 0; i < sheetCount; i += 1) {
+      rels.push(
+        `<Relationship Id="rId${i + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i + 1}.xml"/>`,
+      )
+    }
+    rels.push(
+      `<Relationship Id="rId${sheetCount + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>`,
+    )
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  ${rels.join('\n  ')}
+</Relationships>`
+  }
+
+  function rootRelsXml() {
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>
+</Relationships>`
+  }
+
+  function contentTypesXml(sheetCount) {
+    const overrides = [
+      '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>',
+      '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>',
+    ]
+    for (let i = 0; i < sheetCount; i += 1) {
+      overrides.push(
+        `<Override PartName="/xl/worksheets/sheet${i + 1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`,
+      )
+    }
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+  <Default Extension="xml" ContentType="application/xml"/>
+  ${overrides.join('\n  ')}
+</Types>`
+  }
+
+  function sheetXml(columns, rows) {
+    const lastCol = colLetter(columns.length - 1)
+    const lastRow = Math.max(rows.length + 1, 1)
+    const filterRef = `A1:${lastCol}${lastRow}`
+
+    let xml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+  <sheetViews>
+    <sheetView workbookViewId="0">
+      <pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/>
+      <selection pane="bottomLeft" activeCell="A2" sqref="A2"/>
+    </sheetView>
+  </sheetViews>
+  <cols>
+`
+
+    for (let i = 0; i < columns.length; i += 1) {
+      const width = columns[i].width || 12
+      xml += `    <col min="${i + 1}" max="${i + 1}" width="${width}" customWidth="1"/>\n`
+    }
+
+    xml += `  </cols>
+  <sheetData>
+`
+
+    xml += `    <row r="1">`
+    for (let c = 0; c < columns.length; c += 1) {
+      const ref = cellRef(c, 1)
+      xml += `<c r="${ref}" s="1" t="inlineStr"><is><t>${escXml(columns[c].header)}</t></is></c>`
+    }
+    xml += `</row>\n`
+
+    for (let r = 0; r < rows.length; r += 1) {
+      const rowNum = r + 2
+      xml += `    <row r="${rowNum}">`
+      for (let c = 0; c < columns.length; c += 1) {
+        const cell = rows[r][c]
+        const ref = cellRef(c, rowNum)
+        if (cell.type === 'number') {
+          xml += `<c r="${ref}" s="${cell.style}"><v>${cell.value}</v></c>`
+        } else {
+          xml += `<c r="${ref}" s="${cell.style}" t="inlineStr"><is><t>${escXml(cell.value)}</t></is></c>`
+        }
+      }
+      xml += `</row>\n`
+    }
+
+    xml += `  </sheetData>
+  <autoFilter ref="${filterRef}"/>
+</worksheet>`
+
+    return xml
+  }
+
+  /**
+   * @param {{ name: string, columns: object[], rows: object[][] }[]} sheets
+   */
+  function buildWorkbook(sheets) {
+    const files = [
+      { name: '[Content_Types].xml', data: xmlFile(contentTypesXml(sheets.length)) },
+      { name: '_rels/.rels', data: xmlFile(rootRelsXml()) },
+      { name: 'xl/workbook.xml', data: xmlFile(workbookXml(sheets)) },
+      {
+        name: 'xl/_rels/workbook.xml.rels',
+        data: xmlFile(workbookRelsXml(sheets.length)),
+      },
+      { name: 'xl/styles.xml', data: xmlFile(stylesXml()) },
+    ]
+
+    for (let i = 0; i < sheets.length; i += 1) {
+      const sheet = sheets[i]
+      files.push({
+        name: `xl/worksheets/sheet${i + 1}.xml`,
+        data: xmlFile(sheetXml(sheet.columns, sheet.rows)),
+      })
+    }
+
+    return createZipStore(files)
+  }
+
+  /**
+   * @param {object} options
+   * @param {string} options.sheetName
+   * @param {{ header: string, width?: number }[]} options.columns
+   * @param {{ value: string|number, type: 'string'|'number', style: number }[][]} options.rows
+   */
+  function build(options) {
+    return buildWorkbook([
+      {
+        name: options.sheetName || 'Products',
+        columns: options.columns,
+        rows: options.rows,
+      },
+    ])
+  }
+
+  /**
+   * @param {{ name: string, data: Uint8Array }[]} files
+   */
+  function buildZip(files) {
+    return createZipStore(files)
+  }
+
+  return { build, buildWorkbook, buildZip, createZipStore, colLetter }
+})()
+
+
+const DataPackExport = (() => {
+  const ATTR_PREFIX = 'attr_'
+
+  function attrColumnName(attrId) {
+    return `${ATTR_PREFIX}${attrId}`
+  }
+
+  function flattenProduct(product, fields, lang) {
+    const row = {}
+    const texts = product.texts[lang] || product.texts.sv
+    for (const field of fields) {
+      if (field === 'sku') row.sku = product.sku
+      else if (field === 'name') row.name = texts.name
+      else if (field === 'description') row.description = texts.description
+      else if (field === 'price') row.price = product.price
+      else if (field === 'stock') row.stock = product.stock
+      else row[field] = product[field]
+    }
+    return row
+  }
+
+  function buildWideRows(products, productFields, attributeFields, manifest, lang) {
+    return products.map((product) => {
+      const row = flattenProduct(product, productFields, lang)
+      for (const attrId of attributeFields) {
+        row[attrColumnName(attrId)] = DataPackAttributes.getAttributeValue(product, attrId)
+      }
+      return row
+    })
+  }
+
+  function buildTallRows(products, attributeFields, manifest, lang, includeSku = true) {
+    const catalog = DataPackAttributes.getAttributeCatalog(manifest)
+    const rows = []
+    for (const product of products) {
+      for (const attrId of attributeFields) {
+        const def = DataPackAttributes.findDefinition(catalog, attrId)
+        const row = {}
+        if (includeSku) row.sku = product.sku
+        row.attributeId = attrId
+        row.attributeLabel = def ? DataPackAttributes.attrLabel(def) : attrId
+        row.value = DataPackAttributes.getAttributeValue(product, attrId)
+        rows.push(row)
+      }
+    }
+    return rows
+  }
+
+  function getProductLabels(manifest, fields) {
+    const labels = {}
+    for (const f of manifest.schema) {
+      if (fields.includes(f.name)) labels[f.name] = DataPackI18n.schemaLabel(f)
+    }
+    return labels
+  }
+
+  function getWideLabels(manifest, productFields, attributeFields) {
+    const labels = getProductLabels(manifest, productFields)
+    const catalog = DataPackAttributes.getAttributeCatalog(manifest)
+    for (const attrId of attributeFields) {
+      const def = DataPackAttributes.findDefinition(catalog, attrId)
+      labels[attrColumnName(attrId)] = def ? DataPackAttributes.attrLabel(def) : attrId
+    }
+    return labels
+  }
+
+  function getTallFields(includeSku) {
+    return includeSku
+      ? ['sku', 'attributeId', 'attributeLabel', 'value']
+      : ['attributeId', 'attributeLabel', 'value']
+  }
+
+  function getTallLabels(includeSku) {
+    const labels = {
+      attributeId: DataPackI18n.t('colAttributeId'),
+      attributeLabel: DataPackI18n.t('colAttributeLabel'),
+      value: DataPackI18n.t('colValue'),
+    }
+    if (includeSku) labels.sku = DataPackI18n.t('colSku')
+    return labels
+  }
+
+  function toCsv(rows, fields, labels) {
+    const header = fields.map((f) => labels[f] || f).join(',')
+    const lines = rows.map((row) =>
+      fields
+        .map((f) => {
+          const val = row[f] ?? ''
+          const str = String(val).replace(/"/g, '""')
+          return str.includes(',') || str.includes('"') || str.includes('\n')
+            ? `"${str}"`
+            : str
+        })
+        .join(','),
+    )
+    return [header, ...lines].join('\n')
+  }
+
+  function toJson(data) {
+    return JSON.stringify(data, null, 2)
+  }
+
+  function escXml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+  }
+
+  function toXmlFlat(rows, rootName) {
+    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    xml += `<${rootName}>\n`
+    for (const row of rows) {
+      xml += '  <product>\n'
+      for (const [key, val] of Object.entries(row)) {
+        const tag = key.startsWith(ATTR_PREFIX) ? key.slice(ATTR_PREFIX.length) : key
+        xml += `    <${tag}>${escXml(val)}</${tag}>\n`
+      }
+      xml += '  </product>\n'
+    }
+    xml += `</${rootName}>`
+    return xml
+  }
+
+  function toXmlNested(products, productFields, attributeFields, manifest, lang) {
+    const catalog = DataPackAttributes.getAttributeCatalog(manifest)
+    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<products>\n'
+    for (const product of products) {
+      const row = flattenProduct(product, productFields, lang)
+      xml += '  <product>\n'
+      for (const [key, val] of Object.entries(row)) {
+        xml += `    <${key}>${escXml(val)}</${key}>\n`
+      }
+      if (attributeFields.length) {
+        xml += '    <attributes>\n'
+        for (const attrId of attributeFields) {
+          const def = DataPackAttributes.findDefinition(catalog, attrId)
+          const label = def ? DataPackAttributes.attrLabel(def) : attrId
+          const value = DataPackAttributes.getAttributeValue(product, attrId)
+          xml += `      <attribute id="${escXml(attrId)}" label="${escXml(label)}">${escXml(value)}</attribute>\n`
+        }
+        xml += '    </attributes>\n'
+      }
+      xml += '  </product>\n'
+    }
+    xml += '</products>'
+    return xml
+  }
+
+  function toXmlTall(rows) {
+    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<attributeRecords>\n'
+    for (const row of rows) {
+      xml += '  <record>\n'
+      for (const [key, val] of Object.entries(row)) {
+        xml += `    <${key}>${escXml(val)}</${key}>\n`
+      }
+      xml += '  </record>\n'
+    }
+    xml += '</attributeRecords>'
+    return xml
+  }
+
+  function buildJsonFlat(wideRows) {
+    return wideRows.map((row) => {
+      const out = {}
+      for (const [key, val] of Object.entries(row)) {
+        const outKey = key.startsWith(ATTR_PREFIX) ? key.slice(ATTR_PREFIX.length) : key
+        out[outKey] = val
+      }
+      return out
+    })
+  }
+
+  function buildJsonNested(products, productFields, attributeFields, manifest, lang) {
+    const catalog = DataPackAttributes.getAttributeCatalog(manifest)
+    return products.map((product) => {
+      const item = flattenProduct(product, productFields, lang)
+      if (attributeFields.length) {
+        item.attributes = attributeFields.map((attrId) => {
+          const def = DataPackAttributes.findDefinition(catalog, attrId)
+          return {
+            id: attrId,
+            label: def ? DataPackAttributes.attrLabel(def) : attrId,
+            value: DataPackAttributes.getAttributeValue(product, attrId),
+          }
+        })
+      }
+      return item
+    })
+  }
+
+  function getFieldType(manifest, fieldName) {
+    const field = manifest.schema.find((f) => f.name === fieldName)
+    return field?.type || 'string'
+  }
+
+  function columnWidth(field, label, rows, fieldType) {
+    const presets = {
+      sku: 96,
+      name: 200,
+      description: 340,
+      price: 88,
+      stock: 72,
+      attributeId: 120,
+      attributeLabel: 160,
+      value: 140,
+    }
+    if (presets[field]) return presets[field]
+
+    const headerLen = (label || field).length
+    let maxLen = headerLen
+    for (const row of rows) {
+      const val = row[field]
+      if (val != null) {
+        maxLen = Math.max(maxLen, Math.min(String(val).length, 48))
+      }
+    }
+    if (fieldType === 'number') return Math.max(72, maxLen * 8 + 24)
+    return Math.max(88, Math.min(maxLen * 8 + 32, 280))
+  }
+
+  function pxToExcelWidth(px) {
+    return Math.max(8, Math.round(((px - 5) / 7) * 100) / 100)
+  }
+
+  function dataCellStyle(fieldName, val, fieldType) {
+    if (fieldType !== 'number' && typeof val !== 'number') return 0
+    if (fieldName === 'price') return 2
+    if (fieldName === 'stock') return 3
+    return Number.isInteger(Number(val)) ? 3 : 2
+  }
+
+  function rowsToXlsxData(rows, fields, manifest) {
+    return rows.map((row) =>
+      fields.map((f) => {
+        const val = row[f] ?? ''
+        const fieldType = getFieldType(manifest, f)
+        if (fieldType === 'number' || typeof val === 'number') {
+          return {
+            type: 'number',
+            value: val === '' ? 0 : Number(val),
+            style: dataCellStyle(f, val, fieldType),
+          }
+        }
+        return {
+          type: 'string',
+          value: String(val),
+          style: 0,
+        }
+      }),
+    )
+  }
+
+  function buildXlsxSheet(rows, fields, labels, manifest, sheetName) {
+    const columns = fields.map((f) => ({
+      header: labels[f] || f,
+      width: pxToExcelWidth(columnWidth(f, labels[f] || f, rows, getFieldType(manifest, f))),
+    }))
+    return {
+      name: sheetName,
+      columns,
+      rows: rowsToXlsxData(rows, fields, manifest),
+    }
+  }
+
+  function resolveTabularLayout(format, layout, attributeFields) {
+    if (format === 'json' || format === 'xml') return layout
+    if (!attributeFields.length) return 'wide'
+    if (layout === 'split') return 'split'
+    return layout === 'tall' ? 'tall' : 'wide'
+  }
+
+  function getFilename(packId, format, layout) {
+    if (format === 'csv' && layout === 'split') return `${packId}-export.zip`
+    return `${packId}-export.${format}`
+  }
+
+  function getMime(format, layout) {
+    if (format === 'csv' && layout === 'split') return 'application/zip'
+    switch (format) {
+      case 'csv':
+        return 'text/csv;charset=utf-8'
+      case 'json':
+        return 'application/json'
+      case 'xml':
+        return 'application/xml'
+      case 'xlsx':
+        return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      default:
+        return 'application/octet-stream'
+    }
+  }
+
+  function buildExportPayload(products, options) {
+    const {
+      productFields = [],
+      attributeFields = [],
+      format,
+      layout = 'wide',
+      structure = 'nested',
+      manifest,
+    } = options
+    const lang = DataPackI18n.getLang()
+    const isStructured = format === 'json' || format === 'xml'
+    const effectiveLayout = isStructured ? structure : resolveTabularLayout(format, layout, attributeFields)
+
+    const productRows = products.map((p) => flattenProduct(p, productFields, lang))
+    const wideRows = buildWideRows(products, productFields, attributeFields, manifest, lang)
+    const tallRows = buildTallRows(products, attributeFields, manifest, lang, true)
+    const wideFields = [...productFields, ...attributeFields.map(attrColumnName)]
+    const wideLabels = getWideLabels(manifest, productFields, attributeFields)
+    const tallFields = getTallFields(true)
+    const tallLabels = getTallLabels(true)
+
+    let content = null
+    let filename = getFilename(manifest.meta.packId, format, effectiveLayout)
+    let mime = getMime(format, effectiveLayout)
+    let previewMode = 'wide'
+    let previewRows = wideRows
+    let previewFields = wideFields
+    let previewLabels = wideLabels
+    let splitPreview = null
+
+    if (format === 'csv') {
+      if (effectiveLayout === 'split') {
+        const productsCsv = toCsv(productRows, productFields, getProductLabels(manifest, productFields))
+        const attrsCsv = toCsv(tallRows, tallFields, tallLabels)
+        const enc = new TextEncoder()
+        content = DataPackXlsxWriter.buildZip([
+          { name: 'products.csv', data: enc.encode(productsCsv) },
+          { name: 'attributes.csv', data: enc.encode(attrsCsv) },
+        ])
+        previewMode = 'split'
+        splitPreview = {
+          products: { rows: productRows, fields: productFields, labels: getProductLabels(manifest, productFields) },
+          attributes: { rows: tallRows, fields: tallFields, labels: tallLabels },
+        }
+      } else if (effectiveLayout === 'tall') {
+        content = toCsv(tallRows, tallFields, tallLabels)
+        previewMode = 'tall'
+        previewRows = tallRows
+        previewFields = tallFields
+        previewLabels = tallLabels
+      } else {
+        content = toCsv(wideRows, wideFields, wideLabels)
+      }
+    } else if (format === 'xlsx') {
+      if (effectiveLayout === 'split') {
+        const sheets = [
+          buildXlsxSheet(productRows, productFields, getProductLabels(manifest, productFields), manifest, DataPackI18n.t('sheetProducts')),
+          buildXlsxSheet(tallRows, tallFields, tallLabels, manifest, DataPackI18n.t('sheetAttributes')),
+        ]
+        content = DataPackXlsxWriter.buildWorkbook(sheets)
+        previewMode = 'split'
+        splitPreview = {
+          products: { rows: productRows, fields: productFields, labels: getProductLabels(manifest, productFields) },
+          attributes: { rows: tallRows, fields: tallFields, labels: tallLabels },
+        }
+      } else if (effectiveLayout === 'tall') {
+        const tallSheet = buildXlsxSheet(
+          tallRows,
+          tallFields,
+          tallLabels,
+          manifest,
+          DataPackI18n.t('sheetAttributes'),
+        )
+        content = DataPackXlsxWriter.build({
+          sheetName: tallSheet.name,
+          columns: tallSheet.columns,
+          rows: tallSheet.rows,
+        })
+        previewMode = 'tall'
+        previewRows = tallRows
+        previewFields = tallFields
+        previewLabels = tallLabels
+      } else {
+        const wideSheet = buildXlsxSheet(
+          wideRows,
+          wideFields,
+          wideLabels,
+          manifest,
+          DataPackI18n.t('sheetProducts'),
+        )
+        content = DataPackXlsxWriter.build({
+          sheetName: wideSheet.name,
+          columns: wideSheet.columns,
+          rows: wideSheet.rows,
+        })
+      }
+    } else if (format === 'json') {
+      if (effectiveLayout === 'tall') {
+        content = toJson(tallRows)
+        previewMode = 'tall'
+        previewRows = tallRows
+        previewFields = tallFields
+        previewLabels = tallLabels
+      } else if (effectiveLayout === 'nested') {
+        content = toJson(buildJsonNested(products, productFields, attributeFields, manifest, lang))
+        previewMode = 'code'
+      } else {
+        content = toJson(buildJsonFlat(wideRows))
+      }
+    } else if (format === 'xml') {
+      if (effectiveLayout === 'tall') {
+        content = toXmlTall(tallRows)
+        previewMode = 'tall'
+        previewRows = tallRows
+        previewFields = tallFields
+        previewLabels = tallLabels
+      } else if (effectiveLayout === 'nested') {
+        content = toXmlNested(products, productFields, attributeFields, manifest, lang)
+        previewMode = 'code'
+      } else {
+        content = toXmlFlat(wideRows, 'products')
+      }
+    }
+
+    return {
+      content,
+      filename,
+      mime,
+      effectiveLayout,
+      previewMode,
+      previewRows,
+      previewFields,
+      previewLabels,
+      splitPreview,
+      productRows,
+      wideRows,
+      tallRows,
+      productFields,
+      attributeFields,
+      wideFields,
+      wideLabels,
+    }
+  }
+
+  function prepareExport(products, optionsOrFields, format, manifest, legacyOptions = {}) {
+    const options =
+      typeof optionsOrFields === 'object' && !Array.isArray(optionsOrFields) && optionsOrFields.manifest
+        ? optionsOrFields
+        : {
+            productFields: optionsOrFields,
+            attributeFields: [],
+            format,
+            layout: 'wide',
+            structure: 'nested',
+            manifest,
+            ...legacyOptions,
+          }
+
+    const { productFields, attributeFields, format: fmt, layout, structure, manifest: m } = options
+    const skipContent = options.skipContent === true
+    const built = buildExportPayload(products, options)
+
+    return {
+      rows: built.previewRows,
+      fields: built.previewFields,
+      labels: built.previewLabels,
+      content: skipContent ? null : built.content,
+      filename: built.filename,
+      mime: built.mime,
+      format: fmt,
+      layout: built.effectiveLayout,
+      structure,
+      productCount: products.length,
+      fieldCount: productFields.length,
+      attributeCount: attributeFields.length,
+      previewMode: built.previewMode,
+      splitPreview: built.splitPreview,
+      productFields,
+      attributeFields,
+    }
+  }
+
+  function truncateText(text, maxLen = 1200) {
+    if (text.length <= maxLen) return { text, truncated: false }
+    return { text: text.slice(0, maxLen) + '\n…', truncated: true }
+  }
+
+  function buildPreview(products, options, format, manifest, maxRows = 5) {
+    const normalized =
+      typeof options === 'object' && !Array.isArray(options)
+        ? options
+        : {
+            productFields: options?.length ? options : manifest.schema.filter((f) => f.exportable).map((f) => f.name),
+            attributeFields: [],
+            format,
+            layout: 'wide',
+            structure: 'nested',
+            manifest,
+          }
+
+    if (!normalized.productFields?.length && !normalized.attributeFields?.length) {
+      normalized.productFields = manifest.schema.filter((f) => f.exportable).map((f) => f.name)
+    }
+
+    const prepared = prepareExport(products, { ...normalized, manifest, skipContent: format === 'xlsx' }, format, manifest)
+    const previewRows = prepared.rows.slice(0, maxRows)
+    const isTabular = format === 'csv' || format === 'xlsx'
+    let previewText = ''
+    let previewTruncated = prepared.rows.length > maxRows
+
+    if (prepared.previewMode === 'code' && !isTabular) {
+      const built = buildExportPayload(products, { ...normalized, manifest })
+      const truncated = truncateText(
+        typeof built.content === 'string' ? built.content : '',
+        1400,
+      )
+      previewText = truncated.text
+      previewTruncated = truncated.truncated || previewTruncated
+    } else if (prepared.previewMode === 'split' && prepared.splitPreview) {
+      previewTruncated = false
+    } else if (!isTabular) {
+      const built = buildExportPayload(products, { ...normalized, manifest })
+      const truncated = truncateText(
+        typeof built.content === 'string' ? built.content : '',
+        1400,
+      )
+      previewText = truncated.text
+      previewTruncated = truncated.truncated || previewTruncated
+    } else if (format === 'csv') {
+      const truncated = truncateText(
+        toCsv(previewRows, prepared.fields, prepared.labels),
+        2000,
+      )
+      previewText = truncated.text
+      previewTruncated = truncated.truncated || previewTruncated
+    }
+
+    return {
+      ...prepared,
+      previewRows,
+      previewText,
+      previewTruncated,
+      totalRows: prepared.rows.length,
+      isTabular,
+    }
+  }
+
+  function download(content, filename, mime) {
+    const blob = new Blob([content], { type: mime })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = filename
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  function exportData(products, options, format, manifest) {
+    const prepared = prepareExport(products, options, format, manifest)
+    download(prepared.content, prepared.filename, prepared.mime)
+    return prepared
+  }
+
+  function getDefaultLayout(format, hasAttributes) {
+    if (format === 'json' || format === 'xml') return 'nested'
+    if (hasAttributes && (format === 'xlsx' || format === 'csv')) return 'split'
+    return 'wide'
+  }
+
+  function getExportableAttributes(manifest) {
+    return DataPackAttributes.getAttributeCatalog(manifest)
+  }
+
+  return {
+    flattenProduct,
+    prepareExport,
+    buildPreview,
+    exportData,
+    getFilename,
+    getDefaultLayout,
+    getExportableAttributes,
+    buildWideRows,
+    buildTallRows,
+  }
+})()
+
+
+const DataPackApp = (() => {
+  let manifest = window.DATAPACK_MANIFEST
+  let searchQuery = ''
+  let selectedSku = null
+  let searchTelemetryTimer = null
+
+  const FORMAT_ICONS = { csv: '📊', xlsx: '📗', json: '{ }', xml: '<>' }
+  const WIZARD_STEPS = 5
+
+  let wizard = createWizardState()
+
+  const $ = (id) => document.getElementById(id)
+
+  function createWizardState(overrides = {}) {
+    const exportableFields = manifest.schema.filter((f) => f.exportable).map((f) => f.name)
+    const exportableAttrs = DataPackExport.getExportableAttributes(manifest).map((a) => a.id)
+    const format = 'csv'
+    return {
+      open: false,
+      step: 0,
+      format,
+      layout: DataPackExport.getDefaultLayout(format, exportableAttrs.length > 0),
+      structure: 'nested',
+      scope: 'all',
+      productFields: [...exportableFields],
+      attributeFields: [...exportableAttrs],
+      attributeSearch: '',
+      singleSku: null,
+      source: 'catalog',
+      downloaded: false,
+      ...overrides,
+    }
+  }
+
+  function getFilteredProducts() {
+    const q = searchQuery.toLowerCase().trim()
+    if (!q) return manifest.products
+    return manifest.products.filter((p) => {
+      const texts = p.texts[DataPackI18n.getLang()] || p.texts.sv
+      return (
+        p.sku.toLowerCase().includes(q) ||
+        texts.name.toLowerCase().includes(q) ||
+        texts.description.toLowerCase().includes(q)
+      )
+    })
+  }
+
+  function formatPrice(price) {
+    return `${price.toLocaleString('sv-SE')} SEK`
+  }
+
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+  }
+
+  function isStructuredFormat() {
+    return wizard.format === 'json' || wizard.format === 'xml'
+  }
+
+  function getLayoutLabel() {
+    const key = isStructuredFormat()
+      ? `structure${wizard.structure.charAt(0).toUpperCase()}${wizard.structure.slice(1)}`
+      : `layout${wizard.layout.charAt(0).toUpperCase()}${wizard.layout.slice(1)}`
+    return DataPackI18n.t(key)
+  }
+
+  function hasValidExportSelection() {
+    return wizard.productFields.length > 0 || wizard.attributeFields.length > 0
+  }
+
+  function isStale() {
+    return new Date(manifest.meta.staleAfter) < new Date()
+  }
+
+  function formatHeroDate() {
+    return DataPackI18n.formatDate(manifest.meta.generatedAt)
+  }
+
+  function getQuickExportOptions(format) {
+    const exportableFields = manifest.schema.filter((f) => f.exportable).map((f) => f.name)
+    const exportableAttrs = DataPackExport.getExportableAttributes(manifest).map((a) => a.id)
+    const hasAttrs = exportableAttrs.length > 0
+    if (format === 'json') {
+      return {
+        productFields: exportableFields,
+        attributeFields: exportableAttrs,
+        format: 'json',
+        layout: 'wide',
+        structure: 'nested',
+        manifest,
+      }
+    }
+    return {
+      productFields: exportableFields,
+      attributeFields: exportableAttrs,
+      format,
+      layout: DataPackExport.getDefaultLayout(format, hasAttrs),
+      structure: 'nested',
+      manifest,
+    }
+  }
+
+  function quickExport(preset) {
+    const formatMap = { excel: 'xlsx', csv: 'csv', json: 'json' }
+    const format = formatMap[preset]
+    const products = manifest.products
+    const options = getQuickExportOptions(format)
+    const prepared = DataPackExport.exportData(products, options, format, manifest)
+
+    const successEl = $('hero-success')
+    successEl.hidden = false
+    successEl.textContent = DataPackI18n.t('quickExportSuccess')
+
+    DataPackTelemetry.send(manifest, 'export', {
+      format,
+      source: 'quick',
+      preset,
+      filename: prepared.filename,
+      productCount: products.length,
+      fieldCount: options.productFields.length,
+      attributeCount: options.attributeFields.length,
+    })
+  }
+
+  function renderPageTitle() {
+    const brand = manifest.meta.brand || 'Friluftsportalen'
+    const assortment = manifest.meta.assortment || manifest.meta.packId
+    document.title = `${brand} — ${assortment}`
+    document.documentElement.lang = DataPackI18n.getLang()
+  }
+
+  function renderHero() {
+    $('hero-title').textContent = manifest.meta.assortment || manifest.meta.packId
+    $('hero-subline').textContent = DataPackI18n.t('heroSubline')
+    $('hero-trust').textContent = DataPackI18n.t('heroTrust')
+
+    const count = manifest.products.length
+    const metaParts = [
+      DataPackI18n.t('summaryProducts', { n: count }),
+      DataPackI18n.t('heroUpdated', { date: formatHeroDate() }),
+      DataPackI18n.t('heroWorksOffline'),
+    ]
+    $('hero-meta').textContent = metaParts.join(' · ')
+
+    const staleEl = $('hero-stale')
+    if (isStale()) {
+      staleEl.hidden = false
+      $('hero-stale-msg').textContent =
+        DataPackI18n.t('staleCalm') + ' ' + DataPackI18n.t('staleReassurance')
+    } else {
+      staleEl.hidden = true
+    }
+
+    $('quick-excel').innerHTML = `${escHtml(DataPackI18n.t('quickExcel'))}<span class="quick-export-badge">${escHtml(DataPackI18n.t('recommended'))}</span>`
+    $('quick-csv').textContent = DataPackI18n.t('quickCsv')
+    $('quick-json').textContent = DataPackI18n.t('quickJson')
+    $('hero-customize').textContent = DataPackI18n.t('heroBrowseCustomize')
+  }
+
+  function renderFooter() {
+    const footer = $('pack-footer')
+    const email = manifest.meta.contactEmail
+    if (!email) {
+      footer.hidden = true
+      footer.innerHTML = ''
+      return
+    }
+    footer.hidden = false
+    footer.innerHTML = `${escHtml(DataPackI18n.t('contactQuestions'))} <a href="mailto:${escHtml(email)}">${escHtml(email)}</a>`
+  }
+
+  function hideHeroSuccess() {
+    $('hero-success').hidden = true
+  }
+
+  function getExportOptions() {
+    return {
+      productFields: wizard.productFields,
+      attributeFields: wizard.attributeFields,
+      format: wizard.format,
+      layout: wizard.layout,
+      structure: wizard.structure,
+      manifest,
+    }
+  }
+
+  function renderLangSwitcher() {
+    const el = $('lang-switcher')
+    el.innerHTML = ''
+    for (const lang of DataPackI18n.LANGS) {
+      const btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'lang-btn' + (DataPackI18n.getLang() === lang ? ' active' : '')
+      btn.textContent = lang.toUpperCase()
+      btn.addEventListener('click', () => {
+        DataPackI18n.setLang(lang)
+        renderAll()
+      })
+      el.appendChild(btn)
+    }
+  }
+
+  function renderStaticLabels() {
+    $('btn-download').textContent = DataPackI18n.t('customizeExport')
+    $('btn-update').textContent = DataPackI18n.t('update')
+    $('search').placeholder = DataPackI18n.t('search')
+    $('btn-back').textContent = '← ' + DataPackI18n.t('back')
+    $('btn-export-product').textContent = DataPackI18n.t('exportProduct')
+    $('wizard-title').textContent = DataPackI18n.t('wizardTitle')
+    $('wizard-subtitle').textContent = DataPackI18n.t('wizardSubtitle')
+    $('preview-title').textContent = DataPackI18n.t('previewTitle')
+    $('preview-hint').textContent = DataPackI18n.t('previewHint')
+    $('wizard-back').textContent = DataPackI18n.t('back_btn')
+    $('wizard-close').setAttribute('aria-label', DataPackI18n.t('close'))
+  }
+
+  function renderAll() {
+    renderPageTitle()
+    renderLangSwitcher()
+    renderStaticLabels()
+    renderHero()
+    renderFooter()
+    if (selectedSku) showProduct(selectedSku)
+    else renderCatalog()
+    if (wizard.open) renderWizard()
+  }
+
+  function renderCatalog() {
+    const products = getFilteredProducts()
+    const grid = $('catalog-grid')
+    grid.innerHTML = ''
+
+    if (products.length === 0) {
+      grid.innerHTML = `<p class="empty-state">${DataPackI18n.t('noResults')}</p>`
+      return
+    }
+
+    for (const product of products) {
+      const texts = product.texts[DataPackI18n.getLang()] || product.texts.sv
+      const card = document.createElement('article')
+      card.className = 'product-card'
+      card.innerHTML = `
+        <img src="${product.imageUrl}" alt="${escHtml(texts.name)}" loading="lazy">
+        <div class="product-card-body">
+          <p class="sku">${escHtml(product.sku)}</p>
+          <h3>${escHtml(texts.name)}</h3>
+          <p class="price">${formatPrice(product.price)}</p>
+        </div>
+      `
+      card.addEventListener('click', () => showProduct(product.sku))
+      grid.appendChild(card)
+    }
+  }
+
+  function showCatalog() {
+    selectedSku = null
+    $('catalog-view').classList.remove('hidden')
+    $('product-detail').classList.remove('active')
+    $('pack-hero').hidden = false
+    location.hash = ''
+    renderCatalog()
+  }
+
+  function showProduct(sku) {
+    const product = manifest.products.find((p) => p.sku === sku)
+    if (!product) return
+    selectedSku = sku
+    $('catalog-view').classList.add('hidden')
+    $('product-detail').classList.add('active')
+    $('pack-hero').hidden = true
+    location.hash = `product/${sku}`
+
+    const texts = product.texts[DataPackI18n.getLang()] || product.texts.sv
+    $('detail-image').src = product.imageUrl
+    $('detail-image').alt = texts.name
+    $('detail-sku').textContent = product.sku
+    $('detail-name').textContent = texts.name
+    $('detail-price').textContent = formatPrice(product.price)
+    $('detail-desc').textContent = texts.description
+
+    const attrs = $('detail-attrs')
+    attrs.innerHTML = ''
+    for (const attr of product.attributes) {
+      const li = document.createElement('li')
+      li.innerHTML = `<span>${escHtml(DataPackI18n.attrKey(attr, manifest))}</span><span>${escHtml(attr.value)}</span>`
+      attrs.appendChild(li)
+    }
+    const stockLi = document.createElement('li')
+    stockLi.innerHTML = `<span>${DataPackI18n.t('stock')}</span><span>${product.stock}</span>`
+    attrs.appendChild(stockLi)
+  }
+
+  function getScopeProductCount(scope) {
+    if (scope === 'one') return wizard.singleSku || selectedSku ? 1 : 0
+    if (scope === 'filtered') return getFilteredProducts().length
+    return manifest.products.length
+  }
+
+  function getExportProducts() {
+    if (wizard.scope === 'one') {
+      const sku = wizard.singleSku || selectedSku
+      const p = manifest.products.find((x) => x.sku === sku)
+      return p ? [p] : []
+    }
+    if (wizard.scope === 'filtered') return getFilteredProducts()
+    return manifest.products
+  }
+
+  function openWizard(singleSku) {
+    hideHeroSuccess()
+    wizard = createWizardState({
+      open: true,
+      scope: singleSku ? 'one' : 'all',
+      singleSku: singleSku || null,
+      source: singleSku ? 'product' : 'catalog',
+    })
+    $('wizard-overlay').classList.add('open')
+    renderWizard()
+  }
+
+  function closeWizard() {
+    if (wizard.open && !wizard.downloaded) {
+      DataPackTelemetry.send(manifest, 'wizard_abandon', { step: wizard.step })
+    }
+    wizard.open = false
+    $('wizard-overlay').classList.remove('open')
+  }
+
+  function renderWizardStepper() {
+    const steps = $('wizard-steps')
+    steps.innerHTML = ''
+    const names = DataPackI18n.t('stepNames')
+
+    for (let i = 0; i < WIZARD_STEPS; i++) {
+      const item = document.createElement('div')
+      item.className = 'wizard-step-item'
+      if (i < wizard.step) item.classList.add('done')
+      if (i === wizard.step) item.classList.add('current')
+      item.innerHTML = `
+        <span class="wizard-step-num">${i < wizard.step ? '✓' : i + 1}</span>
+        <span class="wizard-step-label">${escHtml(names[i] || '')}</span>
+      `
+      steps.appendChild(item)
+    }
+  }
+
+  function renderLayoutCard(container, id, titleKey, descKey, selected, recommended, onClick) {
+    const card = document.createElement('button')
+    card.type = 'button'
+    card.className = 'format-card layout-card' + (selected ? ' selected' : '')
+    card.innerHTML = `
+      <div class="format-card-title">${escHtml(DataPackI18n.t(titleKey))}</div>
+      <div class="format-card-desc">${escHtml(DataPackI18n.t(descKey))}</div>
+      ${recommended ? `<span class="layout-badge">${escHtml(DataPackI18n.t('recommended'))}</span>` : ''}
+    `
+    card.addEventListener('click', onClick)
+    container.appendChild(card)
+  }
+
+  function renderFormatStep(content) {
+    content.innerHTML = `
+      <h3 class="step-heading">${escHtml(DataPackI18n.t('stepFormat'))}</h3>
+      <p class="step-desc">${escHtml(DataPackI18n.t('stepFormatDesc'))}</p>
+    `
+    const opts = document.createElement('div')
+    opts.className = 'format-options'
+    const descs = DataPackI18n.t('formatDesc')
+
+    for (const fmt of ['csv', 'xlsx', 'json', 'xml']) {
+      const card = document.createElement('button')
+      card.type = 'button'
+      card.className = 'format-card' + (wizard.format === fmt ? ' selected' : '')
+      card.innerHTML = `
+        <div class="format-card-icon">${FORMAT_ICONS[fmt]}</div>
+        <div class="format-card-title">${escHtml(DataPackI18n.t('formats')[fmt] || fmt)}</div>
+        <div class="format-card-desc">${escHtml(descs[fmt] || '')}</div>
+      `
+      card.addEventListener('click', () => {
+        wizard.format = fmt
+        const hasAttrs = wizard.attributeFields.length > 0
+        if (fmt === 'json' || fmt === 'xml') {
+          wizard.structure = 'nested'
+        } else {
+          wizard.layout = DataPackExport.getDefaultLayout(fmt, hasAttrs)
+        }
+        wizard.downloaded = false
+        renderWizard()
+      })
+      opts.appendChild(card)
+    }
+    content.appendChild(opts)
+  }
+
+  function renderLayoutStep(content) {
+    content.innerHTML = `
+      <h3 class="step-heading">${escHtml(DataPackI18n.t('stepLayout'))}</h3>
+      <p class="step-desc">${escHtml(DataPackI18n.t('stepLayoutDesc'))}</p>
+    `
+    const opts = document.createElement('div')
+    opts.className = 'layout-options'
+
+    if (isStructuredFormat()) {
+      const structures = [
+        ['flat', 'structureFlat', 'structureFlatDesc'],
+        ['nested', 'structureNested', 'structureNestedDesc'],
+        ['tall', 'structureTall', 'structureTallDesc'],
+      ]
+      for (const [id, titleKey, descKey] of structures) {
+        renderLayoutCard(
+          opts,
+          id,
+          titleKey,
+          descKey,
+          wizard.structure === id,
+          id === 'nested',
+          () => {
+            wizard.structure = id
+            wizard.downloaded = false
+            renderWizard()
+          },
+        )
+      }
+    } else {
+      const layouts = [
+        ['wide', 'layoutWide', 'layoutWideDesc'],
+        ['tall', 'layoutTall', 'layoutTallDesc'],
+        ['split', 'layoutSplit', 'layoutSplitDesc'],
+      ]
+      for (const [id, titleKey, descKey] of layouts) {
+        const disabled = id === 'split' && wizard.attributeFields.length === 0
+        if (disabled) continue
+        renderLayoutCard(
+          opts,
+          id,
+          titleKey,
+          descKey,
+          wizard.layout === id,
+          id === 'split' && (wizard.format === 'xlsx' || wizard.format === 'csv'),
+          () => {
+            wizard.layout = id
+            wizard.downloaded = false
+            renderWizard()
+          },
+        )
+      }
+    }
+    content.appendChild(opts)
+  }
+
+  function renderScopeStep(content) {
+    content.innerHTML = `
+      <h3 class="step-heading">${escHtml(DataPackI18n.t('stepScope'))}</h3>
+      <p class="step-desc">${escHtml(DataPackI18n.t('stepScopeDesc'))}</p>
+    `
+    const opts = document.createElement('div')
+    opts.className = 'scope-options'
+
+    const scopes = wizard.singleSku
+      ? [['one', DataPackI18n.t('scopeOne'), DataPackI18n.t('scopeOneDesc')]]
+      : [
+          ['all', DataPackI18n.t('scopeAll'), DataPackI18n.t('scopeAllDesc')],
+          ['filtered', DataPackI18n.t('scopeFiltered'), DataPackI18n.t('scopeFilteredDesc')],
+          ['one', DataPackI18n.t('scopeOne'), DataPackI18n.t('scopeOneDesc')],
+        ]
+
+    for (const [scope, title, desc] of scopes) {
+      const count = getScopeProductCount(scope)
+      const card = document.createElement('button')
+      card.type = 'button'
+      card.className = 'scope-card' + (wizard.scope === scope ? ' selected' : '')
+      card.innerHTML = `
+        <div class="scope-card-body">
+          <div class="scope-card-title">${escHtml(title)}</div>
+          <div class="scope-card-desc">${escHtml(desc)}</div>
+        </div>
+        <span class="scope-badge">${escHtml(DataPackI18n.t('productCount', { n: count }))}</span>
+      `
+      card.addEventListener('click', () => {
+        wizard.scope = scope
+        wizard.downloaded = false
+        renderWizard()
+      })
+      opts.appendChild(card)
+    }
+    content.appendChild(opts)
+  }
+
+  function renderFieldGroup(content, title, fields, selected, searchQuery, onToggle, onSelectAll, onSelectNone, countLabelFn) {
+    const group = document.createElement('section')
+    group.className = 'field-group'
+
+    const header = document.createElement('div')
+    header.className = 'field-group-header'
+    header.innerHTML = `<h4>${escHtml(title)}</h4>`
+    group.appendChild(header)
+
+    const toolbar = document.createElement('div')
+    toolbar.className = 'field-toolbar'
+    toolbar.innerHTML = `
+      <span class="field-count-label">${escHtml(countLabelFn())}</span>
+      <div class="field-toolbar-actions">
+        <button type="button" class="btn-link" data-action="all">${escHtml(DataPackI18n.t('selectAll'))}</button>
+        <button type="button" class="btn-link" data-action="none">${escHtml(DataPackI18n.t('selectNone'))}</button>
+      </div>
+    `
+    toolbar.querySelector('[data-action="all"]').addEventListener('click', onSelectAll)
+    toolbar.querySelector('[data-action="none"]').addEventListener('click', onSelectNone)
+    group.appendChild(toolbar)
+
+    if (searchQuery !== null) {
+      const searchWrap = document.createElement('div')
+      searchWrap.className = 'attribute-search-wrap'
+      searchWrap.innerHTML = `<input type="search" class="attribute-search" placeholder="${escHtml(DataPackI18n.t('searchAttributes'))}" value="${escHtml(searchQuery)}">`
+      const input = searchWrap.querySelector('input')
+      input.addEventListener('input', (e) => {
+        wizard.attributeSearch = e.target.value
+        renderWizard()
+      })
+      group.appendChild(searchWrap)
+    }
+
+    const list = document.createElement('div')
+    list.className = 'field-list'
+    const q = (searchQuery || '').toLowerCase().trim()
+
+    for (const field of fields) {
+      if (q && !field.label.toLowerCase().includes(q) && !field.id.toLowerCase().includes(q)) continue
+      const label = document.createElement('label')
+      label.className = 'field-item'
+      const checked = selected.includes(field.id)
+      label.innerHTML = `<input type="checkbox" ${checked ? 'checked' : ''}> <span>${escHtml(field.label)}</span>`
+      label.querySelector('input').addEventListener('change', (e) => onToggle(field.id, e.target.checked))
+      list.appendChild(label)
+    }
+
+    if (!list.children.length) {
+      list.innerHTML = `<p class="field-empty">${escHtml(DataPackI18n.t('noResults'))}</p>`
+    }
+
+    group.appendChild(list)
+    content.appendChild(group)
+  }
+
+  function renderFieldsStep(content) {
+    const exportable = manifest.schema.filter((f) => f.exportable)
+    const attrCatalog = DataPackExport.getExportableAttributes(manifest)
+
+    content.innerHTML = `
+      <h3 class="step-heading">${escHtml(DataPackI18n.t('stepFields'))}</h3>
+      <p class="step-desc">${escHtml(DataPackI18n.t('stepFieldsDesc'))}</p>
+    `
+
+    renderFieldGroup(
+      content,
+      DataPackI18n.t('fieldGroupProducts'),
+      exportable.map((f) => ({ id: f.name, label: DataPackI18n.schemaLabel(f) })),
+      wizard.productFields,
+      null,
+      (id, checked) => {
+        if (checked) {
+          if (!wizard.productFields.includes(id)) wizard.productFields.push(id)
+        } else wizard.productFields = wizard.productFields.filter((f) => f !== id)
+        wizard.downloaded = false
+        renderWizard()
+      },
+      () => {
+        wizard.productFields = exportable.map((f) => f.name)
+        wizard.downloaded = false
+        renderWizard()
+      },
+      () => {
+        wizard.productFields = []
+        wizard.downloaded = false
+        renderWizard()
+      },
+      () => DataPackI18n.t('fieldsSelected', { n: wizard.productFields.length, total: exportable.length }),
+    )
+
+    renderFieldGroup(
+      content,
+      DataPackI18n.t('fieldGroupAttributes'),
+      attrCatalog.map((def) => ({ id: def.id, label: DataPackAttributes.attrLabel(def) })),
+      wizard.attributeFields,
+      wizard.attributeSearch,
+      (id, checked) => {
+        if (checked) {
+          if (!wizard.attributeFields.includes(id)) wizard.attributeFields.push(id)
+        } else wizard.attributeFields = wizard.attributeFields.filter((f) => f !== id)
+        if (wizard.attributeFields.length === 0 && wizard.layout === 'split') {
+          wizard.layout = 'wide'
+        }
+        wizard.downloaded = false
+        renderWizard()
+      },
+      () => {
+        wizard.attributeFields = attrCatalog.map((a) => a.id)
+        wizard.downloaded = false
+        renderWizard()
+      },
+      () => {
+        wizard.attributeFields = []
+        if (wizard.layout === 'split') wizard.layout = 'wide'
+        wizard.downloaded = false
+        renderWizard()
+      },
+      () =>
+        DataPackI18n.t('attributesSelected', {
+          n: wizard.attributeFields.length,
+          total: attrCatalog.length,
+        }),
+    )
+  }
+
+  function renderReviewStep(content) {
+    content.innerHTML = `
+      <div class="review-step">
+        <div class="review-icon">${wizard.downloaded ? '✅' : '📥'}</div>
+        <h3 class="review-title">${escHtml(wizard.downloaded ? DataPackI18n.t('downloadSuccess') : DataPackI18n.t('readyToDownload'))}</h3>
+        <p class="review-desc">${escHtml(DataPackI18n.t('stepReviewDesc'))}</p>
+      </div>
+    `
+  }
+
+  function renderPreviewTable(rows, fields, labels, maxRows = 5) {
+    const previewRows = rows.slice(0, maxRows)
+    const thead = fields.map((f) => `<th>${escHtml(labels[f] || f)}</th>`).join('')
+    const tbody = previewRows
+      .map((row) => {
+        const cells = fields
+          .map((f) => {
+            const val = row[f] ?? ''
+            return `<td title="${escHtml(val)}">${escHtml(String(val))}</td>`
+          })
+          .join('')
+        return `<tr>${cells}</tr>`
+      })
+      .join('')
+
+    let moreHtml = ''
+    if (rows.length > previewRows.length) {
+      moreHtml = `<div class="preview-more">${escHtml(DataPackI18n.t('previewMore', { n: rows.length - previewRows.length }))}</div>`
+    }
+
+    return `
+      <div class="preview-table-wrap">
+        <table class="preview-table">
+          <thead><tr>${thead}</tr></thead>
+          <tbody>${tbody}</tbody>
+        </table>
+      </div>
+      ${moreHtml}
+    `
+  }
+
+  function renderPreviewPanel() {
+    const summaryEl = $('preview-summary')
+    const contentEl = $('preview-content')
+    const products = getExportProducts()
+
+    if (!hasValidExportSelection() || !products.length) {
+      summaryEl.innerHTML = ''
+      contentEl.innerHTML = `<p class="preview-empty">${escHtml(DataPackI18n.t('previewEmpty'))}</p>`
+      return
+    }
+
+    const preview = DataPackExport.buildPreview(products, getExportOptions(), wizard.format, manifest)
+    const formatLabel = DataPackI18n.t('formats')[wizard.format] || wizard.format
+
+    summaryEl.innerHTML = `
+      <span class="summary-chip"><strong>${escHtml(DataPackI18n.t('summaryProducts', { n: products.length }))}</strong></span>
+      <span class="summary-chip"><strong>${escHtml(DataPackI18n.t('summaryFields', { n: preview.fieldCount }))}</strong></span>
+      <span class="summary-chip"><strong>${escHtml(DataPackI18n.t('summaryAttributes', { n: preview.attributeCount }))}</strong></span>
+      <span class="summary-chip">${escHtml(DataPackI18n.t('summaryFormat'))}: <strong>${escHtml(formatLabel)}</strong></span>
+      <span class="summary-chip">${escHtml(DataPackI18n.t('summaryLayout'))}: <strong>${escHtml(getLayoutLabel())}</strong></span>
+      <span class="summary-chip">${escHtml(DataPackI18n.t('summaryFilename'))}: <strong>${escHtml(preview.filename)}</strong></span>
+    `
+
+    if (preview.previewMode === 'split' && preview.splitPreview) {
+      const p = preview.splitPreview.products
+      const a = preview.splitPreview.attributes
+      contentEl.innerHTML = `
+        <div class="preview-split">
+          <div class="preview-split-block">
+            <h4 class="preview-split-title">${escHtml(DataPackI18n.t('previewSheetProducts'))}</h4>
+            ${renderPreviewTable(p.rows, p.fields, p.labels)}
+          </div>
+          <div class="preview-split-block">
+            <h4 class="preview-split-title">${escHtml(DataPackI18n.t('previewSheetAttributes'))}</h4>
+            ${renderPreviewTable(a.rows, a.fields, a.labels)}
+          </div>
+        </div>
+      `
+      return
+    }
+
+    if (preview.isTabular && preview.previewRows.length) {
+      contentEl.innerHTML = renderPreviewTable(
+        preview.previewRows,
+        preview.fields,
+        preview.labels,
+        preview.previewRows.length,
+      )
+      return
+    }
+
+    let note = ''
+    if (preview.previewTruncated) {
+      note = `<div class="preview-more">${escHtml(DataPackI18n.t('previewTruncated'))}</div>`
+    }
+    contentEl.innerHTML = `
+      <pre class="preview-code">${escHtml(preview.previewText)}</pre>
+      ${note}
+    `
+  }
+
+  function renderWizard() {
+    renderWizardStepper()
+
+    const content = $('wizard-content')
+    content.innerHTML = ''
+
+    if (wizard.step === 0) renderFormatStep(content)
+    else if (wizard.step === 1) renderLayoutStep(content)
+    else if (wizard.step === 2) renderScopeStep(content)
+    else if (wizard.step === 3) renderFieldsStep(content)
+    else renderReviewStep(content)
+
+    renderPreviewPanel()
+
+    const backBtn = $('wizard-back')
+    const nextBtn = $('wizard-next')
+    const lastStep = WIZARD_STEPS - 1
+
+    backBtn.style.visibility = wizard.step === 0 ? 'hidden' : 'visible'
+
+    nextBtn.classList.remove('is-ready', 'is-success')
+    if (wizard.step < lastStep) {
+      nextBtn.textContent = DataPackI18n.t('next')
+      nextBtn.disabled = wizard.step === 3 && !hasValidExportSelection()
+    } else {
+      nextBtn.textContent = wizard.downloaded
+        ? DataPackI18n.t('downloadAgain')
+        : DataPackI18n.t('download_btn')
+      nextBtn.classList.add('is-ready')
+      if (wizard.downloaded) nextBtn.classList.add('is-success')
+      nextBtn.disabled = !hasValidExportSelection() || getExportProducts().length === 0
+    }
+  }
+
+  function wizardNext() {
+    const lastStep = WIZARD_STEPS - 1
+    if (wizard.step < lastStep) {
+      if (wizard.step === 3 && !hasValidExportSelection()) return
+      wizard.step++
+      wizard.downloaded = false
+      renderWizard()
+      return
+    }
+    doExport()
+    wizard.downloaded = true
+    renderWizard()
+  }
+
+  function wizardBack() {
+    if (wizard.step > 0) {
+      wizard.step--
+      wizard.downloaded = false
+      renderWizard()
+    }
+  }
+
+  function doExport() {
+    const products = getExportProducts()
+    const options = getExportOptions()
+    const exportable = manifest.schema.filter((f) => f.exportable)
+    const attrCatalog = DataPackExport.getExportableAttributes(manifest)
+    const prepared = DataPackExport.exportData(products, options, wizard.format, manifest)
+    const allProductFields = wizard.productFields.length === exportable.length
+    DataPackTelemetry.send(manifest, 'export', {
+      format: wizard.format,
+      fields: [...wizard.productFields, ...wizard.attributeFields.map((id) => `attr:${id}`)],
+      productFields: wizard.productFields,
+      attributeFields: wizard.attributeFields,
+      layout: isStructuredFormat() ? undefined : wizard.layout,
+      structure: isStructuredFormat() ? wizard.structure : undefined,
+      scope: wizard.scope,
+      productCount: products.length,
+      fieldCount: wizard.productFields.length,
+      attributeCount: wizard.attributeFields.length,
+      totalFields: exportable.length + attrCatalog.length,
+      allFieldsSelected: allProductFields && wizard.attributeFields.length === attrCatalog.length,
+      searchQuery:
+        wizard.scope === 'filtered' && searchQuery.trim() ? searchQuery.trim() : undefined,
+      productSku:
+        wizard.scope === 'one' ? wizard.singleSku || selectedSku || undefined : undefined,
+      source: wizard.singleSku ? 'product' : 'wizard',
+      filename: prepared.filename,
+      catalogTotal: manifest.products.length,
+    })
+  }
+
+  async function updateData() {
+    const btn = $('btn-update')
+    btn.disabled = true
+    btn.textContent = '...'
+    try {
+      const fresh = await DataPackApi.fetchLatestPack(manifest)
+      manifest = fresh
+      window.DATAPACK_MANIFEST = fresh
+      DataPackTelemetry.send(manifest, 'update', {})
+      renderAll()
+    } catch (err) {
+      alert(err.message || 'Update failed')
+    } finally {
+      btn.disabled = false
+      btn.textContent = DataPackI18n.t('update')
+    }
+  }
+
+  function handleHash() {
+    const hash = location.hash.slice(1)
+    if (hash.startsWith('product/')) {
+      showProduct(hash.replace('product/', ''))
+    } else {
+      showCatalog()
+    }
+  }
+
+  function bindEvents() {
+    $('search').addEventListener('input', (e) => {
+      searchQuery = e.target.value
+      renderCatalog()
+      if (searchQuery.trim()) {
+        clearTimeout(searchTelemetryTimer)
+        searchTelemetryTimer = setTimeout(() => {
+          DataPackTelemetry.send(manifest, 'search', { query: searchQuery.trim() })
+        }, 600)
+      }
+    })
+
+    $('btn-download').addEventListener('click', () => openWizard(null))
+    $('hero-customize').addEventListener('click', () => openWizard(null))
+    $('quick-excel').addEventListener('click', () => quickExport('excel'))
+    $('quick-csv').addEventListener('click', () => quickExport('csv'))
+    $('quick-json').addEventListener('click', () => quickExport('json'))
+    $('btn-export-product').addEventListener('click', () => openWizard(selectedSku))
+    $('btn-back').addEventListener('click', showCatalog)
+    $('btn-update').addEventListener('click', updateData)
+    $('wizard-close').addEventListener('click', closeWizard)
+    $('wizard-overlay').addEventListener('click', (e) => {
+      if (e.target === $('wizard-overlay')) closeWizard()
+    })
+    $('wizard-next').addEventListener('click', wizardNext)
+    $('wizard-back').addEventListener('click', wizardBack)
+    window.addEventListener('hashchange', handleHash)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && wizard.open) closeWizard()
+    })
+  }
+
+  function init() {
+    if (!manifest || !manifest.products) {
+      document.body.innerHTML = '<p style="padding:2rem;color:#e03e3e">Invalid DataPack manifest</p>'
+      return
+    }
+    bindEvents()
+    renderAll()
+    handleHash()
+    DataPackTelemetry.send(manifest, 'open', {})
+  }
+
+  return { init }
+})()
+
+document.addEventListener('DOMContentLoaded', () => DataPackApp.init())
+
+</script>
+</body>
+</html>

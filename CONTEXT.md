@@ -27,17 +27,19 @@ Traditional exports (Excel, CSV, XML, JSON) lock format and columns at send time
 
 ## User journeys
 
-### Receiver (opens MHTML)
+### Receiver (opens catalog file)
 
-1. Open assortment file (email, file share, etc.)
-2. See Friluftsportalen logo and product catalog
-3. Switch display language (SV / NO / DA / FI) via in-file language switcher
-4. If data is stale → banner warns data may be outdated → **Update** fetches fresh manifest from the app API
-5. Browse and search products (texts, image URLs, attributes)
-6. Export via:
-   - **Main page** — “Download data” opens a step-by-step wizard (format + fields)
-   - **Product page** — export this product only
-7. If online → POST telemetry events to the app (pack id included on every event)
+1. Receive **human-named file** from sender (e.g. `Friluftsportalen — Spring Tents 2026.html`) — see [`docs/sender-guide.md`](docs/sender-guide.md)
+2. Open in Chrome or Edge (double-click)
+3. See hero: assortment title, product count, quick export (Excel / CSV / JSON), trust line
+4. Switch display language (SV / NO / DA / FI) via in-file language switcher
+5. If data is stale → calm info in hero → **Update** fetches fresh manifest from the app API
+6. Browse and search products (texts, image URLs, attributes)
+7. Export via:
+   - **Hero** — one-click Excel, CSV, or JSON (recommended defaults)
+   - **Customize export** — full wizard (format, layout, scope, fields)
+   - **Product page** — export this product only (opens wizard scoped to one SKU)
+8. If online → POST telemetry events to the app (pack id included on every event)
 
 ### Sender / operator (POC)
 
@@ -81,7 +83,8 @@ window.DATAPACK_MANIFEST = {
     version: "1.0.0",
     generatedAt: "2026-06-01T08:00:00Z",
     staleAfter: "2026-06-10T00:00:00Z",
-    apiBase: "https://your-app.vercel.app"  // set at build time
+    apiBase: "https://your-app.vercel.app",  // set at build time
+    contactEmail: "sortiment@example.com"    // optional — shown in pack footer
   },
   schema: [
     { name: "sku", label: { sv: "Artikelnummer", no: "...", da: "...", fi: "..." }, type: "string", exportable: true },
