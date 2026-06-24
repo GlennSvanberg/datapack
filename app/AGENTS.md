@@ -8,23 +8,25 @@ Before substantial work:
 - Multiple matches: prefer the most specific local skill for the package or concern you are changing; load additional skills only when the task spans multiple packages or concerns.
 <!-- intent-skills:end -->
 
-# App — TanStack Start (dashboard + API)
+# App — TanStack Start (dashboard + embed API)
 
 **Product context:** read [`../CONTEXT.md`](../CONTEXT.md) and [`../AGENTS.md`](../AGENTS.md) at the repo root.
 
-This package is the **hosted mothership**: dashboard for pack usage and HTTP API for pack updates + telemetry. DataPack `.mhtml` files (in `../datapack/` and `../packs/`) call into this app when online.
+This package is the **hosted mothership**: operator dashboard, embed HTML API, pack ingest, and telemetry. Distributor sites load `public/v1/widget.js` and render live product cards via htmx.
 
 ## Role in the system
 
 | Responsibility | Implementation |
 |----------------|----------------|
-| Serve latest pack data | `GET /api/packs/:packId` → Convex `packs.getByPackId` |
+| Serve embed HTML | `GET /v1/embed/products/:packId/:sku` → server-rendered fragment |
+| Serve widget script | `GET /v1/widget.js` (static, `public/v1/widget.js`) |
+| Serve pack data | `GET /api/packs/:packId` → Convex `packs.getByPackId` |
 | Record telemetry | `POST /api/telemetry` → Convex `telemetry.append` |
 | Usage dashboard | React routes with `useQuery` (live Convex subscriptions) |
-| Pack editing (demo) | `PackEditor` on pack detail → Convex mutations |
+| Demo distributor | `/demo/retailer` — mock partner site with `<fp-product>` embeds |
 | Vercel deployment | This directory is the Vercel **Root Directory** |
 
-Every telemetry event and pack fetch is keyed by **`packId`** so we know which assortment file triggered the action.
+Every telemetry event and embed request is keyed by **`packId`**. Optional **`distributor`** tags partner sites.
 
 ## Scaffolding commands
 
@@ -38,7 +40,7 @@ npm run convex:seed      # once, after first convex dev
 npm run generate-routes  # after adding/removing routes
 ```
 
-Repo root: `datapack/`. Sibling folders: `datapack/` (pack runtime), `sample-data/`, `packs/`.
+Repo root sibling folders: `shared/` (ingest + manifest types), `sample-data/` (optional legacy JSON).
 
 ## Stack
 
@@ -49,6 +51,7 @@ Repo root: `datapack/`. Sibling folders: `datapack/` (pack runtime), `sample-dat
 | Toolchain | TanStack CLI, Vite 8, TypeScript, npm |
 | Styling | Tailwind CSS v4 |
 | Persistence | Convex (`convex/`) — packs + telemetry |
+| Embed | Web Component + htmx (no React in widget) |
 
 ## Environment variables
 
@@ -78,21 +81,25 @@ Copy `.env.example` → `.env.local` after `npx convex dev`.
 ```
 app/
 ├── convex/
-│   ├── schema.ts           # packs + telemetryEvents
-│   ├── packs.ts            # queries + edit mutations
-│   ├── telemetry.ts        # append + aggregate queries
-│   └── seed.ts             # seed from data/ fixtures
-├── data/                   # Seed fixtures only (not read at runtime)
+│   ├── schema.ts              # packs + telemetryEvents
+│   ├── packs.ts               # queries + ingest mutations + getProductForEmbed
+│   ├── telemetry.ts           # append + aggregate queries
+│   └── seed.ts                # seed from data/ fixtures
+├── data/                      # Seed fixtures only (not read at runtime)
+├── public/v1/widget.js        # <fp-product> Web Component loader
 ├── src/
 │   ├── routes/
-│   │   ├── __root.tsx      # ConvexProvider + Live badge
-│   │   ├── index.tsx       # Live dashboard home
-│   │   ├── packs.$packId.tsx  # Live stats + PackEditor
-│   │   └── api/            # CORS API → Convex proxy
+│   │   ├── __root.tsx         # ConvexProvider + Live badge
+│   │   ├── index.tsx          # Live dashboard home
+│   │   ├── packs.$packId.tsx  # Stats + Embed snippet + PackEditor
+│   │   ├── demo.retailer.tsx  # Mock distributor embed demo
+│   │   ├── v1/embed/          # HTML fragment routes for htmx
+│   │   └── api/               # CORS API → Convex proxy
 │   ├── components/
+│   │   ├── EmbedSnippet.tsx   # Copy-paste widget snippet for operators
 │   │   ├── PackEditor.tsx
-│   │   └── LiveBadge.tsx
-│   └── lib/convex/         # client + server Convex helpers
+│   │   └── ingest/            # Upload / re-ingest UI
+│   └── lib/embed/             # Product card HTML renderer
 └── vite.config.ts
 ```
 
@@ -100,15 +107,17 @@ app/
 
 - Dashboard uses **`useQuery` / `useMutation`** from `convex/react` for live data
 - API routes use **`ConvexHttpClient`** via `src/lib/convex/server.ts`
-- API routes must return **CORS headers** so pack HTML files can `fetch` the hosted API
+- Embed and telemetry routes return **CORS headers** for cross-origin distributor sites
+- Widget detects API base from its own `<script src>` origin
 - Regenerate `convex/seedFixtures.ts` from `data/` when fixtures change:
   `node scripts/generate-seed-fixtures.mjs`
 
 ### API routes
 
 ```
-GET  /api/packs/$packId     → Convex packs.getByPackId
-POST /api/telemetry         → Convex telemetry.append
+GET  /v1/embed/products/$packId/$sku   → HTML product fragment (htmx)
+GET  /api/packs/$packId                → Convex packs.getByPackId
+POST /api/telemetry                    → Convex telemetry.append
 ```
 
 Request/response shapes: see [`../CONTEXT.md`](../CONTEXT.md).
@@ -120,25 +129,25 @@ Request/response shapes: see [`../CONTEXT.md`](../CONTEXT.md).
 3. Vercel project **Root Directory** → `app`
 4. Build: `npm run build`
 5. Run `npx convex run seed:runSeed` on production deployment once
-6. Rebuild pack HTML with `API_BASE=https://your-app.vercel.app`
+6. Widget available at `https://your-app.vercel.app/v1/widget.js`
 
 ## Known gotchas
 
 1. **Route generation** — run `npm run generate-routes` if `routeTree.gen.ts` is missing
 2. **Convex must be running** — dashboard and API need `CONVEX_URL`; use `dev:all`
 3. **Do not edit** `routeTree.gen.ts` or `convex/_generated/`
-4. **CORS** — required for local pack HTML → hosted API calls
+4. **CORS** — required for distributor sites embedding the widget
 5. **Seed** — after resetting Convex, run `npm run convex:seed`
 
 ## Related directories (outside this package)
 
 | Path | Purpose |
 |------|---------|
-| `../datapack/` | Vanilla JS catalog runtime embedded in MHTML |
-| `../sample-data/` | Source JSON for building pack files |
-| `../packs/` | Built `.html` pack files |
+| `../shared/ingest/` | CSV/XLSX parsing and mapping library |
+| `../shared/manifest.types.ts` | Manifest v2 types |
+| `../sample-data/` | Optional legacy source JSON (seed uses `app/data/`) |
 
-When changing manifest shape, update **sample-data**, **app/data** (seed fixtures), regenerate seed, and the pack runtime in `../datapack/`.
+When changing manifest shape, update **app/data** (seed fixtures), regenerate seed, and verify embed renderer + ingest pipeline.
 
 <!-- convex-ai-start -->
 

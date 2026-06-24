@@ -1,11 +1,11 @@
 import { useMutation } from 'convex/react'
 import { useEffect, useState } from 'react'
 import { api } from '../../convex/_generated/api'
-import type { PackManifest } from '#/lib/types'
+import type { LegacyPackManifest } from '#/lib/types'
 
 interface PackEditorProps {
   packId: string
-  pack: PackManifest
+  pack: LegacyPackManifest
 }
 
 function toDatetimeLocal(iso: string): string {
@@ -56,7 +56,7 @@ export function PackEditor({ packId, pack }: PackEditorProps) {
           stock: product.stock,
         })
       }
-      setMessage('Saved — open the pack file and click Update to pull fresh data.')
+      setMessage('Saved — embedded widgets will refresh within 30 seconds.')
     } catch (err) {
       setMessage(err instanceof Error ? err.message : 'Save failed')
     } finally {

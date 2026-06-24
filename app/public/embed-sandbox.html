@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>External site sandbox — fp-product embed</title>
+    <style>
+      body {
+        font-family: Georgia, serif;
+        margin: 0;
+        background: #f8f5f0;
+        color: #1a1a1a;
+      }
+      header {
+        background: #2d4a3e;
+        color: #fff;
+        padding: 1rem 2rem;
+      }
+      main {
+        max-width: 720px;
+        margin: 2rem auto;
+        padding: 0 1.5rem;
+      }
+      .note {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <strong>Fjällhandeln AB</strong> — simulated third-party retailer
+    </header>
+    <main>
+      <p class="note">
+        This page is a plain HTML file with no React or dashboard code. It only
+        loads <code>widget.js</code> and an <code>&lt;fp-product&gt;</code> tag —
+        the same integration distributors use on their own sites.
+      </p>
+      <h1>Produkt: Tält</h1>
+      <script src="/v1/widget.js" defer></script>
+      <fp-product
+        pack-id="friluftsportalen-spring-tents-001"
+        sku="TENT-001"
+        lang="sv"
+        distributor="fjallhandeln"
+        poll="30"
+      ></fp-product>
+    </main>
+  </body>
+</html>

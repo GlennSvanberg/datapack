@@ -8,7 +8,12 @@
  * @module
  */
 
+import type * as ingest from "../ingest.js";
+import type * as ingestActions from "../ingestActions.js";
 import type * as lib_aggregates from "../lib/aggregates.js";
+import type * as lib_ingestFull from "../lib/ingestFull.js";
+import type * as lib_packManifest from "../lib/packManifest.js";
+import type * as lib_telemetryPayload from "../lib/telemetryPayload.js";
 import type * as packs from "../packs.js";
 import type * as seed from "../seed.js";
 import type * as seedFixtures from "../seedFixtures.js";
@@ -21,7 +26,12 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  ingest: typeof ingest;
+  ingestActions: typeof ingestActions;
   "lib/aggregates": typeof lib_aggregates;
+  "lib/ingestFull": typeof lib_ingestFull;
+  "lib/packManifest": typeof lib_packManifest;
+  "lib/telemetryPayload": typeof lib_telemetryPayload;
   packs: typeof packs;
   seed: typeof seed;
   seedFixtures: typeof seedFixtures;

@@ -10,13 +10,25 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PacksNewRouteImport } from './routes/packs.new'
 import { Route as PacksPackIdRouteImport } from './routes/packs.$packId'
+import { Route as DemoRetailerRouteImport } from './routes/demo.retailer'
 import { Route as ApiTelemetryRouteImport } from './routes/api/telemetry'
+import { Route as ApiPacksIndexRouteImport } from './routes/api/packs.index'
 import { Route as ApiPacksPackIdRouteImport } from './routes/api/packs.$packId'
+import { Route as ApiPacksIngestPreviewRouteImport } from './routes/api/packs.ingest.preview'
+import { Route as ApiPacksPackIdSourceRouteImport } from './routes/api/packs.$packId.source'
+import { Route as ApiPacksPackIdRecordsRouteImport } from './routes/api/packs.$packId.records'
+import { Route as V1EmbedProductsPackIdSkuRouteImport } from './routes/v1/embed/products.$packId.$sku'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PacksNewRoute = PacksNewRouteImport.update({
+  id: '/packs/new',
+  path: '/packs/new',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PacksPackIdRoute = PacksPackIdRouteImport.update({
@@ -24,9 +36,19 @@ const PacksPackIdRoute = PacksPackIdRouteImport.update({
   path: '/packs/$packId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DemoRetailerRoute = DemoRetailerRouteImport.update({
+  id: '/demo/retailer',
+  path: '/demo/retailer',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiTelemetryRoute = ApiTelemetryRouteImport.update({
   id: '/api/telemetry',
   path: '/api/telemetry',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPacksIndexRoute = ApiPacksIndexRouteImport.update({
+  id: '/api/packs/',
+  path: '/api/packs/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPacksPackIdRoute = ApiPacksPackIdRouteImport.update({
@@ -34,44 +56,120 @@ const ApiPacksPackIdRoute = ApiPacksPackIdRouteImport.update({
   path: '/api/packs/$packId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPacksIngestPreviewRoute = ApiPacksIngestPreviewRouteImport.update({
+  id: '/api/packs/ingest/preview',
+  path: '/api/packs/ingest/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPacksPackIdSourceRoute = ApiPacksPackIdSourceRouteImport.update({
+  id: '/source',
+  path: '/source',
+  getParentRoute: () => ApiPacksPackIdRoute,
+} as any)
+const ApiPacksPackIdRecordsRoute = ApiPacksPackIdRecordsRouteImport.update({
+  id: '/records',
+  path: '/records',
+  getParentRoute: () => ApiPacksPackIdRoute,
+} as any)
+const V1EmbedProductsPackIdSkuRoute =
+  V1EmbedProductsPackIdSkuRouteImport.update({
+    id: '/v1/embed/products/$packId/$sku',
+    path: '/v1/embed/products/$packId/$sku',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/telemetry': typeof ApiTelemetryRoute
+  '/demo/retailer': typeof DemoRetailerRoute
   '/packs/$packId': typeof PacksPackIdRoute
-  '/api/packs/$packId': typeof ApiPacksPackIdRoute
+  '/packs/new': typeof PacksNewRoute
+  '/api/packs/$packId': typeof ApiPacksPackIdRouteWithChildren
+  '/api/packs/': typeof ApiPacksIndexRoute
+  '/api/packs/$packId/records': typeof ApiPacksPackIdRecordsRoute
+  '/api/packs/$packId/source': typeof ApiPacksPackIdSourceRoute
+  '/api/packs/ingest/preview': typeof ApiPacksIngestPreviewRoute
+  '/v1/embed/products/$packId/$sku': typeof V1EmbedProductsPackIdSkuRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/telemetry': typeof ApiTelemetryRoute
+  '/demo/retailer': typeof DemoRetailerRoute
   '/packs/$packId': typeof PacksPackIdRoute
-  '/api/packs/$packId': typeof ApiPacksPackIdRoute
+  '/packs/new': typeof PacksNewRoute
+  '/api/packs/$packId': typeof ApiPacksPackIdRouteWithChildren
+  '/api/packs': typeof ApiPacksIndexRoute
+  '/api/packs/$packId/records': typeof ApiPacksPackIdRecordsRoute
+  '/api/packs/$packId/source': typeof ApiPacksPackIdSourceRoute
+  '/api/packs/ingest/preview': typeof ApiPacksIngestPreviewRoute
+  '/v1/embed/products/$packId/$sku': typeof V1EmbedProductsPackIdSkuRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/api/telemetry': typeof ApiTelemetryRoute
+  '/demo/retailer': typeof DemoRetailerRoute
   '/packs/$packId': typeof PacksPackIdRoute
-  '/api/packs/$packId': typeof ApiPacksPackIdRoute
+  '/packs/new': typeof PacksNewRoute
+  '/api/packs/$packId': typeof ApiPacksPackIdRouteWithChildren
+  '/api/packs/': typeof ApiPacksIndexRoute
+  '/api/packs/$packId/records': typeof ApiPacksPackIdRecordsRoute
+  '/api/packs/$packId/source': typeof ApiPacksPackIdSourceRoute
+  '/api/packs/ingest/preview': typeof ApiPacksIngestPreviewRoute
+  '/v1/embed/products/$packId/$sku': typeof V1EmbedProductsPackIdSkuRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/telemetry' | '/packs/$packId' | '/api/packs/$packId'
+  fullPaths:
+    | '/'
+    | '/api/telemetry'
+    | '/demo/retailer'
+    | '/packs/$packId'
+    | '/packs/new'
+    | '/api/packs/$packId'
+    | '/api/packs/'
+    | '/api/packs/$packId/records'
+    | '/api/packs/$packId/source'
+    | '/api/packs/ingest/preview'
+    | '/v1/embed/products/$packId/$sku'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/telemetry' | '/packs/$packId' | '/api/packs/$packId'
+  to:
+    | '/'
+    | '/api/telemetry'
+    | '/demo/retailer'
+    | '/packs/$packId'
+    | '/packs/new'
+    | '/api/packs/$packId'
+    | '/api/packs'
+    | '/api/packs/$packId/records'
+    | '/api/packs/$packId/source'
+    | '/api/packs/ingest/preview'
+    | '/v1/embed/products/$packId/$sku'
   id:
     | '__root__'
     | '/'
     | '/api/telemetry'
+    | '/demo/retailer'
     | '/packs/$packId'
+    | '/packs/new'
     | '/api/packs/$packId'
+    | '/api/packs/'
+    | '/api/packs/$packId/records'
+    | '/api/packs/$packId/source'
+    | '/api/packs/ingest/preview'
+    | '/v1/embed/products/$packId/$sku'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiTelemetryRoute: typeof ApiTelemetryRoute
+  DemoRetailerRoute: typeof DemoRetailerRoute
   PacksPackIdRoute: typeof PacksPackIdRoute
-  ApiPacksPackIdRoute: typeof ApiPacksPackIdRoute
+  PacksNewRoute: typeof PacksNewRoute
+  ApiPacksPackIdRoute: typeof ApiPacksPackIdRouteWithChildren
+  ApiPacksIndexRoute: typeof ApiPacksIndexRoute
+  ApiPacksIngestPreviewRoute: typeof ApiPacksIngestPreviewRoute
+  V1EmbedProductsPackIdSkuRoute: typeof V1EmbedProductsPackIdSkuRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -83,11 +181,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/packs/new': {
+      id: '/packs/new'
+      path: '/packs/new'
+      fullPath: '/packs/new'
+      preLoaderRoute: typeof PacksNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/packs/$packId': {
       id: '/packs/$packId'
       path: '/packs/$packId'
       fullPath: '/packs/$packId'
       preLoaderRoute: typeof PacksPackIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/retailer': {
+      id: '/demo/retailer'
+      path: '/demo/retailer'
+      fullPath: '/demo/retailer'
+      preLoaderRoute: typeof DemoRetailerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/telemetry': {
@@ -97,6 +209,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiTelemetryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/packs/': {
+      id: '/api/packs/'
+      path: '/api/packs'
+      fullPath: '/api/packs/'
+      preLoaderRoute: typeof ApiPacksIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/packs/$packId': {
       id: '/api/packs/$packId'
       path: '/api/packs/$packId'
@@ -104,14 +223,61 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPacksPackIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/packs/ingest/preview': {
+      id: '/api/packs/ingest/preview'
+      path: '/api/packs/ingest/preview'
+      fullPath: '/api/packs/ingest/preview'
+      preLoaderRoute: typeof ApiPacksIngestPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/packs/$packId/source': {
+      id: '/api/packs/$packId/source'
+      path: '/source'
+      fullPath: '/api/packs/$packId/source'
+      preLoaderRoute: typeof ApiPacksPackIdSourceRouteImport
+      parentRoute: typeof ApiPacksPackIdRoute
+    }
+    '/api/packs/$packId/records': {
+      id: '/api/packs/$packId/records'
+      path: '/records'
+      fullPath: '/api/packs/$packId/records'
+      preLoaderRoute: typeof ApiPacksPackIdRecordsRouteImport
+      parentRoute: typeof ApiPacksPackIdRoute
+    }
+    '/v1/embed/products/$packId/$sku': {
+      id: '/v1/embed/products/$packId/$sku'
+      path: '/v1/embed/products/$packId/$sku'
+      fullPath: '/v1/embed/products/$packId/$sku'
+      preLoaderRoute: typeof V1EmbedProductsPackIdSkuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
+
+interface ApiPacksPackIdRouteChildren {
+  ApiPacksPackIdRecordsRoute: typeof ApiPacksPackIdRecordsRoute
+  ApiPacksPackIdSourceRoute: typeof ApiPacksPackIdSourceRoute
+}
+
+const ApiPacksPackIdRouteChildren: ApiPacksPackIdRouteChildren = {
+  ApiPacksPackIdRecordsRoute: ApiPacksPackIdRecordsRoute,
+  ApiPacksPackIdSourceRoute: ApiPacksPackIdSourceRoute,
+}
+
+const ApiPacksPackIdRouteWithChildren = ApiPacksPackIdRoute._addFileChildren(
+  ApiPacksPackIdRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiTelemetryRoute: ApiTelemetryRoute,
+  DemoRetailerRoute: DemoRetailerRoute,
   PacksPackIdRoute: PacksPackIdRoute,
-  ApiPacksPackIdRoute: ApiPacksPackIdRoute,
+  PacksNewRoute: PacksNewRoute,
+  ApiPacksPackIdRoute: ApiPacksPackIdRouteWithChildren,
+  ApiPacksIndexRoute: ApiPacksIndexRoute,
+  ApiPacksIngestPreviewRoute: ApiPacksIngestPreviewRoute,
+  V1EmbedProductsPackIdSkuRoute: V1EmbedProductsPackIdSkuRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

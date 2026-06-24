@@ -2,9 +2,36 @@ export type NordicLang = 'sv' | 'no' | 'da' | 'fi'
 
 export type LocalizedString = Record<NordicLang, string>
 
-export type TelemetryEventType = 'open' | 'search' | 'export' | 'update'
+export type TelemetryEventType =
+  | 'open'
+  | 'search'
+  | 'export'
+  | 'update'
+  | 'embed_view'
 
-export interface PackMeta {
+export type StorageMode = 'embedded' | 'remote'
+
+export type ViewProfile = 'catalog' | 'table'
+
+export type SchemaFieldType = 'string' | 'number' | 'boolean' | 'date' | 'url'
+
+export type SchemaFieldRole =
+  | 'id'
+  | 'title'
+  | 'description'
+  | 'image'
+  | 'price'
+  | 'stock'
+
+/** Default row count below which packs are embedded in HTML */
+export const STORAGE_EMBED_THRESHOLD = 500
+
+/** Default records per API page / Convex chunk */
+export const RECORD_PAGE_SIZE = 250
+
+// --- Legacy v1 types (Friluftsportalen demos) ---
+
+export interface LegacyPackMeta {
   packId: string
   brand: string
   assortment: string
@@ -12,9 +39,10 @@ export interface PackMeta {
   generatedAt: string
   staleAfter: string
   apiBase?: string
+  contactEmail?: string
 }
 
-export interface SchemaField {
+export interface LegacySchemaField {
   name: string
   label: LocalizedString
   type: 'string' | 'number'
@@ -43,6 +71,7 @@ export interface ProductAttribute {
   value: string
 }
 
+/** @deprecated Use DataRecord in v2 manifests */
 export interface Product {
   sku: string
   texts: Record<NordicLang, ProductTexts>
@@ -52,11 +81,85 @@ export interface Product {
   stock: number
 }
 
-export interface PackManifest {
-  meta: PackMeta
-  schema: SchemaField[]
+export interface LegacyPackManifest {
+  meta: LegacyPackMeta
+  schema: LegacySchemaField[]
   attributeSchema?: AttributeDefinition[]
   products: Product[]
+}
+
+// --- Manifest v2 ---
+
+export interface PackMeta {
+  packId: string
+  title: string
+  brand?: string
+  /** @deprecated Use title — kept for legacy compat reads */
+  assortment?: string
+  version: string
+  generatedAt: string
+  staleAfter: string
+  apiBase?: string
+  contactEmail?: string
+  storageMode: StorageMode
+  embedThreshold?: number
+  recordCount: number
+  primaryKey: string
+  viewProfile: ViewProfile
+}
+
+export interface SchemaField {
+  name: string
+  label: string
+  type: SchemaFieldType
+  role?: SchemaFieldRole
+  searchable?: boolean
+  exportable?: boolean
+}
+
+export type DataRecord = Record<string, string | number | boolean | null>
+
+export interface IngestSheetConfig {
+  name: string
+  joinKey: string
+  fieldMap: Record<string, string>
+  /** 0-based row index for column headers (after empty rows are removed) */
+  headerRowIndex?: number
+}
+
+export type CsvDelimiter = ',' | ';' | '\t' | '|'
+
+export interface IngestConfig {
+  sourceType: 'csv' | 'xlsx'
+  primarySheet: string
+  sheets: IngestSheetConfig[]
+  /** CSV field separator — auto-detected when omitted */
+  csvDelimiter?: CsvDelimiter
+  createdAt: string
+  lastIngestedAt: string
+}
+
+export interface PackManifestV2 {
+  meta: PackMeta
+  schema: SchemaField[]
+  records?: DataRecord[]
+}
+
+/** Union of legacy and v2 manifests as stored or embedded */
+export type PackManifest = LegacyPackManifest | PackManifestV2
+
+export function isLegacyManifest(
+  manifest: PackManifest,
+): manifest is LegacyPackManifest {
+  return 'products' in manifest && Array.isArray(manifest.products)
+}
+
+export function isV2Manifest(manifest: PackManifest): manifest is PackManifestV2 {
+  return (
+    'meta' in manifest &&
+    'primaryKey' in manifest.meta &&
+    !('products' in manifest)
+  )
 }
 
 export type ExportScope = 'all' | 'filtered' | 'one'
@@ -74,9 +177,11 @@ export interface TelemetryPayload {
   layout?: ExportLayout
   structure?: ExportStructure
   productSku?: string
+  recordId?: string
   language?: NordicLang
   scope?: ExportScope
   productCount?: number
+  recordCount?: number
   fieldCount?: number
   attributeCount?: number
   totalFields?: number
@@ -85,6 +190,8 @@ export interface TelemetryPayload {
   source?: ExportSource
   filename?: string
   catalogTotal?: number
+  distributor?: string
+  referer?: string
 }
 
 export interface TelemetryEvent {
@@ -96,7 +203,18 @@ export interface TelemetryEvent {
 
 export interface PackRegistryEntry {
   packId: string
-  assortment: string
-  productCount: number
+  title: string
+  /** @deprecated */
+  assortment?: string
+  recordCount: number
+  productCount?: number
   version: string
+  storageMode: StorageMode
+}
+
+export interface RecordsPage {
+  records: DataRecord[]
+  continueCursor: string | null
+  isDone: boolean
+  totalCount: number
 }

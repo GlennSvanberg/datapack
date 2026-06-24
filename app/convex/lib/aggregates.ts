@@ -78,6 +78,7 @@ export function buildPackStats(packId: string, events: TelemetryEventDoc[]) {
     opens: countByEvent(events, 'open'),
     exports: countByEvent(events, 'export'),
     updates: countByEvent(events, 'update'),
+    embedViews: countByEvent(events, 'embed_view'),
     lastSeen,
     exportsByFormat,
     exportsByScope: buildExportsByScope(events),

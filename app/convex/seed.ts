@@ -27,8 +27,9 @@ export const seedFromFiles = internalMutation({
       }
     }
 
-    for (const { packId, manifest } of SEED_PACKS) {
-      await ctx.db.insert('packs', { packId, manifest })
+    for (const entry of SEED_PACKS) {
+      const packId = entry.id
+      await ctx.db.insert('packs', { packId, manifest: entry.manifest })
     }
 
     for (const event of SEED_EVENTS) {

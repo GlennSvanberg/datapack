@@ -12,7 +12,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'Friluftsportalen — DataPack Dashboard' },
+      { title: 'Friluftsportalen — Live Data Syndication' },
     ],
     links: [{ rel: 'stylesheet', href: appCss }],
   }),
@@ -28,9 +28,17 @@ function RootLayout() {
           <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4">
             <Link to="/" className="flex items-center gap-3">
               <img src="/logo.svg" alt="Friluftsportalen" className="h-8" />
-              <span className="text-sm text-[var(--text-secondary)]">DataPack Dashboard</span>
+              <span className="text-sm text-[var(--text-secondary)]">Live Data Syndication</span>
             </Link>
-            <LiveBadge />
+            <nav className="flex items-center gap-4">
+              <Link
+                to="/demo/retailer"
+                className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+              >
+                Demo retailer
+              </Link>
+              <LiveBadge />
+            </nav>
           </div>
         </header>
         <main className="mx-auto max-w-6xl px-6 py-8">

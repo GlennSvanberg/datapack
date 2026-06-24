@@ -3,9 +3,6 @@
   "private": true,
   "scripts": {
     "dev": "npm run dev --prefix app",
-    "build:app": "npm run build --prefix app",
-    "build:pack": "node datapack/build.mjs",
-    "build:packs": "node datapack/build.mjs",
-    "build": "npm run build:app && npm run build:packs"
+    "build": "npm run build --prefix app"
   }
 }

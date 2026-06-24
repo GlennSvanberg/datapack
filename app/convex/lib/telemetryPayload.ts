@@ -34,5 +34,7 @@ export const telemetryPayload = v.optional(
     source: v.optional(exportSourceValidator),
     filename: v.optional(v.string()),
     catalogTotal: v.optional(v.number()),
+    distributor: v.optional(v.string()),
+    referer: v.optional(v.string()),
   }),
 )

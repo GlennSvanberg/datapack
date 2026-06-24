@@ -1,249 +1,231 @@
 # Friluftsportalen DataPack — POC
 
-Interactive, single-file product catalogs for B2B data distribution.
+Live product syndication for B2B distributors without API integrations.
 
-**Sender** ships one smart pack. **Receiver** browses a product catalog and exports data in the format and shape they choose. The hosted app records what happens when a connection is available.
+**Brand (fictional):** Friluftsportalen — Nordic outdoor equipment (hiking shoes, tents, backpacks, etc.)
 
 ## Problem
 
-Traditional exports (Excel, CSV, XML, JSON) lock format and columns at send time. Receivers rework data manually. Senders learn nothing about what was actually used.
+Distributors need accurate, up-to-date product master data on their own websites. Traditional approaches require custom API integrations, manual copy-paste, or static exports that go stale immediately. Senders learn little about what distributors actually show to customers.
 
 ## Solution (this POC)
 
 | Piece | What it is |
 |-------|------------|
-| **DataPack** | One `.mhtml` per assortment — offline catalog + export wizard |
-| **App** | TanStack Start dashboard + API — pack updates, telemetry, usage views |
+| **Embed widget** | `<fp-product>` Web Component + htmx — drops onto any distributor product page |
+| **Hosted app** | TanStack Start dashboard + embed API + telemetry |
 
-**Brand (fictional):** Friluftsportalen — outdoor equipment (hiking shoes, tents, backpacks, etc.)
+Operators upload catalog data once. Distributors paste a short script snippet. Product cards stay live, poll for updates, and report views back to the sender dashboard.
 
 ## Core principles
 
-- **Receiver-driven export** — CSV, Excel, JSON, XML; user picks fields via a simple wizard
-- **Client-side compute** — browse, search, filter, and export run in the browser
-- **Offline-first** — full catalog works without network; sync and telemetry when online
-- **Small assortments** — a few products per file, not full catalogs
-- **POC scope** — Convex cloud for pack data + telemetry; live dashboard; must look polished, stay simple
+- **Live data** — embed HTML is rendered server-side from Convex; no static copy to maintain
+- **Zero integration** — one `<script>` tag + one custom element; no OAuth, no webhooks
+- **Receiver-friendly** — distributors control their page layout; widget is a self-contained card
+- **Small assortments** — a few products per pack for the POC, not full PIM catalogs
+- **Nordic languages** — SV, NO, DA, FI via the `lang` attribute
+- **POC scope** — Convex for pack data + telemetry; polished UI, minimal moving parts
 
 ## User journeys
 
-### Receiver (opens catalog file)
+### Distributor (embeds widget)
 
-1. Receive **human-named file** from sender (e.g. `Friluftsportalen — Spring Tents 2026.html`) — see [`docs/sender-guide.md`](docs/sender-guide.md)
-2. Open in Chrome or Edge (double-click)
-3. See hero: assortment title, product count, quick export (Excel / CSV / JSON), trust line
-4. Switch display language (SV / NO / DA / FI) via in-file language switcher
-5. If data is stale → calm info in hero → **Update** fetches fresh manifest from the app API
-6. Browse and search products (texts, image URLs, attributes)
-7. Export via:
-   - **Hero** — one-click Excel, CSV, or JSON (recommended defaults)
-   - **Customize export** — full wizard (format, layout, scope, fields)
-   - **Product page** — export this product only (opens wizard scoped to one SKU)
-8. If online → POST telemetry events to the app (pack id included on every event)
+1. Receive embed snippet from Friluftsportalen (or copy from operator dashboard)
+2. Paste on a product detail page:
 
-### Sender / operator (POC)
+```html
+<script src="https://your-host/v1/widget.js" defer></script>
+<fp-product
+  pack-id="friluftsportalen-spring-tents-001"
+  sku="TENT-001"
+  lang="sv"
+  distributor="nordtrail-outdoors"
+  poll="30"
+></fp-product>
+```
 
-1. Manually build a pack with slightly outdated embedded data
-2. Send `.mhtml` to a recipient
-3. View dashboard for pack activity (insights UI evolves; data comes from telemetry JSON)
+3. Page loads → widget fetches HTML fragment from embed API
+4. Product card shows name, image, price, attributes in chosen language
+5. Widget polls every `poll` seconds (default 30) for fresh data
+6. View is recorded as `embed_view` telemetry (best-effort, non-blocking)
+
+### Operator (uploads & monitors)
+
+1. Create or update a pack via dashboard (`/packs/new`) — CSV/XLSX upload, column mapping
+2. Copy embed snippet from pack detail → **Embed** tab
+3. Share snippet with distributors
+4. Monitor dashboard: embed views, search/export events (legacy), per-pack stats
 
 ## Architecture
 
 ```
-┌─────────────────────────────┐         ┌──────────────────────────────────┐
-│  DataPack (.mhtml)          │         │  app/ (TanStack Start on Vercel) │
-│  ─────────────────          │  HTTPS  │  ──────────────────────────────  │
-│  • Embedded manifest        │ ──────► │  GET  /api/packs/:packId         │
-│  • Catalog UI (vanilla JS)  │         │       → latest product JSON    │
-│  • Export wizard            │ ──────► │  POST /api/telemetry             │
-│  • Language switcher        │         │       → Convex telemetryEvents  │
-│  • Works offline            │         │  Dashboard routes (static read) │
-└─────────────────────────────┘         └──────────────────────────────────┘
+┌──────────────────────────────┐         ┌─────────────────────────────────────────┐
+│  Distributor website         │         │  app/ (TanStack Start on Vercel)        │
+│  ─────────────────────       │         │  ─────────────────────────────────────  │
+│  <script src="…/widget.js">  │         │  GET  /v1/embed/products/:packId/:sku   │
+│  <fp-product …>              │ ──────► │       → HTML fragment (htmx swap)       │
+│    └─ htmx polls embed API   │         │  GET  /api/packs/:packId                │
+│                              │ ──────► │       → manifest JSON (ingest/updates)  │
+│                              │ ──────► │  POST /api/telemetry                    │
+│                              │         │       → Convex telemetryEvents          │
+│                              │         │  Dashboard + /demo/retailer             │
+└──────────────────────────────┘         └─────────────────────────────────────────┘
+                                              │
+                                              ▼
+                                    ┌──────────────────┐
+                                    │  Convex            │
+                                    │  packs             │
+                                    │  packRecordPages   │
+                                    │  telemetryEvents   │
+                                    └──────────────────┘
 ```
 
-Every pack carries a **`packId`**. All API calls and telemetry include it so the server knows which assortment file triggered the action.
+Every pack, embed request, and telemetry event carries a **`packId`**. Optional **`distributor`** attribute tags which partner site rendered the widget.
 
-## Product data model
+## Widget integration
 
-Each product includes:
+| Attribute | Required | Default | Purpose |
+|-----------|----------|---------|---------|
+| `pack-id` | yes | — | Assortment identifier |
+| `sku` | yes | — | Product SKU within the pack |
+| `lang` | no | `sv` | Display language: `sv`, `no`, `da`, `fi` |
+| `distributor` | no | — | Partner id for telemetry segmentation |
+| `poll` | no | `30` | Refresh interval in seconds |
 
-- **SKU** / article number
-- **Texts** — name, description, etc. in all Nordic languages (`sv`, `no`, `da`, `fi`)
-- **Image URL** — external or placeholder URLs (no image hosting required for POC)
-- **Attributes** — key/value list (weight, material, sizes, etc.)
+**Files:**
 
-### Manifest (embedded in pack)
+- `app/public/v1/widget.js` — Web Component loader (registers `<fp-product>`, loads htmx)
+- `app/src/routes/v1/embed/products.$packId.$sku.ts` — server-rendered HTML fragment
+- `app/src/lib/embed/renderProduct.ts` — product card template
 
-```javascript
-window.DATAPACK_MANIFEST = {
-  meta: {
-    packId: "friluftsportalen-spring-tents-001",
-    brand: "Friluftsportalen",
-    assortment: "Spring Tents 2026",
-    version: "1.0.0",
-    generatedAt: "2026-06-01T08:00:00Z",
-    staleAfter: "2026-06-10T00:00:00Z",
-    apiBase: "https://your-app.vercel.app",  // set at build time
-    contactEmail: "sortiment@example.com"    // optional — shown in pack footer
-  },
-  schema: [
-    { name: "sku", label: { sv: "Artikelnummer", no: "...", da: "...", fi: "..." }, type: "string", exportable: true },
-    { name: "price", label: { sv: "Pris (SEK)", ... }, type: "number", exportable: true }
-  ],
-  products: [
-    {
-      sku: "TENT-001",
-      texts: {
-        sv: { name: "...", description: "..." },
-        no: { name: "...", description: "..." },
-        da: { ... },
-        fi: { ... }
-      },
-      imageUrl: "https://...",
-      attributes: [
-        { key: { sv: "Vikt", no: "Vekt", ... }, value: "2.1 kg" }
-      ],
-      price: 3499,
-      stock: 42
-    }
-  ]
-};
+**Demo:** [`/demo/retailer`](http://localhost:4040/demo/retailer) — mock distributor page (NordTrail Outdoors) with three live tent embeds.
+
+## Data model
+
+Operators ingest CSV/Excel into manifest v2. See [`docs/ingest-guide.md`](docs/ingest-guide.md).
+
+- **Manifest v2** — `meta` + `schema` + optional embedded `records`; types in [`shared/manifest.types.ts`](shared/manifest.types.ts)
+- **Large data** — records in Convex `packRecordPages`; embed API reads from Convex directly
+- **Legacy demos** — Friluftsportalen seed packs use `products` + Nordic `texts`; embed API normalizes both shapes
+
+### Example record (v2)
+
+```json
+{
+  "sku": "TENT-001",
+  "name": "Arctic Dome 2",
+  "price": 3499,
+  "description": "Lightweight 2-person tent for spring trekking.",
+  "image": "https://…"
+}
 ```
 
-### Stale data + update
+## API contract
 
-- On load, compare `generatedAt` / `staleAfter` (or optionally `version` against API).
-- Show a non-blocking banner when data is outdated.
-- **Update** button: `GET {apiBase}/api/packs/{packId}` → replace local manifest / IndexedDB cache.
-- Catalog re-renders with fresh data; banner dismisses.
+All routes live under `app/`.
 
-## API contract (app)
+### `GET /v1/embed/products/:packId/:sku`
 
-All routes live under `app/`. Implement with TanStack Start server routes or `createServerFn`.
+Returns an HTML fragment for htmx swap (not JSON).
+
+**Query params:**
+
+| Param | Values | Default |
+|-------|--------|---------|
+| `lang` | `sv`, `no`, `da`, `fi` | `sv` |
+| `distributor` | free text | — |
+
+**Response:** `200` with `Content-Type: text/html`. CORS enabled for cross-origin embed.
 
 ### `GET /api/packs/:packId`
 
-Returns the latest manifest JSON for that pack (same shape as embedded manifest).
+Returns pack metadata: `meta` + `schema`, and `records` when `storageMode` is `embedded`.
 
-- Source: Convex `packs` table (editable from dashboard; seeded from `app/data/packs/`)
-- Pack file only needs to know its `packId` and `apiBase`
+### `GET /api/packs/:packId/records`
+
+Paginated records for remote packs. Query: `cursor`, `limit`.
+
+### `POST /api/packs` / `PUT /api/packs/:packId/source`
+
+Upload CSV/XLSX to create or re-ingest a pack (see ingest guide).
 
 ### `POST /api/telemetry`
 
-Append one event to Convex `telemetryEvents` (via TanStack API route proxy).
+Append one event to Convex `telemetryEvents`.
 
 **Request body:**
 
 ```json
 {
   "packId": "friluftsportalen-spring-tents-001",
-  "event": "open | search | export | update",
-  "timestamp": "ISO-8601",
+  "event": "embed_view",
+  "timestamp": "2026-06-01T10:00:00.000Z",
   "payload": {
-    "query": "hiking",
-    "format": "csv",
-    "fields": ["sku", "price"],
     "productSku": "TENT-001",
-    "language": "sv"
+    "language": "sv",
+    "distributor": "nordtrail-outdoors"
   }
 }
 ```
 
+**Events:** `embed_view` (widget), plus legacy `open`, `search`, `export`, `update` where still tracked.
+
 **Response:** `201` with `{ "ok": true }`
 
-Telemetry is best-effort from the pack (fire-and-forget `fetch`). Failures must not block the UI.
-
-### Insights (TBD)
-
-Dashboard subscribes to Convex queries for live stats and events:
-
-- Opens per pack
-- Export formats used
-- Search terms (if tracked)
-- Last seen per pack
-
-Exact charts and filters are not fixed yet.
-
-## DataPack features (MVP)
-
-| Feature | Priority |
-|---------|----------|
-| Header with Friluftsportalen logo | Must |
-| Language switcher (SV / NO / DA / FI) | Must |
-| Catalog grid + search | Must |
-| Product detail page | Must |
-| Stale data banner + Update | Must |
-| Export wizard (format + field picker) | Must |
-| Per-product export | Must |
-| Offline catalog + export | Must |
-| Telemetry when online | Must |
-
-### Export formats
-
-- CSV
-- Excel (`.xlsx`)
-- JSON
-- XML
-
-Wizard steps (keep very simple):
-
-1. Choose format
-2. Choose products (all / filtered / current product)
-3. Choose fields (checkboxes from `schema`)
-4. Download
+Telemetry is fire-and-forget from the widget. Failures must not block rendering.
 
 ## Design
 
-- **Style:** Notion-inspired — dark background, high contrast, clean typography
-- **Accents:** sparing use of color on primary actions (export, update, wizard continue)
-- **DataPack:** customer-facing catalog
-- **Dashboard:** same design family, more compact admin layout
-- **Logo:** Friluftsportalen mark in each MHTML header
+- **Dashboard:** Notion-inspired — dark background, high contrast, clean typography
+- **Embed card:** compact product panel — image, title, price, key attributes; matches Friluftsportalen brand
+- **Demo retailer:** light distributor-site mock to contrast with the dark operator dashboard
+- **Accents:** sparing color on primary CTAs only
 
 ## Tech stack
 
 | Layer | Choice | Location |
 |-------|--------|----------|
 | Dashboard + API | TanStack Start, React 19, Tailwind v4 | `app/` |
-| DataPack runtime | Vanilla JS in self-contained MHTML | `datapack/` |
-| Sample manifests | JSON per assortment | `sample-data/` |
-| Built packs | Output `.mhtml` files | `packs/` |
-| Persistence | Convex (`app/convex/`) | packs + telemetryEvents tables |
-| Seed fixtures | `app/data/` | imported once via `npm run convex:seed` |
-| Local cache (optional) | Dexie.js / IndexedDB | inside pack |
+| Embed widget | Web Component + htmx | `app/public/v1/widget.js` |
+| Embed renderer | Server HTML fragments | `app/src/lib/embed/` |
+| Ingest library | CSV/XLSX parsing | `shared/ingest/` |
+| Persistence | Convex | `app/convex/` |
+| Seed fixtures | JSON per assortment | `app/data/` |
 
 ## Repo layout
 
 ```
 datapack/
-├── CONTEXT.md              # Product vision, data model, API (this file)
+├── CONTEXT.md              # Product vision (this file)
 ├── AGENTS.md               # Agent instructions
-├── app/                    # TanStack Start — dashboard + API (Vercel root)
+├── app/                    # TanStack Start — dashboard + embed API (Vercel root)
 │   ├── convex/             # Schema, queries, mutations, seed
-│   ├── data/               # Seed fixtures only (not runtime)
-│   └── src/routes/
-├── datapack/               # MHTML template, CSS, vanilla JS runtime
-├── sample-data/            # Source JSON used to build packs (may be outdated)
-└── packs/                  # Built .mhtml outputs
+│   ├── data/               # Seed fixtures
+│   ├── public/v1/widget.js # Embed loader script
+│   └── src/
+│       ├── routes/v1/embed/  # HTML fragment routes
+│       └── routes/demo.retailer.tsx
+├── shared/                 # Manifest types + ingest library
+└── sample-data/            # Optional source JSON (legacy; seed uses app/data/)
 ```
 
 ## Hosting (Vercel)
 
-- Set **Root Directory** to `app` in the Vercel project settings
-- Build command: `npm run build`
-- Output: TanStack Start default (see `app/AGENTS.md`)
-- Pack files use `apiBase` pointing at the deployed URL
-- CORS: API routes must allow `POST` from `file://` origins is not possible — packs opened as local files use absolute URL to hosted API (works for `fetch`)
-
-> **Note:** MHTML opened from disk can call a hosted HTTPS API. Ensure telemetry and pack endpoints send appropriate CORS headers (`Access-Control-Allow-Origin: *` is fine for POC).
+- **Root Directory:** `app`
+- **Build:** `npm run build`
+- Set `CONVEX_URL` and `VITE_CONVEX_URL` to your Convex deployment
+- Widget script is served statically at `/v1/widget.js`
+- CORS on embed and telemetry routes for cross-origin distributor sites
 
 ## Out of scope (POC)
 
-- Authentication
-- PIM / ERP integration
-- Automated pack compiler pipeline
+- Authentication / distributor onboarding flows
+- Offline MHTML / single-file catalogs
+- Export wizard (CSV, Excel, JSON, XML)
+- PIM / ERP integrations
 - GDPR / consent flows
 - Large catalogs (1000+ SKUs)
+
 ## Demo narrative
 
-Friluftsportalen sends a spring tent assortment (3–5 products) as an MHTML file. The recipient opens it, sees outdated data, clicks Update, browses in Swedish, exports a CSV with SKU + price + description, and the operator later sees an `open` and `export` event for `friluftsportalen-spring-tents-001` on the dashboard.
+Friluftsportalen uploads a spring tent assortment via the dashboard. NordTrail Outdoors (demo retailer) embeds `<fp-product>` on three product pages. Each page shows live tent data in Swedish, refreshes every 30 seconds, and sends `embed_view` events. The operator sees embed activity on the pack dashboard within seconds.

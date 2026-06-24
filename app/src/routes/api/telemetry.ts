@@ -5,7 +5,13 @@ import { corsPreflightResponse, withCors } from '#/lib/cors'
 import { getConvexClient } from '#/lib/convex/server'
 import type { TelemetryEvent, TelemetryEventType } from '#/lib/types'
 
-const VALID_EVENTS: TelemetryEventType[] = ['open', 'search', 'export', 'update']
+const VALID_EVENTS: TelemetryEventType[] = [
+  'open',
+  'search',
+  'export',
+  'update',
+  'embed_view',
+]
 
 function isValidEvent(body: unknown): body is TelemetryEvent {
   if (!body || typeof body !== 'object') return false

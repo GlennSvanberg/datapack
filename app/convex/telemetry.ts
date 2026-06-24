@@ -14,6 +14,7 @@ const eventValidator = v.union(
   v.literal('search'),
   v.literal('export'),
   v.literal('update'),
+  v.literal('embed_view'),
 )
 
 export const append = mutation({
@@ -75,6 +76,7 @@ export const dashboardStats = query({
     totalOpens: v.number(),
     totalExports: v.number(),
     totalUpdates: v.number(),
+    totalEmbedViews: v.number(),
     exportsByFormat: v.record(v.string(), v.number()),
     exportsByScope: v.record(v.string(), v.number()),
     topExportFields: v.array(
@@ -93,6 +95,7 @@ export const dashboardStats = query({
       totalOpens: countByEvent(events, 'open'),
       totalExports: countByEvent(events, 'export'),
       totalUpdates: countByEvent(events, 'update'),
+      totalEmbedViews: countByEvent(events, 'embed_view'),
       exportsByFormat: buildExportsByFormat(events),
       exportsByScope: buildExportsByScope(events),
       topExportFields: buildTopExportFields(events),
@@ -108,6 +111,7 @@ export const packStats = query({
     opens: v.number(),
     exports: v.number(),
     updates: v.number(),
+    embedViews: v.number(),
     lastSeen: v.union(v.string(), v.null()),
     exportsByFormat: v.record(v.string(), v.number()),
     exportsByScope: v.record(v.string(), v.number()),

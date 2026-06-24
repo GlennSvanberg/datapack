@@ -54,6 +54,7 @@ function formatPayload(event: TelemetryEvent): string {
   if (p.query) parts.push(`"${p.query}"`)
   if (p.format) parts.push(p.format.toUpperCase())
   if (p.productSku) parts.push(p.productSku)
+  if (p.distributor) parts.push(`distributor: ${p.distributor}`)
   if (p.language) parts.push(p.language)
   return parts.join(' · ') || '—'
 }
@@ -62,7 +63,7 @@ export function EventTable({ events }: EventTableProps) {
   if (events.length === 0) {
     return (
       <p className="py-8 text-center text-sm text-[var(--text-muted)]">
-        No events recorded yet. Open a DataPack file to generate telemetry.
+        No events recorded yet. Embed a widget on the demo retailer page to generate telemetry.
       </p>
     )
   }
