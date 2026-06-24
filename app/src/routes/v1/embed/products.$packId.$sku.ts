@@ -5,7 +5,7 @@ import {
   renderProductEmbedError,
   renderProductEmbedHtml,
 } from '#/lib/embed/renderProduct'
-import type { EmbedProduct } from '#/lib/embed/types'
+import type { EmbedProduct, EmbedTheme } from '#/lib/embed/types'
 import { corsPreflightResponse, withCors } from '#/lib/cors'
 import { getConvexClient } from '#/lib/convex/server'
 
@@ -23,6 +23,10 @@ function parseLang(value: string | null): NordicLang {
   return 'sv'
 }
 
+function parseTheme(value: string | null): EmbedTheme {
+  return value === 'inherit' ? 'inherit' : 'card'
+}
+
 export const Route = createFileRoute('/v1/embed/products/$packId/$sku')({
   server: {
     handlers: {
@@ -31,6 +35,8 @@ export const Route = createFileRoute('/v1/embed/products/$packId/$sku')({
         const url = new URL(request.url)
         const lang = parseLang(url.searchParams.get('lang'))
         const distributor = url.searchParams.get('distributor')?.trim() || undefined
+        const theme = parseTheme(url.searchParams.get('theme'))
+        const renderOptions = { lang, distributor, theme }
 
         const client = getConvexClient()
         const product = (await client.query(api.packs.getProductForEmbed, {
@@ -40,13 +46,13 @@ export const Route = createFileRoute('/v1/embed/products/$packId/$sku')({
         })) as EmbedProduct | null
 
         if (!product) {
-          return new Response(renderProductEmbedError('Product not found'), {
+          return new Response(renderProductEmbedError('Product not found', renderOptions), {
             status: 404,
             headers: withCors(HTML_HEADERS),
           })
         }
 
-        const html = renderProductEmbedHtml(product, { lang, distributor })
+        const html = renderProductEmbedHtml(product, renderOptions)
         return new Response(html, {
           status: 200,
           headers: withCors(HTML_HEADERS),

@@ -1,11 +1,22 @@
-
-<div>
-<script src="http://localhost:4040/v1/widget.js" defer></script>
-<fp-product
-  pack-id="friluftsportalen-spring-tents-001"
-  sku="TENT-001"
-  lang="sv"
-  distributor="their-retailer-id"
-  poll="30"
-></fp-product>
-</div>
+<!DOCTYPE html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8" />
+    <title>Embed snippet example</title>
+  </head>
+  <body>
+  <div>
+    <script src="https://datapack-one.vercel.app/v1/widget.js" defer></script>
+    <!-- target: CSS selector on the host page where the widget should appear -->
+    <!-- theme="inherit": use host page fonts, colors, background -->
+    <fp-product
+      pack-id="friluftsportalen-spring-tents-001"
+      sku="TENT-001"
+      lang="sv"
+      distributor="fiwe"
+      theme="inherit"
+      target="#your-product-slot"
+    ></fp-product>
+  </div>
+  </body>
+</html>

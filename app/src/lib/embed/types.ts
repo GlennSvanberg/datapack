@@ -20,7 +20,10 @@ export interface EmbedProduct {
   version: string
 }
 
+export type EmbedTheme = 'card' | 'inherit'
+
 export interface RenderProductEmbedOptions {
   lang?: NordicLang
   distributor?: string
+  theme?: EmbedTheme
 }

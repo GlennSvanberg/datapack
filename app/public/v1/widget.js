@@ -1,12 +1,15 @@
 /**
  * Friluftsportalen product embed — Web Component
  *
- * Usage on any external page (script may appear anywhere before the element):
- *
  *   <script src="https://your-host/v1/widget.js" defer></script>
- *   <fp-product pack-id="friluftsportalen-spring-tents-001" sku="TENT-001"></fp-product>
+ *   <fp-product pack-id="…" sku="…"></fp-product>
  *
- * Optional attributes: lang (default sv), distributor, poll (seconds, default 30)
+ * Optional attributes:
+ *   lang          — sv | no | da | fi (default sv)
+ *   distributor   — retailer id for telemetry
+ *   poll          — refresh interval in seconds (default 30)
+ *   theme         — card (default) | inherit (match host page fonts/colors)
+ *   target        — CSS selector; moves the widget into that container
  */
 ;(function () {
   'use strict'
@@ -26,10 +29,11 @@
     }
   }
 
-  function buildEmbedUrl(apiBase, packId, sku, lang, distributor) {
+  function buildEmbedUrl(apiBase, packId, sku, lang, distributor, theme) {
     var params = new URLSearchParams()
     params.set('lang', lang || 'sv')
     if (distributor) params.set('distributor', distributor)
+    if (theme === 'inherit') params.set('theme', 'inherit')
     return (
       apiBase +
       '/v1/embed/products/' +
@@ -41,7 +45,10 @@
     )
   }
 
-  function loadingHtml() {
+  function loadingHtml(theme) {
+    if (theme === 'inherit') {
+      return '<div class="fp-embed fp-embed--inherit fp-embed--loading" data-fp-version="0"><span>Loading product…</span></div>'
+    }
     return (
       '<div class="fp-embed fp-embed--loading" data-fp-version="0">' +
       '<style>.fp-embed{box-sizing:border-box;font-family:ui-sans-serif,system-ui,sans-serif;font-size:13px;color:#9ca3af;background:#1a1a1a;border:1px solid #2e2e2e;border-radius:10px;padding:16px;min-height:120px;display:flex;align-items:center;justify-content:center;max-width:360px;}</style>' +
@@ -49,7 +56,10 @@
     )
   }
 
-  function errorHtml(message) {
+  function errorHtml(message, theme) {
+    if (theme === 'inherit') {
+      return '<div class="fp-embed fp-embed--inherit fp-embed--error" data-fp-version="0"><span>' + message + '</span></div>'
+    }
     return (
       '<div style="color:#fca5a5;font:13px sans-serif;padding:12px;max-width:360px;">' +
       message +
@@ -82,12 +92,30 @@
     }).catch(function () {})
   }
 
-  function mountHtml(shadow, html) {
+  function mountHtml(mountRoot, html, useShadow) {
     var template = document.createElement('template')
     template.innerHTML = html.trim()
     var node = template.content.firstElementChild
-    shadow.replaceChildren(node || document.createTextNode(html))
+    if (useShadow) {
+      mountRoot.replaceChildren(node || document.createTextNode(html))
+    } else {
+      mountRoot.innerHTML = html
+      node = mountRoot.firstElementChild
+    }
     return node
+  }
+
+  function relocateToTarget(host) {
+    var selector = host.getAttribute('target')
+    if (!selector) return
+    try {
+      var container = document.querySelector(selector)
+      if (container && container !== host.parentElement) {
+        container.appendChild(host)
+      }
+    } catch (_err) {
+      /* invalid selector */
+    }
   }
 
   class FpProduct extends HTMLElement {
@@ -95,35 +123,47 @@
       if (this._fpReady) return
       this._fpReady = true
 
+      relocateToTarget(this)
+
       var packId = this.getAttribute('pack-id')
       var sku = this.getAttribute('sku')
       if (!packId || !sku) {
-        this.attachShadow({ mode: 'open' }).innerHTML = errorHtml('Missing pack-id or sku')
+        this.innerHTML = errorHtml('Missing pack-id or sku', 'card')
         return
       }
 
       var lang = this.getAttribute('lang') || 'sv'
       var distributor = this.getAttribute('distributor') || ''
+      var theme = this.getAttribute('theme') === 'inherit' ? 'inherit' : 'card'
       var poll = parseInt(this.getAttribute('poll') || '30', 10)
       if (!poll || poll < 1) poll = 30
 
+      var useShadow = theme !== 'inherit'
       var apiBase = detectApiBase()
-      var embedUrl = buildEmbedUrl(apiBase, packId, sku, lang, distributor)
-      var shadow = this.attachShadow({ mode: 'open' })
-      shadow.innerHTML = loadingHtml()
-
+      var embedUrl = buildEmbedUrl(apiBase, packId, sku, lang, distributor, theme)
       var host = this
       var pollTimer = null
+      var mountRoot
+
+      if (useShadow) {
+        mountRoot = this.attachShadow({ mode: 'open' })
+        mountRoot.innerHTML = loadingHtml(theme)
+      } else {
+        this.style.display = 'block'
+        this.style.width = '100%'
+        mountRoot = this
+        mountRoot.innerHTML = loadingHtml(theme)
+      }
 
       function refresh() {
         return fetch(embedUrl, { credentials: 'omit' })
           .then(function (response) {
             return response.text().then(function (html) {
               if (!response.ok) {
-                mountHtml(shadow, html || errorHtml('Product not found'))
+                mountHtml(mountRoot, html || errorHtml('Product not found', theme), useShadow)
                 return null
               }
-              var root = mountHtml(shadow, html)
+              var root = mountHtml(mountRoot, html, useShadow)
               if (
                 root &&
                 !host._fpTelemetrySent &&
@@ -137,8 +177,15 @@
             })
           })
           .catch(function () {
-            if (!shadow.querySelector('.fp-embed[data-fp-version]:not([data-fp-version="0"])')) {
-              shadow.innerHTML = errorHtml('Failed to load product data')
+            var hasContent = useShadow
+              ? mountRoot.querySelector('.fp-embed[data-fp-version]:not([data-fp-version="0"])')
+              : host.querySelector('.fp-embed[data-fp-version]:not([data-fp-version="0"])')
+            if (!hasContent) {
+              if (useShadow) {
+                mountRoot.innerHTML = errorHtml('Failed to load product data', theme)
+              } else {
+                host.innerHTML = errorHtml('Failed to load product data', theme)
+              }
             }
           })
       }

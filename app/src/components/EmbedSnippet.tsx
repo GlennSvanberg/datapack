@@ -16,11 +16,14 @@ function buildSnippet(
   lang: string,
 ): string {
   return `<script src="${origin}/v1/widget.js" defer></script>
+<!-- Place fp-product where you want it, or use target to mount into a container -->
 <fp-product
   pack-id="${packId}"
   sku="${sku}"
   distributor="${distributor}"
   lang="${lang}"
+  theme="inherit"
+  target="#your-product-slot"
 ></fp-product>`
 }
 
@@ -43,8 +46,10 @@ export function EmbedSnippet({
   return (
     <div className="space-y-3">
       <p className="text-sm text-[var(--text-secondary)]">
-        Paste this snippet on any product page. The widget loads live catalog data from{' '}
-        <code className="rounded bg-[var(--bg-tertiary)] px-1 py-0.5 text-xs">{origin}</code>.
+        Paste the script once, add an empty container where the product should appear, then point{' '}
+        <code className="rounded bg-[var(--bg-tertiary)] px-1 py-0.5 text-xs">target</code> at it.
+        Use <code className="rounded bg-[var(--bg-tertiary)] px-1 py-0.5 text-xs">theme=&quot;inherit&quot;</code>{' '}
+        to match the host page fonts and colors, or omit for the default card.
       </p>
       <div className="relative">
         <pre className="overflow-x-auto rounded-lg border border-[var(--border)] bg-[var(--bg-tertiary)] p-4 font-mono text-xs leading-relaxed text-[var(--text-primary)]">

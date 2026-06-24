@@ -1,4 +1,4 @@
-import type { EmbedProduct, RenderProductEmbedOptions } from './types'
+import type { EmbedProduct, EmbedTheme, RenderProductEmbedOptions } from './types'
 
 const DESCRIPTION_MAX = 140
 
@@ -34,7 +34,7 @@ function stockLabel(inStock: boolean, stock: number): string {
   return 'Slut i lager'
 }
 
-const EMBED_STYLES = `
+const CARD_STYLES = `
 .fp-embed {
   box-sizing: border-box;
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -123,8 +123,104 @@ const EMBED_STYLES = `
 }
 `.trim()
 
-function renderStyles(): string {
-  return `<style>${EMBED_STYLES}</style>`
+/** Minimal layout — typography and colors inherit from the host page. */
+const INHERIT_STYLES = `
+.fp-embed.fp-embed--inherit {
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  max-width: none;
+  width: 100%;
+}
+.fp-embed--inherit *, .fp-embed--inherit *::before, .fp-embed--inherit *::after {
+  box-sizing: border-box;
+}
+.fp-embed--inherit .fp-embed__layout { display: flex; gap: 1rem; align-items: flex-start; }
+.fp-embed--inherit .fp-embed__media {
+  flex: 0 0 5.5rem;
+  width: 5.5rem;
+  height: 5.5rem;
+  border-radius: 0.25rem;
+  overflow: hidden;
+  background: transparent;
+  border: none;
+}
+.fp-embed--inherit .fp-embed__image { display: block; width: 100%; height: 100%; object-fit: cover; }
+.fp-embed--inherit .fp-embed__body { flex: 1; min-width: 0; }
+.fp-embed--inherit .fp-embed__name {
+  margin: 0 0 0.35em;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  line-height: inherit;
+}
+.fp-embed--inherit .fp-embed__description {
+  margin: 0 0 0.75em;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  opacity: 0.85;
+}
+.fp-embed--inherit .fp-embed__price {
+  margin: 0 0 0.35em;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+.fp-embed--inherit .fp-embed__stock {
+  margin: 0 0 0.75em;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  opacity: 0.9;
+}
+.fp-embed--inherit .fp-embed__stock--available,
+.fp-embed--inherit .fp-embed__stock--unavailable { color: inherit; }
+.fp-embed--inherit .fp-embed__attrs {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.25rem;
+}
+.fp-embed--inherit .fp-embed__attr {
+  display: flex;
+  gap: 0.35rem;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  opacity: 0.85;
+}
+.fp-embed--inherit .fp-embed__attr-label,
+.fp-embed--inherit .fp-embed__attr-value { color: inherit; }
+.fp-embed--inherit.fp-embed--loading,
+.fp-embed--inherit.fp-embed--error {
+  display: block;
+  min-height: 0;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  opacity: 0.7;
+}
+`.trim()
+
+function resolveTheme(theme?: EmbedTheme): EmbedTheme {
+  return theme === 'inherit' ? 'inherit' : 'card'
+}
+
+function renderStyles(theme: EmbedTheme): string {
+  const css = theme === 'inherit' ? INHERIT_STYLES : CARD_STYLES
+  return `<style>${css}</style>`
 }
 
 function renderDistributorMarker(distributor: string | undefined): string {
@@ -148,11 +244,19 @@ function renderAttributes(
   return `<ul class="fp-embed__attrs">${lis}</ul>`
 }
 
-/** HTML fragment for htmx `outerHTML` swap on the widget container. */
+function embedRootClass(theme: EmbedTheme, extra?: string): string {
+  const classes = ['fp-embed']
+  if (theme === 'inherit') classes.push('fp-embed--inherit')
+  if (extra) classes.push(extra)
+  return classes.join(' ')
+}
+
+/** HTML fragment returned to the embed widget. */
 export function renderProductEmbedHtml(
   product: EmbedProduct,
   options: RenderProductEmbedOptions = {},
 ): string {
+  const theme = resolveTheme(options.theme)
   const distributor = options.distributor?.trim()
   const stockClass = product.inStock
     ? 'fp-embed__stock fp-embed__stock--available'
@@ -161,8 +265,8 @@ export function renderProductEmbedHtml(
     ? `<img class="fp-embed__image" src="${escapeAttr(product.imageUrl)}" alt="${escapeAttr(product.name)}" loading="lazy" />`
     : ''
 
-  return `<div class="fp-embed" data-fp-version="${escapeAttr(product.version)}" data-fp-pack-id="${escapeAttr(product.packId)}" data-fp-sku="${escapeAttr(product.sku)}">
-${renderStyles()}
+  return `<div class="${embedRootClass(theme)}" data-fp-version="${escapeAttr(product.version)}" data-fp-pack-id="${escapeAttr(product.packId)}" data-fp-sku="${escapeAttr(product.sku)}" data-fp-theme="${theme}">
+${renderStyles(theme)}
 ${renderDistributorMarker(distributor)}
 <div class="fp-embed__layout">
   <div class="fp-embed__media">${image}</div>
@@ -177,18 +281,23 @@ ${renderDistributorMarker(distributor)}
 </div>`
 }
 
-/** Small HTML error fragment for 404 / lookup failures. */
-export function renderProductEmbedError(message: string): string {
-  return `<div class="fp-embed fp-embed--error" data-fp-version="0">
-${renderStyles()}
+export function renderProductEmbedError(
+  message: string,
+  options: RenderProductEmbedOptions = {},
+): string {
+  const theme = resolveTheme(options.theme)
+  return `<div class="${embedRootClass(theme, 'fp-embed--error')}" data-fp-version="0" data-fp-theme="${theme}">
+${renderStyles(theme)}
 <p>${escapeHtml(message)}</p>
 </div>`
 }
 
-/** Initial loading placeholder used by the web component before first fetch. */
-export function renderProductEmbedLoading(): string {
-  return `<div class="fp-embed fp-embed--loading" data-fp-version="0">
-${renderStyles()}
+export function renderProductEmbedLoading(
+  options: RenderProductEmbedOptions = {},
+): string {
+  const theme = resolveTheme(options.theme)
+  return `<div class="${embedRootClass(theme, 'fp-embed--loading')}" data-fp-version="0" data-fp-theme="${theme}">
+${renderStyles(theme)}
 <span>Loading product…</span>
 </div>`
 }
