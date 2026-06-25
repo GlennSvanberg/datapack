@@ -19,12 +19,11 @@ Operators upload catalog data once. Distributors paste a short script snippet. P
 
 ## Core principles
 
-- **Live data** — embed HTML is rendered server-side from Convex; no static copy to maintain
-- **Zero integration** — one `<script>` tag + one custom element; no OAuth, no webhooks
-- **Receiver-friendly** — distributors control their page layout; widget is a self-contained card
-- **Small assortments** — a few products per pack for the POC, not full PIM catalogs
-- **Nordic languages** — SV, NO, DA, FI via the `lang` attribute
-- **POC scope** — Convex for pack data + telemetry; polished UI, minimal moving parts
+- **Receiver-driven export** — CSV, Excel, JSON, XML; user picks fields via a simple wizard
+- **Client-side compute** — browse, search, filter, and export run in the browser
+- **Offline-first** — full catalog works without network; sync and telemetry when online
+- **Small assortments** — a few products per file, not full catalogs
+- **POC scope** — Convex cloud for pack data + telemetry; live dashboard; must look polished, stay simple
 
 ## User journeys
 

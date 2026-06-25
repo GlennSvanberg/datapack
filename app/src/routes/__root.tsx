@@ -32,6 +32,12 @@ function RootLayout() {
             </Link>
             <nav className="flex items-center gap-4">
               <Link
+                to="/report/product-data-future"
+                className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+              >
+                Report
+              </Link>
+              <Link
                 to="/demo/retailer"
                 className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
               >

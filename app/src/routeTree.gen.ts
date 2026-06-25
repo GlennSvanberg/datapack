@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ReportProductDataFutureRouteImport } from './routes/report.product-data-future'
 import { Route as PacksNewRouteImport } from './routes/packs.new'
 import { Route as PacksPackIdRouteImport } from './routes/packs.$packId'
 import { Route as DemoRetailerRouteImport } from './routes/demo.retailer'
@@ -24,6 +25,11 @@ import { Route as V1EmbedProductsPackIdSkuRouteImport } from './routes/v1/embed/
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportProductDataFutureRoute = ReportProductDataFutureRouteImport.update({
+  id: '/report/product-data-future',
+  path: '/report/product-data-future',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PacksNewRoute = PacksNewRouteImport.update({
@@ -84,6 +90,7 @@ export interface FileRoutesByFullPath {
   '/demo/retailer': typeof DemoRetailerRoute
   '/packs/$packId': typeof PacksPackIdRoute
   '/packs/new': typeof PacksNewRoute
+  '/report/product-data-future': typeof ReportProductDataFutureRoute
   '/api/packs/$packId': typeof ApiPacksPackIdRouteWithChildren
   '/api/packs/': typeof ApiPacksIndexRoute
   '/api/packs/$packId/records': typeof ApiPacksPackIdRecordsRoute
@@ -97,6 +104,7 @@ export interface FileRoutesByTo {
   '/demo/retailer': typeof DemoRetailerRoute
   '/packs/$packId': typeof PacksPackIdRoute
   '/packs/new': typeof PacksNewRoute
+  '/report/product-data-future': typeof ReportProductDataFutureRoute
   '/api/packs/$packId': typeof ApiPacksPackIdRouteWithChildren
   '/api/packs': typeof ApiPacksIndexRoute
   '/api/packs/$packId/records': typeof ApiPacksPackIdRecordsRoute
@@ -111,6 +119,7 @@ export interface FileRoutesById {
   '/demo/retailer': typeof DemoRetailerRoute
   '/packs/$packId': typeof PacksPackIdRoute
   '/packs/new': typeof PacksNewRoute
+  '/report/product-data-future': typeof ReportProductDataFutureRoute
   '/api/packs/$packId': typeof ApiPacksPackIdRouteWithChildren
   '/api/packs/': typeof ApiPacksIndexRoute
   '/api/packs/$packId/records': typeof ApiPacksPackIdRecordsRoute
@@ -126,6 +135,7 @@ export interface FileRouteTypes {
     | '/demo/retailer'
     | '/packs/$packId'
     | '/packs/new'
+    | '/report/product-data-future'
     | '/api/packs/$packId'
     | '/api/packs/'
     | '/api/packs/$packId/records'
@@ -139,6 +149,7 @@ export interface FileRouteTypes {
     | '/demo/retailer'
     | '/packs/$packId'
     | '/packs/new'
+    | '/report/product-data-future'
     | '/api/packs/$packId'
     | '/api/packs'
     | '/api/packs/$packId/records'
@@ -152,6 +163,7 @@ export interface FileRouteTypes {
     | '/demo/retailer'
     | '/packs/$packId'
     | '/packs/new'
+    | '/report/product-data-future'
     | '/api/packs/$packId'
     | '/api/packs/'
     | '/api/packs/$packId/records'
@@ -166,6 +178,7 @@ export interface RootRouteChildren {
   DemoRetailerRoute: typeof DemoRetailerRoute
   PacksPackIdRoute: typeof PacksPackIdRoute
   PacksNewRoute: typeof PacksNewRoute
+  ReportProductDataFutureRoute: typeof ReportProductDataFutureRoute
   ApiPacksPackIdRoute: typeof ApiPacksPackIdRouteWithChildren
   ApiPacksIndexRoute: typeof ApiPacksIndexRoute
   ApiPacksIngestPreviewRoute: typeof ApiPacksIngestPreviewRoute
@@ -179,6 +192,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/report/product-data-future': {
+      id: '/report/product-data-future'
+      path: '/report/product-data-future'
+      fullPath: '/report/product-data-future'
+      preLoaderRoute: typeof ReportProductDataFutureRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/packs/new': {
@@ -274,6 +294,7 @@ const rootRouteChildren: RootRouteChildren = {
   DemoRetailerRoute: DemoRetailerRoute,
   PacksPackIdRoute: PacksPackIdRoute,
   PacksNewRoute: PacksNewRoute,
+  ReportProductDataFutureRoute: ReportProductDataFutureRoute,
   ApiPacksPackIdRoute: ApiPacksPackIdRouteWithChildren,
   ApiPacksIndexRoute: ApiPacksIndexRoute,
   ApiPacksIngestPreviewRoute: ApiPacksIngestPreviewRoute,

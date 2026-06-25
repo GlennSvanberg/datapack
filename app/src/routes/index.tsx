@@ -35,6 +35,13 @@ function DashboardHome() {
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <Link
+            to="/report/product-data-future"
+            className="inline-flex items-center gap-1.5 rounded border border-[var(--border)] px-4 py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+          >
+            Future report
+            <ExternalLink className="h-3.5 w-3.5" />
+          </Link>
+          <Link
             to="/demo/retailer"
             className="inline-flex items-center gap-1.5 rounded border border-[var(--border)] px-4 py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
           >
